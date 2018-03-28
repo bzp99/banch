@@ -1,0 +1,55 @@
+%!TEX TS-program = xelatex
+%!TEX encoding = UTF-8 Unicode
+
+\documentclass[a4paper,draft]{article}
+
+%%% PACKAGES %%%
+\usepackage{polyglossia}	% Hungarian support
+	\setdefaultlanguage{magyar}
+\usepackage{fancyhdr}		% header and footer
+	\pagestyle{fancy}
+		\fancyhf{} % clear
+		\rhead{Péter Bertalan Zoltán (QO7CU6)}
+		\lhead{\today}
+		\lfoot{\LaTeX}
+
+%%% TITLE STUFF %%%
+
+\title{\Huge banch \\ \small (Programozás alapjai 2 --- házi feladat specifikáció)}
+\date{\today}
+\author{Péter Bertalan Zoltán \\ (QO7CU6)}
+
+%%% BODY %%%
+
+\begin{document}
+\maketitle
+
+\thispagestyle{fancy}
+
+\noindent \textit{(Ez nem egyéni feladat, az infocpp oldal HF ötletei közül való, így a specifikáció is nagyjából az ott leírtakank felel meg)}
+
+\section*{Összefoglalás}
+
+\textbf{A \emph{banch}} (fantázianév) egy \textbf{italrecept nyilvántartó program}. Arra alkalmas, hogy italrecepteket lehessen vele létrehozni, elmenteni (azaz fájlba írni). Képes továbbá fájlból beolvasni is recepteket, így legújabb ötleteinket barátainkkal is megoszthatjuk, amennyiben ők is \emph{banch}-t használnak.
+
+\section*{Funkciók, lehetőségek}
+
+\begin{itemize}
+	\item a \emph{banch} beépítetten ismer pár alapvető hozzávalót
+		\begin{itemize}
+			\item de ezeken felül lehetőség van újak hozzáadására
+		\end{itemize}
+	\item lehetőség van receptek létrehozására, interaktív felhasználói felületen
+	\item lehetőség van mind a hozzávalók, mind a receptek egyszerű listázására, ,,böngészésére''
+	\item receptet és hozzávalót természetesen ugyanúgy el is lehet távolítani, mint ahogy létrehozni
+	\item a hozzávalók és receptek tulajdonképpen egy adatbázist alkotnak, amit a \emph{banch} képes fájlba írni (i.e. menteni) illetve akár fájlból beolvasni
+\end{itemize}
+
+\section*{Használat}
+
+\begin{itemize}
+	\item indításkor a program beolvas egy alapértelmezett fájlt, de futása során lehet az adatbázist ,,bezárni'' és új fájlt betölteni helyette
+	\item interaktívan, menüs rendszerben lehetőségünk van a fent említett funckiók elégzésére (hozzávaló / recept hozzáadása / eltávolítása, listázás, etc.)
+	\item (ez nem feltétlenül fog megvalósulni, de lehetne olyan lehetőség is, hogy a program a lehetséges hozzávalókból ,,ajánl'' egy keveréket, azaz véletlenszerűen összerak párat)
+\end{itemize}
+\end{document}
