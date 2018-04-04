@@ -32,8 +32,8 @@ public:
 	~String(); // destructor
 
 private:
-	unsigned int length;
-	char * arr;
+	unsigned int length_;
+	char * arr_;
 };
 
 }

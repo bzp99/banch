@@ -3,22 +3,24 @@
 
 #include "../nostl/string.hxx"
 
+const unsigned int kMaxIngredients = 20;
+
 namespace banch {
 
 class Ingredient {
 public:
-	// stuff
+	virtual void print() const;
 
-private:
-	nostl::String name;
+	virtual ~Ingredient(); // virtual destructor for this class shall be derived later
 };
 
 class Recipe {
 public:
 	Recipe();
 
+	void add(Ingredient*);
+
 	void show() const;
-	void add();
 
 	void save() const;
 	void load();
@@ -26,9 +28,10 @@ public:
 	~Recipe();
 
 private:
-	Ingredient * ingredients;
+	Ingredient * ingredients_[kMaxIngredients]; // heterogenous container
+	unsigned int number_of_ingredients_;
 };
 
-}
+} // namespace banch
 
 #endif // BANCH_HXX
