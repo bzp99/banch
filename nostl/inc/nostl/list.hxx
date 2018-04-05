@@ -5,6 +5,7 @@ namespace nostl {
 
 template <typename T>
 class List {
+private: class Iterator;
 public:
 	List() : number_of_elements_(0)
 	{
@@ -18,11 +19,22 @@ public:
 		this->tail_->next_ = nullptr;
 	}
 
-	void append(T);
-	void prepend(T);
-	void remove(T);
+	List(const List&);
+
+	void append(const T&);
+	void prepend(const T&);
+	void remove(const T&);
+	void clear();
 
 	unsigned int size() const { return this->number_of_elements_; }
+
+	List& operator=(const List&);
+	// TODO other operators?
+
+	Iterator begin() { return (number_of_elements_ == 0) ? nullptr : Iterator(this->head_->next_->value_); }
+	Iterator end() { return (number_of_elements_ == 0) ? nullptr : Iterator(this->head->prev_->value_); }
+
+	~List();
 
 
 private:
@@ -33,7 +45,23 @@ private:
 	};
 
 private:
-	Node * find(T) const;
+	class Iterator {
+	public:
+		Iterator() : pointer_(nullptr) {}
+		Iterator(T * where_to_point) : pointer_(where_to_point) {}
+
+		T& operator*() { return *pointer_; } // dereference
+		void operator++() // preincrement
+		{
+			// FIXME nothing
+		}
+
+	private:
+		T * pointer_;
+	};
+
+private:
+	Node * find(const T&) const;
 
 private:
 	Node * head_;
@@ -42,7 +70,7 @@ private:
 }; // class List
 
 template <typename T>
-typename List<T>::Node * List<T>::find(T val) const
+typename List<T>::Node * List<T>::find(const T& val) const
 {
 	Node * traveller = this->head_->next_; // temporary node
 
@@ -53,6 +81,8 @@ typename List<T>::Node * List<T>::find(T val) const
 		{
 			return traveller;
 		}
+
+		traveller = traveller->next_;
 	}
 
 	// node was not found
@@ -60,7 +90,28 @@ typename List<T>::Node * List<T>::find(T val) const
 }
 
 template <typename T>
-void List<T>::append(T val)
+List<T>::List(const List& obj)
+{
+	// initiating empty list
+	this->head_ = new Node;
+	this->tail_ = new Node;
+	this->head_->prev_ = nullptr;
+	this->head_->next_ = this->tail_;
+	this->tail_->prev_ = this->head_;
+	this->tail_->next_ = nullptr;
+	this->number_of_elements_ = 0;
+
+	// copying list
+	Node * traveller = obj.head_->next_;
+	while (traveller->next_ != obj.tail_)
+	{
+		this->append(traveller); // this also sets the counter
+		traveller = traveller->next_;
+	}
+}
+
+template <typename T>
+void List<T>::append(const T& val)
 {
 	Node * new_node = new Node;
 	new_node->value_ = val;
@@ -72,10 +123,13 @@ void List<T>::append(T val)
 	// setting neighbouring nodes' pointers
 	new_node->prev_->next_ = new_node;
 	new_node->next_->prev_ = new_node;
+
+	// incrementing counter
+	++this->number_of_elements_;
 }
 
 template <typename T>
-void List<T>::prepend(T val)
+void List<T>::prepend(const T& val)
 {
 	Node * new_node = new Node;
 	new_node->value_ = val;
@@ -87,10 +141,13 @@ void List<T>::prepend(T val)
 	// setting neighbouring nodes' pointers
 	new_node->prev_->next_ = new_node;
 	new_node->next_->prev_ = new_node;
+
+	// incrementing counter
+	++this->number_of_elements_;
 }
 
 template <typename T>
-void List<T>::remove(T val)
+void List<T>::remove(const T& val)
 {
 	// find node
 	Node * delendum = find(val);
@@ -103,7 +160,63 @@ void List<T>::remove(T val)
 
 		// delete delendum
 		delete delendum;
+
+		// decrementing counter
+		--this->number_of_elements_;
 	}
+}
+
+template <typename T>
+void List<T>::clear()
+{
+	// traverse list and delete nodes between sentinels
+	Node * traveller = this->head_->next_;
+	while (traveller != this->tail_)
+	{
+		traveller = traveller->next_;
+		delete traveller->prev_;
+	}
+
+	// resetting pointers of sentinels
+	this->head_->next_ = this->tail_;
+	this->tail_->prev_ = this->head_;
+
+	// zero counter
+	this->number_of_elements_ = 0;
+}
+
+template <typename T>
+List<T>& List<T>::operator=(const List<T>& rhs)
+{
+	// checking for self-assignment
+	if (this == &rhs)
+	{
+		return *this;
+	}
+
+	// clearing current list
+	this->clear();
+
+	// copying list
+	Node * traveller = rhs.head_->next_;
+	while (traveller->next_ != rhs.tail_)
+	{
+		this->append(traveller); // this also sets the counter
+		traveller = traveller->next_;
+	}
+
+	return *this;
+}
+
+template <typename T>
+List<T>::~List()
+{
+	// clear list
+	this->clear();
+
+	// delete sentinels
+	delete this->head_;
+	delete this->tail_;
 }
 
 } // namespace nostl
