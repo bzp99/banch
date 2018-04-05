@@ -1,7 +1,7 @@
 #ifndef BANCH_HXX
 #define BANCH_HXX
 
-#include "../nostl/string.hxx"
+#include "nostl/string.hxx"
 
 const unsigned int kMaxIngredients = 20;
 
