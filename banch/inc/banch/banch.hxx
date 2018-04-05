@@ -16,9 +16,16 @@ public:
 
 class Recipe {
 public:
-	Recipe();
+	Recipe() : number_of_ingredients_(0) {}
 
-	void add(Ingredient*);
+	void add(Ingredient * new_ingredient)
+	{
+		if (number_of_ingredients_ >= kMaxIngredients)
+		{
+			throw std::out_of_range("jar full");
+		}
+		ingredients_[number_of_ingredients_++] = new_ingredient;
+	}
 
 	void show() const;
 
@@ -31,6 +38,14 @@ private:
 	Ingredient * ingredients_[kMaxIngredients]; // heterogenous container
 	unsigned int number_of_ingredients_;
 };
+
+void Recipe::show() const
+{
+	for (unsigned int i = 0; i < this->number_of_ingredients_; ++i)
+	{
+		print(this->ingredients_[i]);
+	}
+}
 
 } // namespace banch
 
