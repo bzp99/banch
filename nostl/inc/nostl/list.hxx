@@ -10,14 +10,14 @@ public:
 
 	List(const List&);
 
+	List& operator=(const List&);
+
 	void append(const T&);
 	void prepend(const T&);
 	void remove(const T&);
 	void clear();
 
 	unsigned int size() const { return this->number_of_elements_; }
-
-	List& operator=(const List&);
 
 	~List();
 
