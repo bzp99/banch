@@ -22,14 +22,22 @@ public:
 	~List();
 
 
-private:
+private: // nested class
 	struct Node {
 		T value_;
 		Node * previous_;
 		Node * next_;
 	};
 
-private:
+private: // private function
+	Node * find(const T&) const;
+
+private: // data members
+	Node * head_;
+	Node * tail_;
+	unsigned int number_of_elements_;
+
+private: // nested class
 	class Iterator {
 	public:
 		Iterator(Node * where_to_point, Node * first_sentinel, Node * last_sentinel) : current_(where_to_point), first_sentinel_(first_sentinel), last_sentinel(last_sentinel) {}
@@ -78,17 +86,10 @@ private:
 		Node * last_sentinel;
 	};
 
-public:
+public: // functions of nested class
 	Iterator begin() { return (number_of_elements_ == 0) ? nullptr : Iterator(this->head_->next_, this->head_, this->tail_); }
 	Iterator end() { return (number_of_elements_ == 0) ? nullptr : Iterator(this->head->prev_, this->head_, this->tail_); }
 
-private:
-	Node * find(const T&) const;
-
-private:
-	Node * head_;
-	Node * tail_;
-	unsigned int number_of_elements_;
 }; // class List
 
 template <typename T>
