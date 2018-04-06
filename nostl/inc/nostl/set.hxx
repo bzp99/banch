@@ -11,7 +11,7 @@ public:
 	Set() : number_of_elements_(0), list_(new List<T>) {}
 
 	Set(const Set& obj) : number_of_elements_(obj.number_of_elements_), list_(obj.list_) {}
-	
+
 	Set& operator=(const Set&);
 
 	void insert(const T&);
