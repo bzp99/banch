@@ -32,14 +32,6 @@ private:
 	unsigned int number_of_ingredients_;
 }; // class Recipe
 
-void Recipe::show() const
-{
-	for (unsigned int i = 0; i < this->number_of_ingredients_; ++i)
-	{
-		print(this->ingredients_[i]);
-	}
-}
-
 } // namespace banch
 
 #endif // BANCH_HXX
