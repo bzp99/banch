@@ -52,7 +52,7 @@ private: // nested class
 		}
 		Iterator operator--(int) // postdecrement
 		{
-			Interator rv = *this;
+			Iterator rv = *this;
 			--this->list_iterator_;
 			return rv;
 		}
