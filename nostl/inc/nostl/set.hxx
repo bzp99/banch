@@ -59,6 +59,18 @@ public: // nested class
 		typename List<T>::Iterator list_iterator_;
 	}; // class Iterator
 
+public: // functions of nested class
+	Iterator begin()
+	{
+		typename List<T>::Iterator i = this->list_->begin();
+		return Iterator(i);
+	}
+	Iterator end()
+	{
+		typename List<T>::Iterator i = this->list_->end();
+		return Iterator(i);
+	}
+
 
 private: // data members
 	List<T> * list_;
