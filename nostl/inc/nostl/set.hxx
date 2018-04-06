@@ -27,8 +27,8 @@ public: // nested class
 	public:
 		Iterator(typename List<T>::Iterator list_iterator) : list_iterator_(list_iterator) {}
 
-		T& operator*() { return *(this->list_iterator_); } // derefence with *
-		Iterator * operator->() { return this; } // dereference with ->
+		T& operator*() const { return *(this->list_iterator_); } // derefence with *
+		Iterator * operator->() const { return this; } // dereference with ->
 		Iterator operator++() // preincrement
 		{
 			++this->list_iterator_;
@@ -51,8 +51,8 @@ public: // nested class
 			--this->list_iterator_;
 			return rv;
 		}
-		bool operator==(Iterator& rhs) { return this->list_iterator_ == rhs.list_iterator_; }
-		bool operator!=(Iterator& rhs) { return (*this == rhs); }
+		bool operator==(const Iterator& rhs) const { return this->list_iterator_ == rhs.list_iterator_; }
+		bool operator!=(const Iterator& rhs) const { return (*this == rhs); }
 
 
 	private:
