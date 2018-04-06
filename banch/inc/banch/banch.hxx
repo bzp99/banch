@@ -17,8 +17,8 @@ class Recipe {
 public:
 	Recipe() : number_of_ingredients_(0) { ingredients_ = new nostl::Set<Ingredient>; }
 
-	void add(Ingredient * addendum) { this->ingredients_->insert(addendum); }
-	void remove(Ingredient * delendum) { this->ingredients_->remove(delendum); }
+	void add(const Ingredient& addendum) { this->ingredients_->insert(addendum); }
+	void remove(const Ingredient& delendum) { this->ingredients_->remove(delendum); }
 
 	void show() const;
 
