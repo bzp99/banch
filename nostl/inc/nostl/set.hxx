@@ -66,7 +66,7 @@ private: // nested class
 }; // class Set
 
 template <typename T>
-Set<T>::Set& Set<T>::operator=(const Set& rhs)
+typename Set<T>::Set& Set<T>::operator=(const Set& rhs)
 {
 	// check for self assignment
 	if (this == &rhs)
@@ -87,7 +87,7 @@ void Set<T>::insert(const T& val)
 	// make sure list/set doesn't contain item yet
 	if (this->number_of_elements_ != 0)
 	{
-		for (List<T>::Iterator i = this->list_->begin(); i != this->list_->end(); i++)
+		for (typename List<T>::Iterator i = this->list_->begin(); i != this->list_->end(); i++)
 		{
 			if (*i == val)
 			{
