@@ -5,7 +5,7 @@ namespace nostl {
 
 template <typename T>
 class List { // implementing List class for STL containers are prohibited
-public:
+public: // main body
 	List();
 
 	List(const List&);
@@ -37,7 +37,7 @@ private: // data members
 	Node * tail_;
 	unsigned int number_of_elements_;
 
-private: // nested class
+public: // nested class
 	class Iterator {
 	public:
 		Iterator(Node * where_to_point, Node * first_sentinel, Node * last_sentinel) : current_(where_to_point), first_sentinel_(first_sentinel), last_sentinel(last_sentinel) {}
@@ -86,7 +86,7 @@ private: // nested class
 		Node * current_;
 		Node * first_sentinel_;
 		Node * last_sentinel;
-	};
+	}; // class Iterator
 
 public: // functions of nested class
 	Iterator begin() { return (number_of_elements_ == 0) ? nullptr : Iterator(this->head_->next_, this->head_, this->tail_); }
