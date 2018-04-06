@@ -4,8 +4,7 @@
 namespace nostl {
 
 template <typename T>
-class List {
-private: class Iterator;
+class List { // implementing List class for STL containers are prohibited
 public:
 	List() : number_of_elements_(0)
 	{
@@ -31,8 +30,6 @@ public:
 	List& operator=(const List&);
 	// TODO other operators?
 
-	Iterator begin() { return (number_of_elements_ == 0) ? nullptr : Iterator(this->head_->next_, this->head_, this->tail_); }
-	Iterator end() { return (number_of_elements_ == 0) ? nullptr : Iterator(this->head->prev_, this->head_, this->tail_); }
 
 	~List();
 
@@ -86,11 +83,16 @@ private:
 		bool operator==(Iterator& rhs) { return this->current_ == rhs.current_; }
 		bool operator!=(Iterator& rhs) { return !(*this == rhs); }
 
+
 	private:
 		Node * current_;
 		Node * first_sentinel_;
 		Node * last_sentinel;
 	};
+
+public:
+	Iterator begin() { return (number_of_elements_ == 0) ? nullptr : Iterator(this->head_->next_, this->head_, this->tail_); }
+	Iterator end() { return (number_of_elements_ == 0) ? nullptr : Iterator(this->head->prev_, this->head_, this->tail_); }
 
 private:
 	Node * find(const T&) const;
