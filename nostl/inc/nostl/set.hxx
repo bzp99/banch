@@ -61,7 +61,7 @@ private: // nested class
 
 
 	private:
-		List<T>::Iterator list_iterator_;
+		typename List<T>::Iterator list_iterator_;
 	};
 }; // class Set
 
@@ -77,7 +77,7 @@ Set<T>::Set& Set<T>::operator=(const Set& rhs)
 	this->clear();
 	this->number_of_elements_ = rhs.number_of_elements_;
 	this->list_ = rhs.list_;
-	
+
 	return *this;
 }
 
