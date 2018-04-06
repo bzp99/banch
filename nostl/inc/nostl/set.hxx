@@ -25,7 +25,6 @@ public:
 public: // nested class
 	class Iterator {
 	public:
-		Iterator() {}
 		Iterator(typename List<T>::Iterator list_iterator) : list_iterator_(list_iterator) {}
 
 		T& operator*() const { return *(this->list_iterator_); } // derefence with *
