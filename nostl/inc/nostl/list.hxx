@@ -54,11 +54,12 @@ private: // nested class
 		}
 		Iterator operator++(int) // postincrement
 		{
-			return *this;
+			Iterator rv = *this;
 			if (this->current_->next_ != this->last_sentinel)
 			{
 				this->current_ = this->current_->next_;
 			}
+			return rv;
 		}
 		Iterator operator--() // predecrement
 		{
@@ -70,11 +71,12 @@ private: // nested class
 		}
 		Iterator operator--(int) // postdecrement
 		{
-			return *this;
+			Iterator rv = *this;
 			if (this->current_->prev_ != this->first_sentinel)
 			{
 				this->current_ = this->current_->prev_;
 			}
+			return rv;
 		}
 		bool operator==(Iterator& rhs) { return this->current_ == rhs.current_; }
 		bool operator!=(Iterator& rhs) { return !(*this == rhs); }
