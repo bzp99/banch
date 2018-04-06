@@ -2,8 +2,7 @@
 #define BANCH_HXX
 
 #include "nostl/string.hxx"
-
-const unsigned int kMaxIngredients = 20;
+#include "nostl/set.hxx"
 
 namespace banch {
 
@@ -16,28 +15,22 @@ public:
 
 class Recipe {
 public:
-	Recipe() : number_of_ingredients_(0) {}
+	Recipe() : number_of_ingredients_(0) { ingredients_ = new nostl::Set<Ingredient>; }
 
-	void add(Ingredient * new_ingredient)
-	{
-		if (number_of_ingredients_ >= kMaxIngredients)
-		{
-			throw std::out_of_range("jar full");
-		}
-		ingredients_[number_of_ingredients_++] = new_ingredient;
-	}
+	void add(Ingredient * addendum) { this->ingredients_->insert(addendum); }
+	void remove(Ingredient * delendum) { this->ingredients_->remove(delendum); }
 
 	void show() const;
 
 	void save() const;
 	void load();
 
-	~Recipe();
+	~Recipe() { delete ingredients_; }
 
 private:
-	Ingredient * ingredients_[kMaxIngredients]; // heterogenous container
+	nostl::Set<Ingredient> * ingredients_; // heterogenous container
 	unsigned int number_of_ingredients_;
-};
+}; // class Recipe
 
 void Recipe::show() const
 {
