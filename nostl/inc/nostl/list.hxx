@@ -6,17 +6,7 @@ namespace nostl {
 template <typename T>
 class List { // implementing List class for STL containers are prohibited
 public:
-	List() : number_of_elements_(0)
-	{
-		this->head_ = new Node;
-		this->tail_ = new Node;
-
-		this->head_->prev_ = nullptr;
-		this->head_->next_ = this->tail_;
-
-		this->tail_->prev_ = this->head_;
-		this->tail_->next_ = nullptr;
-	}
+	List();
 
 	List(const List&);
 
@@ -28,8 +18,6 @@ public:
 	unsigned int size() const { return this->number_of_elements_; }
 
 	List& operator=(const List&);
-	// TODO other operators?
-
 
 	~List();
 
@@ -102,6 +90,21 @@ private:
 	Node * tail_;
 	unsigned int number_of_elements_;
 }; // class List
+
+template <typename T>
+List<T>::List()
+{
+	this->number_of_elements_ = 0;
+
+	this->head_ = new Node;
+	this->tail_ = new Node;
+
+	this->head_->prev_ = nullptr;
+	this->head_->next_ = this->tail_;
+
+	this->tail_->prev_ = this->head_;
+	this->tail_->next_ = nullptr;
+}
 
 template <typename T>
 typename List<T>::Node * List<T>::find(const T& val) const
