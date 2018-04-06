@@ -40,6 +40,7 @@ private: // data members
 public: // nested class
 	class Iterator {
 	public:
+		Iterator() {}
 		Iterator(Node * where_to_point, Node * first_sentinel, Node * last_sentinel) : current_(where_to_point), first_sentinel_(first_sentinel), last_sentinel(last_sentinel) {}
 
 		T& operator*() { return this->current_->value_; } // dereference with *
@@ -89,8 +90,8 @@ public: // nested class
 	}; // class Iterator
 
 public: // functions of nested class
-	Iterator begin() { return (number_of_elements_ == 0) ? nullptr : Iterator(this->head_->next_, this->head_, this->tail_); }
-	Iterator end() { return (number_of_elements_ == 0) ? nullptr : Iterator(this->head->previous_, this->head_, this->tail_); }
+	Iterator begin() { return (number_of_elements_ == 0) ? Iterator(nullptr, nullptr, nullptr) : Iterator(this->head_->next_, this->head_, this->tail_); }
+	Iterator end() { return (number_of_elements_ == 0) ? Iterator(nullptr, nullptr, nullptr) : Iterator(this->head->previous_, this->head_, this->tail_); }
 
 }; // class List
 
