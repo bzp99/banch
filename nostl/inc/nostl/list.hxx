@@ -43,8 +43,6 @@ public: // nested class
 		Iterator() {}
 		Iterator(Node * where_to_point, Node * first_sentinel, Node * last_sentinel) : current_(where_to_point), first_sentinel_(first_sentinel), last_sentinel_(last_sentinel) {}
 
-		Iterator(const Iterator& obj) : current_(obj.current_), first_sentinel_(obj.first_sentinel_), last_sentinel_(obj.last_sentinel_) {}
-
 		T& operator*() { return this->current_->value_; } // dereference with *
 		Iterator *  operator->() { return this; } // dereference with ->
 		Iterator operator++() // preincrement
