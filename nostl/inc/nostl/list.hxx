@@ -31,8 +31,8 @@ public:
 	List& operator=(const List&);
 	// TODO other operators?
 
-	Iterator begin() { return (number_of_elements_ == 0) ? nullptr : Iterator(this->head_->next_->value_); }
-	Iterator end() { return (number_of_elements_ == 0) ? nullptr : Iterator(this->head->prev_->value_); }
+	Iterator begin() { return (number_of_elements_ == 0) ? nullptr : Iterator(this->head_->next_, this->head_, this->tail_); }
+	Iterator end() { return (number_of_elements_ == 0) ? nullptr : Iterator(this->head->prev_, this->head_, this->tail_); }
 
 	~List();
 
@@ -47,17 +47,49 @@ private:
 private:
 	class Iterator {
 	public:
-		Iterator() : pointer_(nullptr) {}
-		Iterator(T * where_to_point) : pointer_(where_to_point) {}
+		Iterator(Node * where_to_point, Node * first_sentinel, Node * last_sentinel) : current_(where_to_point), first_sentinel_(first_sentinel), last_sentinel(last_sentinel) {}
 
-		T& operator*() { return *pointer_; } // dereference
-		void operator++() // preincrement
+		T& operator*() { return this->current_->value_; } // dereference with *
+		Iterator *  operator->() { return this; } // dereference with ->
+		Iterator operator++() // preincrement
 		{
-			// FIXME nothing
+			if (this->current_->next_ != this->last_sentinel)
+			{
+				this->current_ = this->current_->next_;
+			}
+			return *this;
 		}
+		Iterator operator++(int) // postincrement
+		{
+			return *this;
+			if (this->current_->next_ != this->last_sentinel)
+			{
+				this->current_ = this->current_->next_;
+			}
+		}
+		Iterator operator--() // predecrement
+		{
+			if (this->current_->prev_ != this->first_sentinel_)
+			{
+				this->current_ = this->current_->prev_;
+			}
+			return *this;
+		}
+		Iterator operator--(int) // postdecrement
+		{
+			return *this;
+			if (this->current_->prev_ != this->first_sentinel)
+			{
+				this->current_ = this->current_->prev_;
+			}
+		}
+		bool operator==(Iterator& rhs) { return this->current_ == rhs.current_; }
+		bool operator!=(Iterator& rhs) { return !(*this == rhs); }
 
 	private:
-		T * pointer_;
+		Node * current_;
+		Node * first_sentinel_;
+		Node * last_sentinel;
 	};
 
 private:
