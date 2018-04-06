@@ -30,7 +30,7 @@ private: // data members
 private: // nested class
 	class Iterator {
 	public:
-		Iterator(List<T>::Iterator list_iterator) : list_iterator_(list_iterator) {}
+		Iterator(typename List<T>::Iterator list_iterator) : list_iterator_(list_iterator) {}
 
 		T& operator*() { return *(this->list_iterator_); } // derefence with *
 		Iterator * operator->() { return this; } // dereference with ->
