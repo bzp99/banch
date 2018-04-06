@@ -63,18 +63,18 @@ private: // nested class
 		}
 		Iterator operator--() // predecrement
 		{
-			if (this->current_->prev_ != this->first_sentinel_)
+			if (this->current_->previous_ != this->first_sentinel_)
 			{
-				this->current_ = this->current_->prev_;
+				this->current_ = this->current_->previous_;
 			}
 			return *this;
 		}
 		Iterator operator--(int) // postdecrement
 		{
 			Iterator rv = *this;
-			if (this->current_->prev_ != this->first_sentinel)
+			if (this->current_->previous_ != this->first_sentinel)
 			{
-				this->current_ = this->current_->prev_;
+				this->current_ = this->current_->previous_;
 			}
 			return rv;
 		}
@@ -90,7 +90,7 @@ private: // nested class
 
 public: // functions of nested class
 	Iterator begin() { return (number_of_elements_ == 0) ? nullptr : Iterator(this->head_->next_, this->head_, this->tail_); }
-	Iterator end() { return (number_of_elements_ == 0) ? nullptr : Iterator(this->head->prev_, this->head_, this->tail_); }
+	Iterator end() { return (number_of_elements_ == 0) ? nullptr : Iterator(this->head->previous_, this->head_, this->tail_); }
 
 }; // class List
 
@@ -102,10 +102,10 @@ List<T>::List()
 	this->head_ = new Node;
 	this->tail_ = new Node;
 
-	this->head_->prev_ = nullptr;
+	this->head_->previous_ = nullptr;
 	this->head_->next_ = this->tail_;
 
-	this->tail_->prev_ = this->head_;
+	this->tail_->previous_ = this->head_;
 	this->tail_->next_ = nullptr;
 }
 
@@ -135,9 +135,9 @@ List<T>::List(const List& obj)
 	// initiating empty list
 	this->head_ = new Node;
 	this->tail_ = new Node;
-	this->head_->prev_ = nullptr;
+	this->head_->previous_ = nullptr;
 	this->head_->next_ = this->tail_;
-	this->tail_->prev_ = this->head_;
+	this->tail_->previous_ = this->head_;
 	this->tail_->next_ = nullptr;
 	this->number_of_elements_ = 0;
 
@@ -157,12 +157,12 @@ void List<T>::append(const T& val)
 	new_node->value_ = val;
 
 	// setting new_node's pointers
-	new_node->prev_ = this->tail_->prev_;
+	new_node->previous_ = this->tail_->previous_;
 	new_node->next_ = this->tail_;
 
 	// setting neighbouring nodes' pointers
-	new_node->prev_->next_ = new_node;
-	new_node->next_->prev_ = new_node;
+	new_node->previous_->next_ = new_node;
+	new_node->next_->previous_ = new_node;
 
 	// incrementing counter
 	++this->number_of_elements_;
@@ -175,12 +175,12 @@ void List<T>::prepend(const T& val)
 	new_node->value_ = val;
 
 	// setting new_node's pointers
-	new_node->prev_ = this->head_;
+	new_node->previous_ = this->head_;
 	new_node->next_ = this->head_->next_;
 
 	// setting neighbouring nodes' pointers
-	new_node->prev_->next_ = new_node;
-	new_node->next_->prev_ = new_node;
+	new_node->previous_->next_ = new_node;
+	new_node->next_->previous_ = new_node;
 
 	// incrementing counter
 	++this->number_of_elements_;
@@ -195,8 +195,8 @@ void List<T>::remove(const T& val)
 	if (delendum != nullptr)
 	{
 		// set neighbouring nodes' pointers
-		delendum->prev_->next_ = delendum->next_;
-		delendum->next_->prev_ = delendum->prev_;
+		delendum->previous_->next_ = delendum->next_;
+		delendum->next_->previous_ = delendum->previous_;
 
 		// delete delendum
 		delete delendum;
@@ -214,12 +214,12 @@ void List<T>::clear()
 	while (traveller != this->tail_)
 	{
 		traveller = traveller->next_;
-		delete traveller->prev_;
+		delete traveller->previous_;
 	}
 
 	// resetting pointers of sentinels
 	this->head_->next_ = this->tail_;
-	this->tail_->prev_ = this->head_;
+	this->tail_->previous_ = this->head_;
 
 	// zero counter
 	this->number_of_elements_ = 0;
