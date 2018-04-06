@@ -22,12 +22,7 @@ public:
 
 	~Set() { delete this->list_; }
 
-
-private: // data members
-	List<T> * list_;
-	unsigned int number_of_elements_;
-
-private: // nested class
+public: // nested class
 	class Iterator {
 	public:
 		Iterator(typename List<T>::Iterator list_iterator) : list_iterator_(list_iterator) {}
@@ -62,7 +57,13 @@ private: // nested class
 
 	private:
 		typename List<T>::Iterator list_iterator_;
-	};
+	}; // class Iterator
+
+
+private: // data members
+	List<T> * list_;
+	unsigned int number_of_elements_;
+
 }; // class Set
 
 template <typename T>
