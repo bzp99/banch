@@ -47,7 +47,7 @@ public: // nested class
 		Iterator *  operator->() { return this; } // dereference with ->
 		Iterator operator++() // preincrement
 		{
-			if (this->current_->next_ != this->last_sentinel)
+			if (this->current_->next_ != this->last_sentinel_)
 			{
 				this->current_ = this->current_->next_;
 			}
@@ -56,7 +56,7 @@ public: // nested class
 		Iterator operator++(int) // postincrement
 		{
 			Iterator rv = *this;
-			if (this->current_->next_ != this->last_sentinel)
+			if (this->current_->next_ != this->last_sentinel_)
 			{
 				this->current_ = this->current_->next_;
 			}
@@ -79,8 +79,8 @@ public: // nested class
 			}
 			return rv;
 		}
-		bool operator==(Iterator& rhs) { return this->current_ == rhs.current_; }
-		bool operator!=(Iterator& rhs) { return !(*this == rhs); }
+		bool operator==(Iterator& rhs) const { return this->current_ == rhs.current_; }
+		bool operator!=(Iterator& rhs) const { return !(*this == rhs); }
 
 
 	private:
@@ -91,7 +91,7 @@ public: // nested class
 
 public: // functions of nested class
 	Iterator begin() { return (number_of_elements_ == 0) ? Iterator(nullptr, nullptr, nullptr) : Iterator(this->head_->next_, this->head_, this->tail_); }
-	Iterator end() { return (number_of_elements_ == 0) ? Iterator(nullptr, nullptr, nullptr) : Iterator(this->head->previous_, this->head_, this->tail_); }
+	Iterator end() { return (number_of_elements_ == 0) ? Iterator(nullptr, nullptr, nullptr) : Iterator(this->head_->previous_, this->head_, this->tail_); }
 
 }; // class List
 
