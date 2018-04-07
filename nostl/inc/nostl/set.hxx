@@ -27,7 +27,8 @@ public: // nested class
 	public:
 		Iterator(typename List<T>::Iterator list_iterator) : list_iterator_(list_iterator) {}
 
-		T& operator*() const { return *(this->list_iterator_); } // derefence with *
+		T& operator*() { return *(this->list_iterator_); } // derefence with * / var
+		T const& operator*() const { return *(this->list_iterator_); } // derefence with * / const
 		Iterator * operator->() const { return this; } // dereference with ->
 		Iterator operator++() // preincrement
 		{
