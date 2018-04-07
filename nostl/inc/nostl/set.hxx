@@ -52,7 +52,7 @@ public: // nested class
 			return rv;
 		}
 		bool operator==(const Iterator& rhs) const { return this->list_iterator_ == rhs.list_iterator_; }
-		bool operator!=(const Iterator& rhs) const { return (*this == rhs); }
+		bool operator!=(const Iterator& rhs) const { return !(*this == rhs); }
 
 
 	private:
