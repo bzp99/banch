@@ -10,6 +10,8 @@ class Ingredient {
 public:
 	virtual void print() const;
 
+	virtual bool operator==(const Ingredient&);
+
 	virtual ~Ingredient(); // virtual destructor for this class shall be derived later
 };
 
