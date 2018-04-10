@@ -80,8 +80,8 @@ public: // nested class
 			}
 			return rv;
 		}
-		bool operator==(Iterator& rhs) const { return this->current_ == rhs.current_; }
-		bool operator!=(Iterator& rhs) const { return !(*this == rhs); }
+		bool operator==(Iterator const & rhs) const { return this->current_ == rhs.current_; }
+		bool operator!=(Iterator const & rhs) const { return !(*this == rhs); }
 
 
 	private:
