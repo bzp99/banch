@@ -74,7 +74,7 @@ public: // nested class
 		Iterator operator--(int) // postdecrement
 		{
 			Iterator rv = *this;
-			if (this->current_->previous_ != this->first_sentinel)
+			if (this->current_->previous_ != this->first_sentinel_)
 			{
 				this->current_ = this->current_->previous_;
 			}
@@ -92,7 +92,7 @@ public: // nested class
 
 public: // functions of nested class
 	Iterator begin() { return (number_of_elements_ == 0) ? Iterator(nullptr, nullptr, nullptr) : Iterator(this->head_->next_, this->head_, this->tail_); }
-	Iterator end() { return (number_of_elements_ == 0) ? Iterator(nullptr, nullptr, nullptr) : Iterator(this->head_->previous_, this->head_, this->tail_); }
+	Iterator end() { return (number_of_elements_ == 0) ? Iterator(nullptr, nullptr, nullptr) : Iterator(this->tail_->previous_, this->head_, this->tail_); }
 
 }; // class List
 
