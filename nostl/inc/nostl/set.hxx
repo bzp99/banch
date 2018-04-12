@@ -10,12 +10,12 @@ class Set { // implementing Set class for STL containers are prohibited
 public:
 	Set() : number_of_elements_(0), list_(new List<T>) {}
 
-	Set(const Set& obj) : number_of_elements_(obj.number_of_elements_), list_(obj.list_) {}
+	Set(Set const & obj) : number_of_elements_(obj.number_of_elements_), list_(obj.list_) {}
 
-	Set& operator=(const Set&);
+	Set & operator=(Set const &);
 
-	void insert(const T&);
-	void remove(const T&);
+	void insert(T const &);
+	void remove(T const &);
 	void clear();
 
 	unsigned int size() const { return this->number_of_elements_; }
@@ -27,8 +27,8 @@ public: // nested class
 	public:
 		Iterator(typename List<T>::Iterator list_iterator) : list_iterator_(list_iterator) {}
 
-		T& operator*() { return *(this->list_iterator_); } // derefence with * / var
-		T const& operator*() const { return *(this->list_iterator_); } // derefence with * / const
+		T & operator*() { return *(this->list_iterator_); } // derefence with * / var
+		T const & operator*() const { return *(this->list_iterator_); } // derefence with * / const
 		Iterator * operator->() const { return this; } // dereference with ->
 		Iterator operator++() // preincrement
 		{
@@ -52,8 +52,8 @@ public: // nested class
 			--this->list_iterator_;
 			return rv;
 		}
-		bool operator==(const Iterator& rhs) const { return this->list_iterator_ == rhs.list_iterator_; }
-		bool operator!=(const Iterator& rhs) const { return !(*this == rhs); }
+		bool operator==(Iterator const & rhs) const { return this->list_iterator_ == rhs.list_iterator_; }
+		bool operator!=(Iterator const & rhs) const { return !(*this == rhs); }
 
 
 	private:
@@ -80,7 +80,7 @@ private: // data members
 }; // class Set
 
 template <typename T>
-typename Set<T>::Set& Set<T>::operator=(const Set& rhs)
+typename Set<T>::Set & Set<T>::operator=(Set const & rhs)
 {
 	// check for self assignment
 	if (this == &rhs)
@@ -96,7 +96,7 @@ typename Set<T>::Set& Set<T>::operator=(const Set& rhs)
 }
 
 template <typename T>
-void Set<T>::insert(const T& val)
+void Set<T>::insert(T const & val)
 {
 	// make sure list/set doesn't contain item yet
 	if (this->number_of_elements_ != 0)
@@ -115,7 +115,7 @@ void Set<T>::insert(const T& val)
 }
 
 template <typename T>
-void Set<T>::remove(const T& val)
+void Set<T>::remove(T const & val)
 {
 	this->list_->remove(val);
 	--this->number_of_elements_;

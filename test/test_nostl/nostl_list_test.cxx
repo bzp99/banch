@@ -15,7 +15,7 @@ TEST(ListTest, FillList)
 	nostl::List<double> * foo = new nostl::List<double>;
 	for (unsigned int i = 0; i < 100; ++i)
 	{
-		foo->append((double) i / 2);
+		foo->append(static_cast<double>(i) / 2.0);
 	}
 	EXPECT_EQ(100, foo->size());
 	delete foo;
@@ -27,7 +27,7 @@ TEST(ListTest, ClearList)
 	nostl::List<long> * foo = new nostl::List<long>;
 	for (unsigned int i = 0; i < 20; ++i)
 	{
-		foo->append((long) i / 3.1415);
+		foo->append(static_cast<long>(i) / 3.141592654);
 	}
 	EXPECT_EQ(20, foo->size());
 	foo->clear();

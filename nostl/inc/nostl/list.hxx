@@ -8,13 +8,13 @@ class List { // implementing List class for STL containers are prohibited
 public: // main body
 	List();
 
-	List(const List&);
+	List(List const &);
 
-	List& operator=(const List&);
+	List & operator=(List const &);
 
-	void append(const T&);
-	void prepend(const T&);
-	void remove(const T&);
+	void append(T const &);
+	void prepend(T const &);
+	void remove(T const &);
 	void clear();
 
 	unsigned int size() const { return this->number_of_elements_; }
@@ -30,12 +30,13 @@ private: // nested class
 	};
 
 private: // private function
-	Node * find(const T&) const;
+	Node * find(T const &) const;
 
 private: // data members
 	Node * head_;
 	Node * tail_;
 	unsigned int number_of_elements_;
+
 
 public: // nested class
 	class Iterator {
@@ -43,8 +44,8 @@ public: // nested class
 		Iterator() {}
 		Iterator(Node * where_to_point, Node * first_sentinel, Node * last_sentinel) : current_(where_to_point), first_sentinel_(first_sentinel), last_sentinel_(last_sentinel) {}
 
-		T& operator*() { return this->current_->value_; } // dereference with *
-		T const& operator*() const { return this->current_->value_; } // dereference with *
+		T & operator*() { return this->current_->value_; } // dereference with *
+		T const & operator*() const { return this->current_->value_; } // dereference with *
 		Iterator *  operator->() { return this; } // dereference with ->
 		Iterator operator++() // preincrement
 		{
@@ -112,7 +113,7 @@ List<T>::List()
 }
 
 template <typename T>
-typename List<T>::Node * List<T>::find(const T& val) const
+typename List<T>::Node * List<T>::find(T const & val) const
 {
 	Node * traveller = this->head_->next_; // temporary node
 
@@ -132,7 +133,7 @@ typename List<T>::Node * List<T>::find(const T& val) const
 }
 
 template <typename T>
-List<T>::List(const List& obj)
+List<T>::List(List const & obj)
 {
 	// initiating empty list
 	this->head_ = new Node;
@@ -153,7 +154,7 @@ List<T>::List(const List& obj)
 }
 
 template <typename T>
-void List<T>::append(const T& val)
+void List<T>::append(T const & val)
 {
 	Node * new_node = new Node;
 	new_node->value_ = val;
@@ -171,7 +172,7 @@ void List<T>::append(const T& val)
 }
 
 template <typename T>
-void List<T>::prepend(const T& val)
+void List<T>::prepend(T const & val)
 {
 	Node * new_node = new Node;
 	new_node->value_ = val;
@@ -189,7 +190,7 @@ void List<T>::prepend(const T& val)
 }
 
 template <typename T>
-void List<T>::remove(const T& val)
+void List<T>::remove(T const & val)
 {
 	// find node
 	Node * delendum = find(val);
@@ -228,7 +229,7 @@ void List<T>::clear()
 }
 
 template <typename T>
-List<T>& List<T>::operator=(const List<T>& rhs)
+List<T> & List<T>::operator=(List<T> const & rhs)
 {
 	// checking for self-assignment
 	if (this == &rhs)
