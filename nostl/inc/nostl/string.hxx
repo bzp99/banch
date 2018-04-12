@@ -22,7 +22,7 @@ public:
 		arr_[1] = '\0';
 	}
 
-	String(char const * chs const) : length_(strlen(chs)) // constructor from c-string
+	String(char const * chs) : length_(strlen(chs)) // constructor from c-string
 	{
 		this->arr_ = new char[this->length_ + 1];
 		strcpy(this->arr_, chs);
@@ -45,10 +45,10 @@ public:
 	char operator[](unsigned int const) const; // indexing (const)
 	char& operator[](unsigned int const); // indexing (var)
 	void operator+=(char const); // additive concatenation with char
-	void operator+=(char const * const); // additiva concatenation with c-string
+	void operator+=(char const *); // additiva concatenation with c-string
 	void operator+=(String const &); // additive concatenation with other String
 	String operator+(char const) const; // concatenation with char
-	String operator+(char const * const) const; // concatenation with c-string
+	String operator+(char const *) const; // concatenation with c-string
 	String operator+(String const &) const; // concatenation with other String
 
 	inline friend std::ostream & operator<<(std::ostream &, String const &); // inserter
@@ -117,7 +117,7 @@ inline void String::operator+=(char const ch)
 	delete[] tmp;
 }
 
-void String::operator+=(char const * chs const)
+void String::operator+=(char const * chs)
 {
 	for (unsigned int i = 0; i < strlen(chs); ++i)
 	{
@@ -140,7 +140,7 @@ String String::operator+(char const ch) const
 	return rv;
 }
 
-String String::operator+(char const * chs const) const
+String String::operator+(char const * chs) const
 {
 	String rv(*this);
 	rv += chs;
