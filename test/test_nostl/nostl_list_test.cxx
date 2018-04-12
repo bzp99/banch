@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include "nostl/list.hxx"
 
-TEST(ListTest, CreateEmptyIntList)
+TEST(ListTest, CreateEmpty)
 {
 	// create empty list and check if its size is 0
 	nostl::List<int> * foo = new nostl::List<int>;
@@ -9,7 +9,7 @@ TEST(ListTest, CreateEmptyIntList)
 	delete foo;
 }
 
-TEST(ListTest, FillList)
+TEST(ListTest, Fill)
 {
 	// fill new list with doubles like {0, .5, 1, 1.5, ..., 50}
 	nostl::List<double> * foo = new nostl::List<double>;
