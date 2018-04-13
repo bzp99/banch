@@ -21,7 +21,7 @@ TEST(ListTest, Fill)
 	delete foo;
 }
 
-TEST(ListTest, ClearList)
+TEST(ListTest, Clear)
 {
 	// fill test with longs and test clearing
 	nostl::List<long> * foo = new nostl::List<long>;
@@ -89,6 +89,35 @@ TEST(ListTest, IterationOutOfRange)
 	++i;
 	EXPECT_EQ(20.5, *(i++));
 	EXPECT_EQ(20.5, *i);
+
+	delete foo;
+}
+
+TEST(ListTest, Removal)
+{
+	// create new list with a few elements like {3, 30, 3, 30}
+	nostl::List<int> * foo = new nostl::List<int>;
+	foo->append(3);
+	foo->append(30);
+	foo->append(3);
+	foo->append(30);
+	EXPECT_EQ(4, foo->size());
+
+	// remove an element
+	foo->remove(30);
+	nostl::List<int>::Iterator i = foo->begin();
+	EXPECT_EQ(3, *(i++));
+	EXPECT_EQ(3, *(i++));
+	EXPECT_EQ(30, *i);
+	EXPECT_EQ(3, foo->size());
+
+	// remove two more just for fun
+	foo->remove(30);
+	EXPECT_EQ(2, foo->size()); // FIXME this fails
+	foo->remove(3);
+	i = foo->begin();
+	EXPECT_EQ(3, *i);
+	EXPECT_EQ(1, foo->size());
 
 	delete foo;
 }

@@ -26,3 +26,17 @@ TEST(SetTest, Fill)
 
 	delete foo;
 }
+
+TEST(SetTest, Clear)
+{
+	// fill new set with longs and test clearing
+	nostl::Set<long> * foo = new nostl::Set<long>;
+	for (unsigned int i = 0; i < 420; ++i)
+	{
+		foo->insert(static_cast<long>(i) / -2.718281828459);
+	}
+	EXPECT_EQ(420, foo->size());
+	foo->clear();
+	EXPECT_EQ(0, foo->size());
+	delete foo;
+}

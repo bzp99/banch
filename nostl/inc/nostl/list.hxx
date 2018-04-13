@@ -1,6 +1,9 @@
 #ifndef BANCH_NOSTL_LIST_H
 #define BANCH_NOSTL_LIST_H
 
+// TODO temporal, remove later
+#include <iostream>
+
 namespace nostl {
 
 template <typename T>
@@ -206,6 +209,10 @@ void List<T>::remove(T const & val)
 
 		// decrementing counter
 		--this->number_of_elements_;
+	} // TODO remove this, its temporary
+	else
+	{
+		std::cout << "not found" << std::endl;
 	}
 }
 
