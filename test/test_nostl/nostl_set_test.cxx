@@ -145,27 +145,35 @@ TEST(SetTest, IterationOutOfRange)
 
 TEST(SetTest, Removal)
 {
-	// create new Set with a few elements like {3, 30, 3, 30}
+	// create new Set with a few elements like {3, 4, 5, 40}
 	nostl::Set<int> foo;
 	foo.insert(3);
-	foo.insert(30);
-	foo.insert(3);
-	foo.insert(30);
+	foo.insert(4);
+	foo.insert(5);
+	foo.insert(40);
 	EXPECT_EQ(4, foo.size());
 
 	// remove an element
-	foo.remove(30); // --> {3, 3, 30}
+	foo.remove(4); // --> {3, 5, 40}
 	nostl::Set<int>::Iterator i = foo.begin();
 	EXPECT_EQ(3, *(i++));
-	EXPECT_EQ(3, *(i++));
-	EXPECT_EQ(30, *i);
+	EXPECT_EQ(5, *(i++));
+	EXPECT_EQ(40, *i);
 	EXPECT_EQ(3, foo.size());
 
 	// remove two more just for fun
-	foo.remove(30); // --> {3, 3}
+	foo.remove(40); // --> {3, 5}
 	EXPECT_EQ(2, foo.size());
-	foo.remove(3); // --> {3}
+	foo.remove(3); // --> {5}
 	i = foo.begin();
-	EXPECT_EQ(3, *i);
+	EXPECT_EQ(5, *i);
 	EXPECT_EQ(1, foo.size());
+
+	// remove a nonexistent one
+	foo.remove(3030); // --> {3, 5}
+	EXPECT_EQ(1, foo.size());
+
+	// remove the last one
+	foo.remove(5); // --> {}
+	EXPECT_EQ(0, foo.size());
 }
