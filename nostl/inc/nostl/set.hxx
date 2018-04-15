@@ -1,6 +1,10 @@
 #ifndef BANCH_NOSTL_SET_HXX
 #define BANCH_NOSTL_SET_HXX
 
+/// \file list.hxx
+///
+/// \brief re-implementation of std::Set<T>
+
 #include "nostl/list.hxx"
 
 namespace nostl {
@@ -37,7 +41,7 @@ public:
 
 
 public:
-	/// \brief custom made iterator to navigate the Set mode easily
+	/// \brief custom made iterator to navigate the Set more easily
 	class Iterator {
 	public:
 		/// \brief constructor for the Set's Iterator (uses Lists class')

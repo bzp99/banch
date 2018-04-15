@@ -1,6 +1,10 @@
 #ifndef BANCH_NOSTL_LIST_H
 #define BANCH_NOSTL_LIST_H
 
+/// \file list.hxx
+///
+/// \brief re-implementation of std::List<T>
+
 namespace nostl {
 
 /// \brief re-implementation of std::List<T>

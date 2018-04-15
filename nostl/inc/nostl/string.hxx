@@ -1,6 +1,10 @@
 #ifndef STRING_HXX
 #define STRING_HXX
 
+/// \file list.hxx
+///
+/// \brief re-implementation of std::String
+
 #include <iostream>
 #include <cstring>
 
