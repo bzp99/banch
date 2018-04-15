@@ -56,7 +56,7 @@ TEST(ListTest, Copy)
 
 TEST(ListTest, Assign)
 {
-	// create List with a few ints like {0, 2, ..., 99}
+	// create List with a few ints like {0, 1, ..., 99}
 	nostl::List<int> foo;
 	for (unsigned int i = 0; i < 100; ++i)
 	{
