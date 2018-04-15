@@ -40,6 +40,11 @@ public:
 		return this->length_;
 	}
 
+	char * cstr() const
+	{
+		return this->arr_;
+	}
+
 	/// OPERATORS ///
 	String& operator=(String const &); // assignment
 	char operator[](unsigned int const) const; // indexing (const)
