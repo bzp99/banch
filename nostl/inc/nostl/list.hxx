@@ -1,6 +1,7 @@
 #ifndef BANCH_NOSTL_LIST_H
 #define BANCH_NOSTL_LIST_H
 
+#include <iostream> // FIXME temporal
 namespace nostl {
 
 /// \brief re-implementation of std::List<T>
@@ -388,6 +389,12 @@ List<T> & List<T>::operator=(List<T> const & rhs)
 
 	// clearing current list
 	this->clear();
+
+	// if rhs is empty, we're done
+	if (rhs.size() == 0)
+	{
+		return *this;
+	}
 
 	// copying list
 	Node * traveller = rhs.head_->next_;
