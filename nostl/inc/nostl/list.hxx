@@ -1,56 +1,141 @@
 #ifndef BANCH_NOSTL_LIST_H
 #define BANCH_NOSTL_LIST_H
 
-// TODO temporal, remove later
+/// FIXME temporal, remove later
 #include <iostream>
 
 namespace nostl {
 
+/// \brief re-implementation of std::List<T>
+///
+/// I had to re-implement the List class because using STL containers was
+/// prohibited. My List is doubly-linked and has two sentinels (a head and a
+/// tail)
 template <typename T>
-class List { // implementing List class for STL containers are prohibited
-public: // main body
+class List {
+public:
+	/// \brief default constructor
+	///
+	/// Constructor that takes no parameter and initialises memory for an empty
+	/// List
 	List();
 
+	/// \brief copy constructor
+	///
+	/// The default copy constructor needs to be overridden because it would
+	/// only copy pointers to the head and tail of the list
 	List(List const &);
 
+	/// \brief assignment operator
+	///
+	/// One would like to be able to set a List to be equal to another. There
+	/// needs to be a specific function for this
 	List & operator=(List const &);
 
+
+	/// \brief add element to end of List
+	///
+	/// \param value of new element
 	void append(T const &);
+
+	/// \brief add element to beginning of List
+	///
+	/// \param value of new element
 	void prepend(T const &);
+
+	/// \brief remove an element from the List
+	///
+	/// \param value of element to remove
+	///
+	/// \note this function only deletes the first occurrence of the value
+	/// that's passed as a parameter
 	void remove(T const &);
+
+	/// \brief clear the list (i.e. delete all elements)
 	void clear();
 
+	/// \brief get the size of the list (i.e. the number of its elements)
+	///
+	/// \return the List's size
 	unsigned int size() const { return this->number_of_elements_; }
 
+
+	/// \brief destructor
+	///
+	/// The destructor function is required because the class uses dynamic
+	/// memory allocation
 	~List();
 
 
-private: // nested class
+private:
+	/// \brief the doubly-linked list consists of these nodes
+	///
+	/// Each Node has a value and knows the preceding and succeeding Node's
+	/// address
 	struct Node {
-		T value_;
-		Node * previous_;
-		Node * next_;
+		T value_; ///< the actual value that is stored by the Node
+		Node * previous_; ///< address of preceding Node
+		Node * next_; ///< address of succeeding Node
 	};
 
-private: // private function
+private:
+	/// \brief get address of first element in the List with a given value
+	///
+	/// \param value to search for
+	///
+	/// \return address of Node with value passed as parameter
+	///
+	/// \note the function obviously returns the *first* occurrence of the value
+	/// passed as parameter
 	Node * find(T const &) const;
 
-private: // data members
-	Node * head_;
-	Node * tail_;
-	unsigned int number_of_elements_;
+private:
+	Node * head_; ///< head sentinel (its value is irrelevant)
+	Node * tail_; ///< tail sentinel (its value is irrelevant)
+	unsigned int number_of_elements_; ///< size of the List
 
 
-public: // nested class
+public:
+	/// \brief custom made iterator to navigate the List more easily
 	class Iterator {
 	public:
-		Iterator() {}
-		Iterator(Node * where_to_point, Node * first_sentinel, Node * last_sentinel) : current_(where_to_point), first_sentinel_(first_sentinel), last_sentinel_(last_sentinel) {}
+		/// \brief constructor for the List's Iterator
+		///
+		/// \param where_to_point address Node to point to
+		/// \param first_sentinel address of the List's head sentinel
+		/// \param last_sentinel address f the List's tail sentinel
+		Iterator(Node * where_to_point,
+					Node * first_sentinel,
+					Node * last_sentinel)
+		{
+			this->current_ = where_to_point;
+			this->first_sentinel_ = first_sentinel;
+			this->last_sentinel_ = last_sentinel;
+		}
 
-		T & operator*() { return this->current_->value_; } // dereference with *
-		T const & operator*() const { return this->current_->value_; } // dereference with *
-		Iterator *  operator->() { return this; } // dereference with ->
-		Iterator operator++() // preincrement
+
+		/// \brief dereference operator
+		///
+		/// \return the value of the Node currently pointed to
+		T & operator*() { return this->current_->value_; }
+
+		/// \brief const dereference operator
+		///
+		/// \return the value of the Node currently pointed to
+		T const & operator*() const { return this->current_->value_; }
+
+		/// \brief member access operator
+		///
+		/// \return pointer to itself
+		///
+		/// \note this is just needed for convenience
+		Iterator *  operator->() { return this; }
+
+
+		/// \brief preincrement operator
+		///
+		/// \return Iterator of next Node
+		Iterator operator++()
 		{
 			if (this->current_->next_ != this->last_sentinel_)
 			{
@@ -58,7 +143,13 @@ public: // nested class
 			}
 			return *this;
 		}
-		Iterator operator++(int) // postincrement
+
+		/// \brief postincrement operator
+		///
+		/// \param int dummy parameter
+		///
+		/// \return Iterator of current Node
+		Iterator operator++(int)
 		{
 			Iterator rv = *this;
 			if (this->current_->next_ != this->last_sentinel_)
@@ -67,7 +158,11 @@ public: // nested class
 			}
 			return rv;
 		}
-		Iterator operator--() // predecrement
+
+		/// \brief predecrement operator
+		///
+		/// \return Iterator of previous Node
+		Iterator operator--()
 		{
 			if (this->current_->previous_ != this->first_sentinel_)
 			{
@@ -75,7 +170,13 @@ public: // nested class
 			}
 			return *this;
 		}
-		Iterator operator--(int) // postdecrement
+
+		/// \brief postdecrement operator
+		///
+		/// \param int dummy parameter
+		///
+		/// \return Iterator of current Node
+		Iterator operator--(int)
 		{
 			Iterator rv = *this;
 			if (this->current_->previous_ != this->first_sentinel_)
@@ -84,20 +185,66 @@ public: // nested class
 			}
 			return rv;
 		}
-		bool operator==(Iterator const & rhs) const { return this->current_ == rhs.current_; }
+
+
+		/// \brief equality operator
+		///
+		/// \param rhs Iterator to check equality with
+		///
+		/// \return true if the Iterators point to the same Node
+		bool operator==(Iterator const & rhs) const
+		{
+			return this->current_ == rhs.current_;
+		}
+
+		/// \brief inequality operator
+		///
+		/// \param rhs Iterator to check inequality with
+		///
+		/// \return true if the Iterators point to different Nodes
 		bool operator!=(Iterator const & rhs) const { return !(*this == rhs); }
 
 
 	private:
-		Node * current_;
-		Node * first_sentinel_;
-		Node * last_sentinel_;
+		Node * current_; ///< currently pointed Node
+		Node * first_sentinel_; ///< lower bound (can't go 'below' this)
+		Node * last_sentinel_; ///< upper bound (can't go 'above' this)
 	}; // class Iterator
 
-public: // functions of nested class
-	Iterator begin() { return (number_of_elements_ == 0) ? Iterator(nullptr, nullptr, nullptr) : Iterator(this->head_->next_, this->head_, this->tail_); }
-	Iterator end() { return (number_of_elements_ == 0) ? Iterator(nullptr, nullptr, nullptr) : Iterator(this->tail_->previous_, this->head_, this->tail_); }
+public:
+	/// \brief get Iterator to the first element of the List
+	///
+	/// \return the first List element (right after the head sentinel)
+	///
+	/// TODO should we really return nullptrs in case the List is empty?
+	Iterator begin()
+	{
+		if (this->number_of_elements_ == 0)
+		{
+			return Iterator(nullptr, nullptr, nullptr);
+		}
+		else
+		{
+			return Iterator(this->head_->next_, this->head_, this->tail_);
+		}
+	}
 
+	/// \brief get Iterator to the last element of the List
+	///
+	/// \return the last List element (right before the tail sentinel)
+	///
+	/// TODO should we really return nullptrs in case the List is empty?
+	Iterator end()
+	{
+		if (this->number_of_elements_ == 0)
+		{
+			return Iterator(nullptr, nullptr, nullptr);
+		}
+		else
+		{
+			return Iterator(this->tail_->previous_, this->head_, this->tail_);
+		}
+	}
 }; // class List
 
 template <typename T>
