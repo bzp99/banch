@@ -20,7 +20,7 @@ TEST(StringTest, Create)
 	nostl::String qux("The cake is a lie");
 	nostl::String quux = "We don't go to Ravenholm";
 	EXPECT_EQ(strlen("The cake is a lie"), qux.len());
-	EXPECT_EQ(strlen("We don't got to Ravenholm"), quux.len());
+	EXPECT_EQ(strlen("We don't go to Ravenholm"), quux.len());
 	EXPECT_STREQ("The cake is a lie", qux.cstr());
 	EXPECT_STREQ("We don't go to Ravenholm", quux.cstr());
 }
@@ -56,10 +56,11 @@ TEST(StringTest, Assign)
 TEST(StringTest, Index)
 {
 	// create String constant
-	nostl::String foo const = "abcdefgh";
+	nostl::String const foo = "abcdefgh";
 
 	// check if indexing works properly
-	for (char c = 'a', unsigned int i = 0; c <= 'h'; ++c, ++i)
+	unsigned int i = 0;
+	for (unsigned int c = 'a'; c <= 'h'; ++c, ++i)
 	{
 		EXPECT_EQ(c, foo[i]);
 	}
@@ -68,6 +69,6 @@ TEST(StringTest, Index)
 	nostl::String bar = "faul";
 
 	// check if indexing works properly
-	bar[2] = i;
+	bar[2] = 'i';
 	EXPECT_STREQ("fail", bar.cstr());
 }
