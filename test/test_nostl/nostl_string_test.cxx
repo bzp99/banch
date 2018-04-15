@@ -72,3 +72,61 @@ TEST(StringTest, Index)
 	bar[2] = 'i';
 	EXPECT_STREQ("fail", bar.cstr());
 }
+
+TEST(StringTest, IndexOutOfRange)
+{
+	// create String
+	nostl::String foo = "Spaaaaaace";
+
+	// try to index OOR
+	EXPECT_THROW(foo[foo.len()] = 'e', std::out_of_range);
+}
+
+TEST(StringTest, Concatenate)
+{
+	// additive concatenation with char
+	nostl::String foo = "fo";
+	foo += 'o';
+	EXPECT_STREQ("foo", foo.cstr());
+
+	// additive concatenation with c-string
+	foo += "bar";
+	EXPECT_STREQ("foobar", foo.cstr());
+
+	// additive concatenation with another String
+	foo += String("barfoo");
+	EXPECT_STREQ("foobarbarfoo", foo.cstr());
+
+	// concatenation with char
+	nostl::String const ba = "ba";
+	nostl::String bar = ba + 'r';
+	EXPECT_STREQ("bar", bar.cstr());
+
+	// concatenation with c-string
+	nostl::String const f = "f";
+	foo = f + "oo";
+	EXPECT_STREQ("foo", foo.cstr());
+
+	// concatenation with another String
+	nostl::String const bar = "bar";
+	nostl::String foobar = foo + bar;
+	EXPECT_STREQ("foobar", foobar.cstr());
+
+}
+
+TEST(StringTest, IO)
+{
+	// create two Strings
+	nostl::String foo;
+	nostl::String const bar = "trololo";
+
+	// extraction
+	std::stringstream ss;
+	ss << "Allons-y!";
+	ss >> foo;
+	EXPECT_STREQ("Allons-y!", foo.cstr());
+
+	// insertion
+	ss << bar;
+	EXPECT_STREQ("trololo", ss.str().c_str());
+}
