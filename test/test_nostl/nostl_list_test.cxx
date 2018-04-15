@@ -148,7 +148,7 @@ TEST(ListTest, Removal)
 	EXPECT_EQ(4, foo.size());
 
 	// remove an element
-	foo.remove(30);
+	foo.remove(30); // --> {3, 3, 30}
 	nostl::List<int>::Iterator i = foo.begin();
 	EXPECT_EQ(3, *(i++));
 	EXPECT_EQ(3, *(i++));
@@ -156,9 +156,9 @@ TEST(ListTest, Removal)
 	EXPECT_EQ(3, foo.size());
 
 	// remove two more just for fun
-	foo.remove(30);
+	foo.remove(30); // --> {3, 3}
 	EXPECT_EQ(2, foo.size()); // FIXME this fails
-	foo.remove(3);
+	foo.remove(3); // --> {3}
 	i = foo.begin();
 	EXPECT_EQ(3, *i);
 	EXPECT_EQ(1, foo.size());
