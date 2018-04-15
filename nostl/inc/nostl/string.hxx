@@ -6,68 +6,156 @@
 
 namespace nostl {
 
-class String { // implementing String class because STL containers are prohibited
+/// \brief re-implementation of std::String
+///
+/// I had to re-implement the String class because using STL containers was
+/// prohibited.
+class String {
 public:
-	/// CONSTRUCTORS ///
-	String() : length_(0) // constructor w/o parameters
+	/// \brief constructor w/o parameters --- creates empty String
+	String() : length_(0)
 	{
 		this->arr_ = new char[this->length_ + 1];
 		arr_[0] = '\0';
 	}
 
-	String(char const ch) : length_(1) // constructor from char
+	/// \brief construct from a single character
+	///
+	/// \param ch character to construct String from
+	String(char const ch) : length_(1)
 	{
 		this->arr_ = new char[this->length_ + 1];
 		arr_[0] = ch;
 		arr_[1] = '\0';
 	}
 
-	String(char const * chs) : length_(strlen(chs)) // constructor from c-string
+	/// \brief construct from c-string
+	///
+	/// \param chs c-string to construct String from
+	String(char const * chs) : length_(strlen(chs))
 	{
 		this->arr_ = new char[this->length_ + 1];
 		strcpy(this->arr_, chs);
 	}
 
-	String(String const & obj) : length_(obj.length_) // copy constructor
+	/// \brief copy constructor
+	///
+	/// \param obj String to copy
+	///
+	/// The default copy constructor needs to be overridden because the class
+	/// uses dynamic memory allocation.
+	String(String const & obj) : length_(obj.length_)
 	{
 		this->arr_ = new char[this->length_ + 1];
 		strcpy(this->arr_, obj.arr_);
 	}
 
-	/// MEMBER FUNCTIONS ///
-	unsigned int len() const // get length
-	{
-		return this->length_;
-	}
 
-	char * cstr() const
-	{
-		return this->arr_;
-	}
+	/// \brief get length of String
+	///
+	/// \return lenght of String
+	unsigned int len() const { return this->length_; }
 
-	/// OPERATORS ///
-	String& operator=(String const &); // assignment
-	String& operator=(char const *);
-	char operator[](unsigned int const) const; // indexing (const)
-	char& operator[](unsigned int const); // indexing (var)
-	void operator+=(char const); // additive concatenation with char
-	void operator+=(char const *); // additiva concatenation with c-string
-	void operator+=(String const &); // additive concatenation with other String
-	String operator+(char const) const; // concatenation with char
-	String operator+(char const *) const; // concatenation with c-string
-	String operator+(String const &) const; // concatenation with other String
+	/// \brief get classic c-string
+	///
+	/// \return the c-string equivalent of the String
+	char * cstr() const { return this->arr_; }
 
-	inline friend std::ostream & operator<<(std::ostream &, String const &); // inserter
-	inline friend std::istream & operator>>(std::istream &, String&); // extractor
 
-	~String(); // destructor
+	/// \brief assignment operator
+	///
+	/// \param String to set *this* String to be equal to
+	///
+	/// \return the String itself
+	String & operator=(String const &);
+
+	/// \brief assignment operator w/ c-string
+	///
+	/// \param c-string to set *this* String to have
+	///
+	/// \return the String itself
+	String & operator=(char const *);
+
+	/// \brief constant index operator
+	///
+	/// \param index of requested char
+	///
+	/// \return char at index (a value)
+	char operator[](unsigned int const) const;
+
+	/// \brief variable index operator
+	///
+	/// \param index of requested char
+	///
+	/// \return char at index (variable)
+	char & operator[](unsigned int const);
+
+	/// \brief additive concatenation with a single character
+	///
+	/// \param character to add to the String
+	void operator+=(char const);
+
+	/// \brief additive concatenation with c-string
+	///
+	/// \param c-string to add to the String
+	void operator+=(char const *);
+
+	/// \brief additive concatenation with another String
+	///
+	/// \param String to add to *this* String
+	void operator+=(String const &);
+
+	/// \brief concatenation with a single character
+	///
+	/// \param character to add
+	///
+	/// \return new String also containing the new character
+	String operator+(char const) const;
+
+	/// \brief concatenation with c-string
+	///
+	/// \param c-string to add
+	///
+	/// \return new String that has *this* String's contents, plus the c-string
+	String operator+(char const *) const;
+
+	/// \brief concatenation with another String
+	///
+	/// \param String to add
+	///
+	/// \return new String that has *this* String's contents, plus the contents
+	/// of the other String
+	String operator+(String const &) const;
+
+
+	/// \brief inserter operator
+	///
+	/// \param stream to insert into
+	/// \param String to insert
+	///
+	/// \return the stream object
+	inline friend std::ostream & operator<<(std::ostream &, String const &);
+
+	/// \brief extractor operator
+	///
+	/// \param stream to extract from
+	/// \param String to extract into
+	///
+	/// \return the stream object
+	inline friend std::istream & operator>>(std::istream &, String &);
+
+	/// \brief destructor
+	///
+	/// The default destructor needs to be overridden because the class uses
+	/// dynamic memory allocation and that memory has to be freed.
+	~String();
 
 private:
-	unsigned int length_;
-	char * arr_;
+	unsigned int length_; ///< lenght of String
+	char * arr_; ///< char array (AKA c-string) containing data
 }; // class String
 
-inline String& String::operator=(String const & rhs)
+String & String::operator=(String const & rhs)
 {
 	// check for self assignment
 	if (this == &rhs)
@@ -84,7 +172,7 @@ inline String& String::operator=(String const & rhs)
 	return *this;
 }
 
-inline String& String::operator=(char const * rhs)
+String & String::operator=(char const * rhs)
 {
 	*this = String(rhs);
 }
@@ -109,7 +197,7 @@ inline char & String::operator[](unsigned int const idx)
 	return this->arr_[idx];
 }
 
-inline void String::operator+=(char const ch)
+void String::operator+=(char const ch)
 {
 	// copy current array contents to temporary array
 	char * tmp = new char[this->length_ + 1];
@@ -131,13 +219,14 @@ inline void String::operator+=(char const ch)
 
 void String::operator+=(char const * chs)
 {
-	for (unsigned int i = 0; i < strlen(chs); ++i)
+	unsigned int chs_len = strlen(chs);
+	for (unsigned int i = 0; i < chs_len; ++i)
 	{
 		*this += chs[i];
 	}
 }
 
-void String::operator+=(String const& obj)
+void String::operator+=(String const & obj)
 {
 	for (unsigned int i = 0; i < obj.length_; ++i)
 	{
