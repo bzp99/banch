@@ -5,28 +5,30 @@ namespace nostl {
 
 /// \brief re-implementation of std::List<T>
 ///
+/// \tparam T type of elements that the List contains
+///
 /// I had to re-implement the List class because using STL containers was
 /// prohibited. My List is doubly-linked and has two sentinels (a head and a
-/// tail)
+/// tail).
 template <typename T>
 class List {
 public:
-	/// \brief default constructor
-	///
-	/// Constructor that takes no parameter and initialises memory for an empty
-	/// List
+	/// \brief constructor w/o parameters --- only initialises memory
 	List();
 
 	/// \brief copy constructor
 	///
+	/// \param List to copy
+	///
 	/// The default copy constructor needs to be overridden because it would
-	/// only copy pointers to the head and tail of the list
+	/// only copy pointers to the head and tail of the list.
 	List(List const &);
 
 	/// \brief assignment operator
 	///
-	/// One would like to be able to set a List to be equal to another. There
-	/// needs to be a specific function for this
+	/// \param List to set *this* equal to
+	///
+	/// \return the List itself
 	List & operator=(List const &);
 
 
@@ -48,7 +50,7 @@ public:
 	/// that's passed as a parameter
 	void remove(T const &);
 
-	/// \brief clear the list (i.e. delete all elements)
+	/// \brief clear the list (i.e. remove all of its elements)
 	void clear();
 
 	/// \brief get the size of the list (i.e. the number of its elements)
@@ -59,8 +61,8 @@ public:
 
 	/// \brief destructor
 	///
-	/// The destructor function is required because the class uses dynamic
-	/// memory allocation
+	/// The default destructor function needs to be overridden because the class
+	/// uses dynamic memory allocation
 	~List();
 
 
