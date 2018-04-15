@@ -94,7 +94,7 @@ TEST(StringTest, Concatenate)
 	EXPECT_STREQ("foobar", foo.cstr());
 
 	// additive concatenation with another String
-	foo += String("barfoo");
+	foo += nostl::String("barfoo");
 	EXPECT_STREQ("foobarbarfoo", foo.cstr());
 
 	// concatenation with char
@@ -108,7 +108,6 @@ TEST(StringTest, Concatenate)
 	EXPECT_STREQ("foo", foo.cstr());
 
 	// concatenation with another String
-	nostl::String const bar = "bar";
 	nostl::String foobar = foo + bar;
 	EXPECT_STREQ("foobar", foobar.cstr());
 
@@ -127,6 +126,8 @@ TEST(StringTest, IO)
 	EXPECT_STREQ("Allons-y!", foo.cstr());
 
 	// insertion
+	ss.str("");
+	ss.clear();
 	ss << bar;
 	EXPECT_STREQ("trololo", ss.str().c_str());
 }
