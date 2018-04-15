@@ -67,7 +67,7 @@ TEST(ListTest, Assign)
 	nostl::List<int> bar;
 	for (unsigned int i = 100; i < 1000; ++i)
 	{
-		foo.append(i);
+		bar.append(i);
 	}
 
 	// make sure the two Lists differ (obviously...)
