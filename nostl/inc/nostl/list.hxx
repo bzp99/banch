@@ -218,7 +218,7 @@ public:
 	/// TODO should we really return nullptrs in case the List is empty?
 	Iterator begin()
 	{
-		if (this->number_of_elements_ == 0)
+		if (this->size() == 0)
 		{
 			return Iterator(nullptr, nullptr, nullptr);
 		}
@@ -235,7 +235,7 @@ public:
 	/// TODO should we really return nullptrs in case the List is empty?
 	Iterator end()
 	{
-		if (this->number_of_elements_ == 0)
+		if (this->size() == 0)
 		{
 			return Iterator(nullptr, nullptr, nullptr);
 		}
