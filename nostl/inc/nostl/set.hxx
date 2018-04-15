@@ -33,7 +33,7 @@ public:
 	/// \brief get the size of the Set (i.e. the number of its elements)
 	///
 	/// \return the Set's size
-	unsigned int size() const { return this->list_.number_of_elements_; }
+	unsigned int size() const { return this->list_.size(); }
 
 
 public:
@@ -154,7 +154,6 @@ public:
 
 private:
 	List<T> list_; ///< Set is implemented using a doubly-linked List
-	unsigned int number_of_elements_; ///< size of the Set
 
 }; // class Set
 
@@ -162,7 +161,7 @@ template <typename T>
 void Set<T>::insert(T const & val)
 {
 	// make sure list/set doesn't contain item yet
-	if (this->number_of_elements_ != 0)
+	if (this->size() != 0)
 	{
 		for (typename List<T>::Iterator i = this->list_.begin();
 				i != this->list_.end(); ++i)
@@ -175,21 +174,18 @@ void Set<T>::insert(T const & val)
 	}
 
 	this->list_.append(val);
-	++this->number_of_elements_;
 }
 
 template <typename T>
 void Set<T>::remove(T const & val)
 {
 	this->list_.remove(val);
-	--this->number_of_elements_;
 }
 
 template <typename T>
 void Set<T>::clear()
 {
 	this->list_.clear();
-	this->number_of_elements_ = 0;
 }
 
 }
