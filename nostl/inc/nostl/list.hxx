@@ -297,7 +297,7 @@ List<T>::List(List const & obj)
 	Node * traveller = obj.head_->next_;
 	while (traveller->next_ != obj.tail_)
 	{
-		this->append(traveller); // this also sets the counter
+		this->append(traveller->value_); // this also sets the counter
 		traveller = traveller->next_;
 	}
 }
@@ -393,7 +393,7 @@ List<T> & List<T>::operator=(List<T> const & rhs)
 	Node * traveller = rhs.head_->next_;
 	while (traveller->next_ != rhs.tail_)
 	{
-		this->append(traveller); // this also sets the counter
+		this->append(traveller->value_); // this also sets the counter
 		traveller = traveller->next_;
 	}
 
