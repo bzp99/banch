@@ -117,12 +117,13 @@ inline void String::operator+=(char const ch)
 
 	// allocate memory for new array
 	++this->length_;
+	delete[] this->arr_;
 	this->arr_ = new char[this->length_ + 1];
 	strcpy(this->arr_, tmp);
 
 	// add new character
-	this->arr_[this->length_] = ch;
-	this->arr_[this->length_ + 1] = '\0';
+	this->arr_[this->length_ - 1] = ch;
+	this->arr_[this->length_] = '\0';
 
 	// free temporarily allocated memory
 	delete[] tmp;
