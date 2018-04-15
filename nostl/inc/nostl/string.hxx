@@ -47,6 +47,7 @@ public:
 
 	/// OPERATORS ///
 	String& operator=(String const &); // assignment
+	String& operator=(char const *);
 	char operator[](unsigned int const) const; // indexing (const)
 	char& operator[](unsigned int const); // indexing (var)
 	void operator+=(char const); // additive concatenation with char
@@ -81,6 +82,11 @@ inline String& String::operator=(String const & rhs)
 	strcpy(this->arr_, rhs.arr_);
 
 	return *this;
+}
+
+inline String& String::operator=(char const * rhs)
+{
+	*this = String(rhs);
 }
 
 inline char String::operator[](unsigned int const idx) const
