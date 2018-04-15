@@ -265,10 +265,16 @@ List<T>::List()
 template <typename T>
 typename List<T>::Node * List<T>::find(T const & val) const
 {
-	Node * traveller = this->head_->next_; // temporary node
+	// if the List is empty, nothing will be found
+	if (this->size() == 0)
+	{
+		return nullptr;
+	}
+
+	Node * traveller = this->head_->next_;
 
 	// traverse list to find node
-	while(traveller->next_ != this->tail_)
+	while(traveller != this->tail_)
 	{
 		if (traveller->value_ == val)
 		{
