@@ -27,10 +27,10 @@ TEST(SetTest, Fill)
 TEST(SetTest, Clear)
 {
 	// fill new set with longs and test clearing
-	nostl::Set<long> foo;
+	nostl::Set<double> foo;
 	for (unsigned int i = 0; i < 420; ++i)
 	{
-		foo.insert(static_cast<long>(i) / -2.718281828459);
+		foo.insert(static_cast<double>(i) / -2.718281828459);
 	}
 	EXPECT_EQ(420, foo.size());
 	foo.clear();
