@@ -1,7 +1,6 @@
 #ifndef BANCH_NOSTL_LIST_H
 #define BANCH_NOSTL_LIST_H
 
-#include <iostream> // FIXME temporal
 namespace nostl {
 
 /// \brief re-implementation of std::List<T>
@@ -99,6 +98,11 @@ public:
 	/// \brief custom made iterator to navigate the List more easily
 	class Iterator {
 	public:
+		/// \brief construr for the List's Iterator w/o parameter
+		///
+		/// TODO why do I need this?
+		Iterator() {}
+
 		/// \brief constructor for the List's Iterator
 		///
 		/// \param where_to_point address Node to point to
