@@ -3,14 +3,14 @@
 
 TEST(ListTest, CreateEmpty)
 {
-	// create empty list and check if its size is 0
+	// create empty List and check if its size is 0
 	nostl::List<int> foo;
 	EXPECT_EQ(0, foo.size());
 }
 
 TEST(ListTest, Fill)
 {
-	// fill new list with doubles like {0, .5, 1, 1.5, ..., 50}
+	// create List with doubles like {0, .5, 1, 1.5, ..., 50}
 	nostl::List<double> foo;
 	for (unsigned int i = 0; i < 100; ++i)
 	{
@@ -21,7 +21,7 @@ TEST(ListTest, Fill)
 
 TEST(ListTest, Clear)
 {
-	// fill list with longs and test clearing
+	// create List with longs and test clearing
 	nostl::List<long> foo;
 	for (unsigned int i = 0; i < 20; ++i)
 	{
@@ -34,29 +34,58 @@ TEST(ListTest, Clear)
 
 TEST(ListTest, Copy)
 {
-	// create empty list with a few ints like {1, 2, ..., 100}
+	// create List with a few ints like {0, 1, ..., 99}
 	nostl::List<int> foo;
 	for (unsigned int i = 0; i < 100; ++i)
 	{
 		foo.append(i);
 	}
 
-	// create another list by copying the first one
+	// create another List by copying the first one
 	nostl::List<int> bar = foo;
 
 	// change a few elements in the copy and make sure original instance is left
 	// unchanged
 	bar.remove(13);
 	bar.remove(0);
-	EXPECT_NEQ(foo.size(), bar.size());
+	EXPECT_NE(foo.size(), bar.size());
 	bar.clear();
 	EXPECT_EQ(0, bar.size());
 	EXPECT_EQ(100, foo.size());
 }
 
+TEST(ListTest, Assign)
+{
+	// create List with a few ints like {0, 2, ..., 99}
+	nostl::List<int> foo;
+	for (unsigned int i = 0; i < 100; ++i)
+	{
+		foo.append(i);
+	}
+
+	// create another List with a few other ints like {100, 101, ..., 999}
+	nostl::List<int> bar;
+	for (unsigned int i = 100; i < 1000; ++i)
+	{
+		foo.append(i);
+	}
+
+	// make sure the two Lists differ (obviously...)
+	EXPECT_NE(foo.size(), bar.size());
+
+	// set foo to be the same as bar
+	foo = bar;
+
+	// see if assignment was correct and the two Lists are still different
+	// instances
+	EXPECT_EQ(foo.size(), bar.size());
+	bar.append(1000);
+	EXPECT_NE(foo.size(), bar.size());
+}
+
 TEST(ListTest, Iteration)
 {
-	// create new list and fill with ints like {200, 5, 1}
+	// create new List and fill with ints like {200, 5, 1}
 	nostl::List<int> foo;
 	foo.append(5);
 	foo.append(1);
@@ -89,7 +118,7 @@ TEST(ListTest, Iteration)
 
 TEST(ListTest, IterationOutOfRange)
 {
-	// create new list and fill with doubles like {10.5, 15.5, 20.5}
+	// create new List and fill with doubles like {10.5, 15.5, 20.5}
 	nostl::List<double> foo;
 	foo.prepend(20.5);
 	foo.prepend(15.5);
@@ -110,7 +139,7 @@ TEST(ListTest, IterationOutOfRange)
 
 TEST(ListTest, Removal)
 {
-	// create new list with a few elements like {3, 30, 3, 30}
+	// create new List with a few elements like {3, 30, 3, 30}
 	nostl::List<int> foo;
 	foo.append(3);
 	foo.append(30);
