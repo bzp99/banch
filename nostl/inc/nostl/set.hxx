@@ -16,29 +16,6 @@ namespace nostl {
 template <typename T>
 class Set {
 public:
-	/// \brief costructor w/o parameters --- only initialises memory
-	Set() : number_of_elements_(0), list_(new List<T>) {}
-
-	/// \brief copy constructor
-	///
-	/// \param obj Set to copy
-	///
-	/// The default copy constructor needs to be overridden because it would
-	/// only copy a pointer to the List the Set uses.
-	Set(Set const & obj)
-	{
-		this->number_of_elements_ = obj.number_of_elements_;
-		*(this->list_) = obj.list_;
-	}
-
-	/// \brief assignment operator
-	///
-	/// \param Set to set *this* equal to
-	///
-	/// \return the Set itself
-	Set & operator=(Set const &);
-
-
 	/// \brief add element to the Set
 	///
 	/// \param value of new element
@@ -56,14 +33,8 @@ public:
 	/// \brief get the size of the Set (i.e. the number of its elements)
 	///
 	/// \return the Set's size
-	unsigned int size() const { return this->number_of_elements_; }
+	unsigned int size() const { return this->list_.number_of_elements_; }
 
-
-	/// \brief destructor
-	///
-	/// The destructor function needs to overridden because the class allocates
-	/// memory for it's internal List
-	~Set() { delete this->list_; }
 
 public:
 	/// \brief custom made iterator to navigate the Set mode easily
@@ -167,7 +138,7 @@ public:
 	/// \return Iterator to first element
 	Iterator begin()
 	{
-		typename List<T>::Iterator i = this->list_->begin();
+		typename List<T>::Iterator i = this->list_.begin();
 		return Iterator(i);
 	}
 
@@ -176,32 +147,16 @@ public:
 	/// \return Iterator to last element
 	Iterator end()
 	{
-		typename List<T>::Iterator i = this->list_->end();
+		typename List<T>::Iterator i = this->list_.end();
 		return Iterator(i);
 	}
 
 
 private:
-	List<T> * list_; ///< Set is implemented using a doubly-linked List
+	List<T> list_; ///< Set is implemented using a doubly-linked List
 	unsigned int number_of_elements_; ///< size of the Set
 
 }; // class Set
-
-template <typename T>
-typename Set<T>::Set & Set<T>::operator=(Set const & rhs)
-{
-	// check for self assignment
-	if (this == &rhs)
-	{
-		return *this;
-	}
-
-	this->clear();
-	this->number_of_elements_ = rhs.number_of_elements_;
-	this->list_ = rhs.list_;
-
-	return *this;
-}
 
 template <typename T>
 void Set<T>::insert(T const & val)
@@ -209,8 +164,8 @@ void Set<T>::insert(T const & val)
 	// make sure list/set doesn't contain item yet
 	if (this->number_of_elements_ != 0)
 	{
-		for (typename List<T>::Iterator i = this->list_->begin();
-				i != this->list_->end(); ++i)
+		for (typename List<T>::Iterator i = this->list_.begin();
+				i != this->list_.end(); ++i)
 		{
 			if (*i == val)
 			{
@@ -219,21 +174,21 @@ void Set<T>::insert(T const & val)
 		}
 	}
 
-	this->list_->append(val);
+	this->list_.append(val);
 	++this->number_of_elements_;
 }
 
 template <typename T>
 void Set<T>::remove(T const & val)
 {
-	this->list_->remove(val);
+	this->list_.remove(val);
 	--this->number_of_elements_;
 }
 
 template <typename T>
 void Set<T>::clear()
 {
-	this->list_->clear();
+	this->list_.clear();
 	this->number_of_elements_ = 0;
 }
 
