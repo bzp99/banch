@@ -11,12 +11,12 @@ class Ingredient {
 public:
 	void print(std::ostream & os) const
 	{
-		os << amount_ << name_;
+		os << this->amount_ << this->name_;
 	}
 
 
 private:
-	Measure amount_;
+	measure::Measure<double> amount_;
 	nostl::String name_;
 };
 
@@ -27,12 +27,12 @@ public:
 		ingredients_ = new nostl::Set<Ingredient*>;
 	}
 
-	void add(Ingredient const & addendum)
+	void add(Ingredient * const addendum)
 	{
 		this->ingredients_->insert(addendum);
 	}
 
-	void remove(Ingredient const & delendum)
+	void remove(Ingredient * const delendum)
 	{
 		this->ingredients_->remove(delendum);
 	}
