@@ -3,18 +3,21 @@
 
 #include "nostl/string.hxx"
 #include "nostl/set.hxx"
+#include "measure/measure.hxx"
 
 namespace banch {
 
 class Ingredient {
 public:
-	virtual void print() const;
+	void print(std::ostream & os) const
+	{
+		os << amount_ << name_;
+	}
 
-	virtual ~Ingredient();
 
-
-protected:
+private:
 	Measure amount_;
+	nostl::String name_;
 };
 
 class Recipe {
