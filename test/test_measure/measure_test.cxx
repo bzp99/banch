@@ -1,14 +1,12 @@
 #include "gtest/gtest.h"
+#include "measure/measure.hxx"
+#include "nostl/string.hxx"
 
-TEST(MeasureTest, SanityCheck)
+TEST(MeasureTest, Print)
 {
 	// create a few allowed Measures
-	Measure<int> foo("kg", 120);
-	Measure<double> bar("L", 3.4)
-
-	// create disallowed Measures
-	EXPECT_DEATH(Measure<nostl::String> baz("fail", "fail"),
-					"Invalid template parameter assertion works!";)
+	measure::Measure<int> foo("kg", 120);
+	measure::Measure<double> bar("L", 3.4);
 
 	// print Measures
 	std::stringstream ss;
