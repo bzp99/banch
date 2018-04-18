@@ -1,5 +1,5 @@
-#ifndef BANCH_HXX
-#define BANCH_HXX
+#ifndef BANCH_BANCH_HXX
+#define BANCH_BANCH_HXX
 
 #include "nostl/string.hxx"
 #include "nostl/set.hxx"
@@ -10,9 +10,11 @@ class Ingredient {
 public:
 	virtual void print() const;
 
-	//virtual bool operator==(Ingredient const &);
+	virtual ~Ingredient();
 
-	virtual ~Ingredient(); // virtual destructor for this class shall be derived later
+
+protected:
+	Measure amount_;
 };
 
 class Recipe {
@@ -46,4 +48,4 @@ private:
 
 } // namespace banch
 
-#endif // BANCH_HXX
+#endif // BANCH_BANCH_HXX
