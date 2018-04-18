@@ -1,7 +1,7 @@
 #ifndef BANCH_NOSTL_SET_HXX
 #define BANCH_NOSTL_SET_HXX
 
-/// \file list.hxx
+/// \file set.hxx
 ///
 /// \brief re-implementation of std::Set<T>
 
