@@ -53,6 +53,20 @@ TEST(StringTest, Assign)
 	EXPECT_STRNE(foo.cstr(), bar.cstr());
 }
 
+TEST(StringTest, Equality)
+{
+	// create two Strings
+	nostl::String foo = "Apple";
+	nostl::String bar = "Banana";
+
+	// check equlity and inequality operators
+	EXPECT_EQ(0, (foo == bar));
+	EXPECT_EQ(1, (foo != bar));
+
+	bar = foo;
+	EXPECT_EQ(1, (foo == bar));
+}
+
 TEST(StringTest, Index)
 {
 	// create String constant
