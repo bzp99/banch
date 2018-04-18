@@ -1,7 +1,7 @@
 #ifndef STRING_HXX
 #define STRING_HXX
 
-/// \file list.hxx
+/// \file string.hxx
 ///
 /// \brief re-implementation of std::String
 
@@ -79,6 +79,20 @@ public:
 	///
 	/// \return the String itself
 	String & operator=(char const *);
+
+	/// \brief equality operator
+	///
+	/// \param String to check equality with
+	///
+	/// \return true if the two Strings are equal
+	bool operator==(String const &) const;
+
+	/// \brief inequality operator
+	///
+	/// \param String to check inequality with
+	///
+	/// \return true if the two Strings are different
+	bool operator!=(String const &) const;
 
 	/// \brief constant index operator
 	///
@@ -179,6 +193,16 @@ String & String::operator=(String const & rhs)
 String & String::operator=(char const * rhs)
 {
 	*this = String(rhs);
+}
+
+bool String::operator==(String const & comparison) const
+{
+	return (strcmp(this->cstr(), comparison.cstr()) == 0);
+}
+
+bool String::operator!=(String const & comparison) const
+{
+	return !(*this == comparison); 
 }
 
 inline char String::operator[](unsigned int const idx) const
