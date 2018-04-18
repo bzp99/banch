@@ -12,6 +12,7 @@ enable_testing()
 # subprojects
 add_subdirectory(banch) # main project
 add_subdirectory(nostl) # STL workarounds
+add_subdirectory(measure) # measurements
 add_subdirectory(test) # unit testing w/ GTest
 
 # documentation
