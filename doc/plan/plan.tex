@@ -1,0 +1,276 @@
+%!TEX TS-program = xelatex
+%!TEX encoding = UTF-8 Unicode
+
+\documentclass[a4paper]{article}
+
+%%% PACKAGES %%%
+\usepackage{polyglossia}	% Hungarian support
+	\setdefaultlanguage{magyar}
+
+\usepackage{graphicx}		% images
+	\graphicspath{{../../build/doc/html/}}
+
+\usepackage{color}
+\usepackage{listings}		% code listing
+	\definecolor{codegreen}{rgb}{0,0.6,0}
+	\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+	\definecolor{codepurple}{rgb}{0.58,0,0.82}
+	\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+	\lstdefinestyle{mystyle}{
+		backgroundcolor=\color{backcolour},
+		commentstyle=\color{codegreen},
+		keywordstyle=\color{magenta},
+		numberstyle=\tiny\color{codegray},
+		stringstyle=\color{codepurple},
+		basicstyle=\footnotesize,
+		breakatwhitespace=false,
+		breaklines=true,
+		captionpos=b,
+		keepspaces=true,
+		numbers=left,
+		numbersep=5pt,
+		showspaces=false,
+		showstringspaces=false,
+		showtabs=false,
+		tabsize=4
+	}
+
+	\lstset{style=mystyle}
+
+\usepackage{fancyhdr}		% header and footer
+	\pagestyle{fancy}
+		\fancyhf{} % clear
+		\rhead{Péter Bertalan Zoltán (QO7CU6)}
+		\lhead{\today}
+		\lfoot{\LaTeX}
+		\rfoot{\thepage}
+
+%%% TITLE STUFF %%%
+
+\title{\Huge banch \\ \small (Programozás alapjai 2 --- házi feladat terv)}
+\date{\today}
+\author{Péter Bertalan Zoltán \\ (QO7CU6)}
+
+%%% BODY %%%
+
+\begin{document}
+\maketitle
+
+\thispagestyle{fancy}
+
+\section*{Pontosított specifikáció}
+
+A \emph{banch} valójában egy igen egyszerű szoftver. Mindössze arról szól, hogy
+van egy \texttt{Recipe} osztály, ezeknek a példányait kezeli a program. Ez az
+osztály egy heterogén tárolóban tárolja a különböző hozzávalókat
+(\texttt{Ingredient}), igazából egy általam implementált halmaz osztályt használ
+erre (\texttt{Set}). Elméletileg egy-egy recept tetszőleges mennyiségű
+hozzávalót tartalmazhat.
+
+A felhasználónak van lehetősége \texttt{Recipe} példányokat létrehozni és ezeket
+,,megtölteni'' \texttt{Ingredient}-ekkel. Persze az \texttt{Ingredient}
+osztálynak vannak leszármazottai, hogy valóban heterogén kollekcióról
+beszélhessünk: például vannak alkoholos italok, amiknek van pluszban
+alkoholtartalom adattagjuk.
+
+\section*{nostl}
+
+Mivel a feladatban meg volt tiltva, hogy STL tárolókat használjak, ezért
+kénytelen voltam megírni a sajátjaimat. Szükségem volt \texttt{String}-re és
+\texttt{Set}-re, viszont az utóbbihoz kellett írnom valamilyen okosabb tárolót,
+mint a tömb, ezért csináltam egy \texttt{List}-et is. A \texttt{Set}-et (és
+ezért a \texttt{List}-et is) úgy írtam meg, hogy tetszőleges típussal működjenek
+(\emph{template}). Lentebb egy pár diagram (sajnos a Doxygen által generált
+diagramok nem írják a változók típusait; remélem, ez nem túl nagy probléma)
+
+\subsection*{\texttt{nostl::List}}
+
+\begin{center}
+\includegraphics[width=3cm, height=5cm]{classnostl_1_1List__coll__graph.png}
+\end{center}
+
+Beszúrok ide egy algoritmust az osztályból, hogy legyen valami:
+
+\begin{lstlisting}[language=C++]
+template <typename T>
+void List<T>::prepend(T const & val)
+{
+	Node * new_node = new Node;
+	new_node->value_ = val;
+
+	// setting new_node's pointers
+	new_node->previous_ = this->head_;
+	new_node->next_ = this->head_->next_;
+
+	// setting neighbouring nodes' pointers
+	new_node->previous_->next_ = new_node;
+	new_node->next_->previous_ = new_node;
+
+	// incrementing counter
+	++this->number_of_elements_;
+}
+\end{lstlisting}
+
+(ez az algoritmus felelős azért, hogy a láncolt lista elejére beszúrhassunk
+valamit)
+
+\subsection*{\texttt{nostl::Set}}
+
+\begin{center}
+\includegraphics[width=2cm, height=3cm]{classnostl_1_1Set__coll__graph.png}
+\end{center}
+
+A \texttt{Set} osztály, mint látható, tartalmaz egy \texttt{List} adattagot, és
+tulajdonképpen semmit sem csinál, csak egy ,,wrapper'' akörül, annyi bónusszal,
+hogy nem enged egy már létező elemet újra a halmazba tenni.
+
+Tehát voltaképpen ez a lényege:
+
+\begin{lstlisting}[language=C++]
+template <typename T>
+void Set<T>::insert(T const & val)
+{
+	// make sure list/set doesn't contain item yet
+	if (this->size() != 0)
+	{
+		for (typename List<T>::Iterator i = this->list_.begin();
+				i != this->list_.end(); ++i)
+		{
+			if (*i == val)
+			{
+				return;
+			}
+		}
+	}
+
+	this->list_.append(val);
+}
+\end{lstlisting}
+
+\subsection*{\texttt{nostl::String}}
+
+\begin{center}
+\includegraphics[width=2cm, height=6cm]{classnostl_1_1String__coll__graph.png}
+\end{center}
+
+Ezt az osztályt nem szeretném részletezni, mert tulajdonképpen ugyanaz, amit már
+laboron is megírtunk.
+
+\hspace{2cm}
+\hrule
+\hspace{2cm}
+
+\section*{measure (\texttt{measure::Measure})}
+
+Ez egy kis mini-header fájl tulajdonképpen, ami csak arra hivatott, hogy
+értelmesen lehessen kezelni a programban a mennyiségeket.
+
+\begin{center}
+\includegraphics[width=2cm, height=6cm]%
+					{classmeasure_1_1Measure__coll__graph.png}
+\end{center}
+
+\begin{lstlisting}[language=C++]
+template <typename T>
+class Measure {
+
+	static_assert(std::is_arithmetic<T>::value, "Type must be numeric!");
+
+public:
+	Measure(nostl::String const unit, T const & value)
+	{
+		this->unit_ = unit;
+		this->value_ = value;
+	}
+
+	bool isSameDimension(Measure const & comparison) const
+	{
+		return (this->unit_ == comparison.unit_);
+	}
+
+	bool operator==(Measure const & rhs) const
+	{
+		return (isSameDimension(rhs) && (this->value_ == rhs.value_));
+	}
+
+	template <typename F>
+	friend std::ostream & operator<<(std::ostream &, Measure<F> const);
+
+	// TODO more operators may be needed
+
+
+private:
+	nostl::String unit_;
+	T value_;
+}; // class Measure
+\end{lstlisting}
+
+\hspace{2cm}
+\hrule
+\hspace{2cm}
+
+\section*{banch}
+
+Végülis itt van a lényeg, itt van a fő projekt. Irónikusan errő tudok a
+legkevesebbet mondani, mert a nagy munka az STL tárolók újraírása volt, maga a
+recept nyilvántartó program megírása már nem egy olyan bonyolult dolog.
+
+Így néz ki tehát a \texttt{Recipe} osztály diagramja dicső valójában (egyelőre):
+
+\begin{center}
+\includegraphics[width=3cm, height=10cm]{classbanch_1_1Recipe__coll__graph.png}
+\end{center}
+
+\textit{hogy a diagramon miért nem látszik, hogy az osztálynak van egy
+\texttt{ingredients\_} adattagja, amiben a hozzávalók vannak, nem tudom \ldots}
+
+\hspace{2cm}
+\hrule
+\hspace{2cm}
+
+\section*{Tesztelés}
+
+A szoftvert modulokra bontottam és a Google Test keretrendszerrel tesztelem
+folymatosan. Nagyjából így néz ki egy ilyen teszt:
+
+\begin{lstlisting}[language=C++]
+TEST(ListTest, Removal)
+{
+	// create new List with a few elements like {3, 30, 3, 30}
+	nostl::List<int> foo;
+	foo.append(3);
+	foo.append(30);
+	foo.append(3);
+	foo.append(30);
+	EXPECT_EQ(4, foo.size());
+
+	// remove an element
+	foo.remove(30); // --> {3, 3, 30}
+	nostl::List<int>::Iterator i = foo.begin();
+	EXPECT_EQ(3, *(i++));
+	EXPECT_EQ(3, *(i++));
+	EXPECT_EQ(30, *i);
+	EXPECT_EQ(3, foo.size());
+
+	// remove two more just for fun
+	foo.remove(30); // --> {3, 3}
+	EXPECT_EQ(2, foo.size()); // FIXME this fails
+	foo.remove(3); // --> {3}
+	i = foo.begin();
+	EXPECT_EQ(3, *i);
+	EXPECT_EQ(1, foo.size());
+}
+\end{lstlisting}
+
+\section*{További megjegyzés}
+
+A \texttt{Recipe} osztály tagfüggvényei még megírásra várnak, de látszik, miket
+tud majd: hozzávalót bevenni, kivenni, azokat listázni, illetve magát fájlba
+írni. Ezek voltak az elvárások a specifikációban.
+
+Megjegyzem, hogy mindazon felül, ami ebben a dokumentumban szerepel, még szükség
+lesz egyéb osztályokra is valószínűleg. De szerintem ez a terv leírja a program
+lényegét, a terv célját teljesíti.
+
+\end{document}
