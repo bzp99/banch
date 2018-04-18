@@ -3,7 +3,7 @@
 ###
 file(GLOB SRCS *.cxx)
 
-add_executable(test_nostl ${SRCS})
+add_executable(test_measure ${SRCS})
 
 target_link_libraries(test_measure
 						libgtest
