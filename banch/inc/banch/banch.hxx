@@ -22,31 +22,32 @@ private:
 
 class Recipe {
 public:
-	Recipe() : number_of_ingredients_(0)
-	{
-		ingredients_ = new nostl::Set<Ingredient*>;
-	}
-
 	void add(Ingredient const * addendum)
 	{
-		this->ingredients_->insert(addendum);
+		this->ingredients_.insert(addendum);
 	}
 
 	void remove(Ingredient const * delendum)
 	{
-		this->ingredients_->remove(delendum);
+		this->ingredients_.remove(delendum);
 	}
 
-	void show() const;
+	void show() const
+	{
+		for (nostl::Set<Ingredient*>::Iterator i = this->ingredients_.begin();
+				i != this->ingredients_.end();
+				++i)
+		{
+			i->show();
+		}
+	}
 
 	void save() const;
 	void load();
 
-	~Recipe() { delete this->ingredients_; }
 
 private:
-	nostl::Set<Ingredient*> * ingredients_; // heterogenous container
-	unsigned int number_of_ingredients_;
+	nostl::Set<Ingredient*> ingredients_; // heterogenous container
 }; // class Recipe
 
 } // namespace banch
