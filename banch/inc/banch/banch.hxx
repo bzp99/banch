@@ -27,12 +27,12 @@ public:
 		ingredients_ = new nostl::Set<Ingredient*>;
 	}
 
-	void add(Ingredient * const addendum)
+	void add(Ingredient const * addendum)
 	{
 		this->ingredients_->insert(addendum);
 	}
 
-	void remove(Ingredient * const delendum)
+	void remove(Ingredient const * delendum)
 	{
 		this->ingredients_->remove(delendum);
 	}
