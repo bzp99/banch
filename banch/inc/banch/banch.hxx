@@ -8,7 +8,12 @@
 namespace banch {
 
 class Ingredient {
+using nostl::String;
+
 public:
+	Ingredient(String const name, double const amount, nostl::String unit)
+		:	name_(name), amount_(amount, unit) {}
+
 	void print(std::ostream & os) const
 	{
 		os << this->amount_ << this->name_;

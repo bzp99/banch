@@ -1,12 +1,24 @@
 #ifndef MEASURE_MEASURE_HXX
 #define MEASURE_MEASURE_HXX
 
+/// \file measure.hxx
+///
+/// \brief horribly low-level class to represent real life quantities
+
 #include <type_traits>
 
 #include "nostl/string.hxx"
 
 namespace measure {
 
+/// \brief basic class to represent real life quantities
+///
+/// \tparam T numeric type that holds amount
+///
+/// As simple as it gets, this class only keeps track of a number and a
+/// nostl::String. Obviously, this way it doesn't really know anything about
+/// conversion between different units or anything. If extended, however, this
+/// could be very useful.
 template <typename T>
 class Measure {
 
