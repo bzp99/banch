@@ -145,6 +145,8 @@ public:
 	/// of the other String
 	String operator+(String const &) const;
 
+	/// \brief clear operator
+	void clear();
 
 	/// \brief inserter operator
 	///
@@ -161,6 +163,14 @@ public:
 	///
 	/// \return the stream object
 	inline friend std::istream & operator>>(std::istream &, String &);
+
+	/// \brief std::getline overload
+	///
+	/// \param stream to read line from
+	/// \param String to read line into
+	///
+	/// \return the stream object
+	friend std::istream & getline(std::istream &, String &);
 
 	/// \brief destructor
 	///
@@ -283,6 +293,11 @@ String String::operator+(String const & obj) const
 	return rv;
 }
 
+void String::clear()
+{
+	*this = "";
+}
+
 inline std::ostream & operator<<(std::ostream & os, String const & obj)
 {
 	return os << obj.arr_;
@@ -291,6 +306,18 @@ inline std::ostream & operator<<(std::ostream & os, String const & obj)
 inline std::istream & operator>>(std::istream & is, String & obj)
 {
 	return is >> obj.arr_;
+}
+
+std::istream & getline(std::istream & is, String & obj)
+{
+	char ch;
+	obj.clear();
+	while ((is.get(ch)) && (ch != '\n'))
+	{
+		obj += ch;
+	}
+
+	return is;
 }
 
 inline nostl::String::~String()
