@@ -47,4 +47,4 @@ include_directories("${source_dir}/googletest/include"
 # add test directories from here
 ###
 add_subdirectory(test_nostl)
-add_subdirectory(test_measure)
+add_subdirectory(test_banch)
