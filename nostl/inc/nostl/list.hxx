@@ -5,6 +5,7 @@
 ///
 /// \brief re-implementation of std::List<T>
 
+/// \brief namespace for STL reimplementations
 namespace nostl {
 
 /// \brief re-implementation of std::List<T>
@@ -17,7 +18,7 @@ namespace nostl {
 template <typename T>
 class List {
 public:
-	/// \brief constructor w/o parameters --- only initialises memory
+	/// \brief constructor w/o parameters --- only creates sentinels
 	List();
 
 	/// \brief copy constructor
@@ -25,7 +26,7 @@ public:
 	/// \param List to copy
 	///
 	/// The default copy constructor needs to be overridden because it would
-	/// only copy pointers to the head and tail of the list.
+	/// only copy pointers to the head and tail of the List.
 	List(List const &);
 
 	/// \brief assignment operator
@@ -86,10 +87,10 @@ private:
 	///
 	/// \param value to search for
 	///
-	/// \return address of Node with value passed as parameter
+	/// \return address of Node with value passed as parameter or nullptr if
+	/// nothing was found
 	///
-	/// \note the function obviously returns the *first* occurrence of the value
-	/// passed as parameter
+	/// \note the function returns the *first* occurrence of the value passed
 	Node * find(T const &) const;
 
 private:
@@ -102,11 +103,6 @@ public:
 	/// \brief custom made iterator to navigate the List more easily
 	class Iterator {
 	public:
-		/// \brief construr for the List's Iterator w/o parameter
-		///
-		/// TODO why do I need this?
-		Iterator() {}
-
 		/// \brief constructor for the List's Iterator
 		///
 		/// \param where_to_point address Node to point to
@@ -137,7 +133,7 @@ public:
 		/// \return pointer to itself
 		///
 		/// \note this is just needed for convenience
-		Iterator *  operator->() { return this; }
+		Iterator * operator->() { return this; }
 
 
 		/// \brief preincrement operator
@@ -219,13 +215,14 @@ public:
 		Node * last_sentinel_; ///< upper bound (can't go 'above' this)
 	}; // class Iterator
 
+
 public:
 	/// \brief get Iterator to the first element of the List
 	///
 	/// \return the first List element (right after the head sentinel)
 	///
-	/// TODO should we really return nullptrs in case the List is empty?
-	Iterator begin()
+	/// TODO should we really return nullptrs when the List is empty?
+	Iterator begin() const
 	{
 		if (this->size() == 0)
 		{
@@ -241,8 +238,8 @@ public:
 	///
 	/// \return the last List element (right before the tail sentinel)
 	///
-	/// TODO should we really return nullptrs in case the List is empty?
-	Iterator end()
+	/// TODO should we really return nullptrs when the List is empty?
+	Iterator end() const
 	{
 		if (this->size() == 0)
 		{
@@ -312,7 +309,7 @@ List<T>::List(List const & obj)
 	Node * traveller = obj.head_->next_;
 	while (traveller->next_ != obj.tail_)
 	{
-		this->append(traveller->value_); // this also sets the counter
+		this->append(traveller->value_); // this also sets the node counter
 		traveller = traveller->next_;
 	}
 }
@@ -368,7 +365,7 @@ void List<T>::remove(T const & val)
 		// delete delendum
 		delete delendum;
 
-		// decrementing counter
+		// decrementing node counter
 		--this->number_of_elements_;
 	}
 }
@@ -388,7 +385,7 @@ void List<T>::clear()
 	this->head_->next_ = this->tail_;
 	this->tail_->previous_ = this->head_;
 
-	// zero counter
+	// zero node counter
 	this->number_of_elements_ = 0;
 }
 
@@ -414,7 +411,7 @@ List<T> & List<T>::operator=(List<T> const & rhs)
 	Node * traveller = rhs.head_->next_;
 	while (traveller != rhs.tail_)
 	{
-		this->append(traveller->value_); // this also sets the counter
+		this->append(traveller->value_); // this also sets the node counter
 		traveller = traveller->next_;
 	}
 
