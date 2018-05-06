@@ -1,24 +1,24 @@
 #include "gtest/gtest.h"
-#include "nostl/string.hxx"
+#include "string.hxx" // TODO set correct path and add using directive
 
 TEST(StringTest, Create)
 {
 	// create empty String
-	nostl::String foo;
+	String foo;
 	EXPECT_EQ(0, foo.len());
 	EXPECT_STREQ("", foo.cstr());
 
 	// create String from char
-	nostl::String bar('c');
-	nostl::String baz = 'd';
+	String bar('c');
+	String baz = 'd';
 	EXPECT_EQ(1, bar.len());
 	EXPECT_EQ(1, baz.len());
 	EXPECT_STREQ("c", bar.cstr());
 	EXPECT_STREQ("d", baz.cstr());
 
 	// create String from c-string
-	nostl::String qux("The cake is a lie");
-	nostl::String quux = "We don't go to Ravenholm";
+	String qux("The cake is a lie");
+	String quux = "We don't go to Ravenholm";
 	EXPECT_EQ(strlen("The cake is a lie"), qux.len());
 	EXPECT_EQ(strlen("We don't go to Ravenholm"), quux.len());
 	EXPECT_STREQ("The cake is a lie", qux.cstr());
@@ -28,10 +28,10 @@ TEST(StringTest, Create)
 TEST(StringTest, Copy)
 {
 	// create a String
-	nostl::String foo = "Combustible lemons!";
+	String foo = "Combustible lemons!";
 
 	// create a new String by copying the previous one
-	nostl::String bar = foo;
+	String bar = foo;
 
 	// make sure things are in order
 	EXPECT_STREQ(foo.cstr(), bar.cstr());
@@ -41,8 +41,8 @@ TEST(StringTest, Copy)
 TEST(StringTest, Assign)
 {
 	// create two Strings
-	nostl::String foo = "I don't want to go...";
-	nostl::String bar = "Geronimo!";
+	String foo = "I don't want to go...";
+	String bar = "Geronimo!";
 
 	// assign foo to be equal to bar
 	foo = bar;
@@ -56,8 +56,8 @@ TEST(StringTest, Assign)
 TEST(StringTest, Equality)
 {
 	// create two Strings
-	nostl::String foo = "Apple";
-	nostl::String bar = "Banana";
+	String foo = "Apple";
+	String bar = "Banana";
 
 	// check equlity and inequality operators
 	EXPECT_EQ(0, (foo == bar));
@@ -70,7 +70,7 @@ TEST(StringTest, Equality)
 TEST(StringTest, Index)
 {
 	// create String constant
-	nostl::String const foo = "abcdefgh";
+	String const foo = "abcdefgh";
 
 	// check if indexing works properly
 	unsigned int i = 0;
@@ -80,7 +80,7 @@ TEST(StringTest, Index)
 	}
 
 	// create String variable
-	nostl::String bar = "faul";
+	String bar = "faul";
 
 	// check if indexing works properly
 	bar[2] = 'i';
@@ -90,7 +90,7 @@ TEST(StringTest, Index)
 TEST(StringTest, IndexOutOfRange)
 {
 	// create String
-	nostl::String foo = "Spaaaaaace";
+	String foo = "Spaaaaaace";
 
 	// try to index OOR
 	EXPECT_THROW(foo[foo.len()] = 'e', std::out_of_range);
@@ -99,7 +99,7 @@ TEST(StringTest, IndexOutOfRange)
 TEST(StringTest, Concatenate)
 {
 	// additive concatenation with char
-	nostl::String foo = "fo";
+	String foo = "fo";
 	foo += 'o';
 	EXPECT_STREQ("foo", foo.cstr());
 
@@ -108,21 +108,21 @@ TEST(StringTest, Concatenate)
 	EXPECT_STREQ("foobar", foo.cstr());
 
 	// additive concatenation with another String
-	foo += nostl::String("barfoo");
+	foo += String("barfoo");
 	EXPECT_STREQ("foobarbarfoo", foo.cstr());
 
 	// concatenation with char
-	nostl::String const ba = "ba";
-	nostl::String bar = ba + 'r';
+	String const ba = "ba";
+	String bar = ba + 'r';
 	EXPECT_STREQ("bar", bar.cstr());
 
 	// concatenation with c-string
-	nostl::String const f = "f";
+	String const f = "f";
 	foo = f + "oo";
 	EXPECT_STREQ("foo", foo.cstr());
 
 	// concatenation with another String
-	nostl::String foobar = foo + bar;
+	String foobar = foo + bar;
 	EXPECT_STREQ("foobar", foobar.cstr());
 
 }
@@ -130,8 +130,8 @@ TEST(StringTest, Concatenate)
 TEST(StringTest, IO)
 {
 	// create two Strings
-	nostl::String foo;
-	nostl::String const bar = "trololo";
+	String foo;
+	String const bar = "trololo";
 
 	// extraction
 	std::stringstream ss;
