@@ -3,29 +3,26 @@
 
 #include "nostl/string.hxx"
 #include "nostl/set.hxx"
-#include "measure/measure.hxx"
 
 namespace banch {
 
 class Ingredient {
-using nostl::String;
-
 public:
-	Ingredient(String const name, double const amount, nostl::String unit)
-		:	name_(name), amount_(amount, unit) {}
+	Ingredient(nostl::String const name, unsigned int const quanta)
+		:	name_(name), quanta_(quanta) {}
 
 	void print(std::ostream & os) const
 	{
-		os << this->amount_ << this->name_;
+		os << this->amount_ << " units of " << this->name_;
 	}
 
 
 private:
-	measure::Measure<double> amount_;
 	nostl::String name_;
-};
+	unsigned int quanta_;
+}; // class Ingredient
 
-class Recipe {
+class Recipe : public Serializable {
 public:
 	void add(Ingredient const * addendum)
 	{
@@ -43,12 +40,9 @@ public:
 				i != this->ingredients_.end();
 				++i)
 		{
-			i->show();
+			i->print();
 		}
 	}
-
-	void save() const;
-	void load();
 
 
 private:
