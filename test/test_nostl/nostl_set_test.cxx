@@ -1,17 +1,19 @@
 #include "gtest/gtest.h"
 #include "nostl/set.hxx"
 
+using namespace nostl;
+
 TEST(SetTest, CreateEmpty)
 {
 	// create empty set and check if its size is 0
-	nostl::Set<int> foo;
+	Set<int> foo;
 	EXPECT_EQ(0, foo.size());
 }
 
 TEST(SetTest, Fill)
 {
 	// create new set with different doubles, namely {0, .5, 1, ..., 50}
-	nostl::Set<double> foo;
+	Set<double> foo;
 	for (unsigned int i = 0; i < 100; ++i)
 	{
 		foo.insert(static_cast<double>(i) / 2.0);
@@ -27,7 +29,7 @@ TEST(SetTest, Fill)
 TEST(SetTest, Clear)
 {
 	// fill new set with doubles and test clearing
-	nostl::Set<double> foo;
+	Set<double> foo;
 	for (unsigned int i = 0; i < 420; ++i)
 	{
 		foo.insert(static_cast<double>(i) / -2.718281828459);
@@ -40,14 +42,14 @@ TEST(SetTest, Clear)
 TEST(SetTest, Copy)
 {
 	// create Set with a few ints like {0, 1, ... 99}
-	nostl::Set<int> foo;
+	Set<int> foo;
 	for (unsigned int i = 0; i < 100; ++i)
 	{
 		foo.insert(i);
 	}
 
 	// create another Set by copying the first one
-	nostl::Set<int> bar = foo;
+	Set<int> bar = foo;
 
 	// change a few elements in the copy and make sure original instance is left
 	// unchaged
@@ -63,14 +65,14 @@ TEST(SetTest, Copy)
 TEST(SetTest, Assign)
 {
 	// create Set with a few ints like {0, 1, ..., 99}
-	nostl::Set<int> foo;
+	Set<int> foo;
 	for (unsigned int i = 0; i < 100; ++i)
 	{
 		foo.insert(i);
 	}
 
 	// create another Set with a few other ints like {100, 101, ..., 999}
-	nostl::Set<int> bar;
+	Set<int> bar;
 	for (unsigned int i = 100; i < 1000; ++i)
 	{
 		bar.insert(i);
@@ -92,13 +94,13 @@ TEST(SetTest, Assign)
 TEST(SetTest, Iteration)
 {
 	// create new Set and fill with ints like {200, 5, 1}
-	nostl::Set<int> foo;
+	Set<int> foo;
 	foo.insert(200);
 	foo.insert(5);
 	foo.insert(1);
 
 	// test preindex iteration
-	nostl::Set<int>::Iterator i = foo.begin();
+	Set<int>::Iterator i = foo.begin();
 	EXPECT_EQ(200, *i);
 	++i;
 	EXPECT_EQ(5, *i);
@@ -125,13 +127,13 @@ TEST(SetTest, Iteration)
 TEST(SetTest, IterationOutOfRange)
 {
 	// create new Set and fill with doubles like {10.5, 15.5, 20.5}
-	nostl::Set<double> foo;
+	Set<double> foo;
 	foo.insert(10.5);
 	foo.insert(15.5);
 	foo.insert(20.5);
 
 	// try to under-iterate
-	nostl::Set<double>::Iterator i = foo.begin();
+	Set<double>::Iterator i = foo.begin();
 	--i;
 	EXPECT_EQ(10.5, *(i--));
 	EXPECT_EQ(10.5, *i);
@@ -146,7 +148,7 @@ TEST(SetTest, IterationOutOfRange)
 TEST(SetTest, Removal)
 {
 	// create new Set with a few elements like {3, 4, 5, 40}
-	nostl::Set<int> foo;
+	Set<int> foo;
 	foo.insert(3);
 	foo.insert(4);
 	foo.insert(5);
@@ -155,7 +157,7 @@ TEST(SetTest, Removal)
 
 	// remove an element
 	foo.remove(4); // --> {3, 5, 40}
-	nostl::Set<int>::Iterator i = foo.begin();
+	Set<int>::Iterator i = foo.begin();
 	EXPECT_EQ(3, *(i++));
 	EXPECT_EQ(5, *(i++));
 	EXPECT_EQ(40, *i);
