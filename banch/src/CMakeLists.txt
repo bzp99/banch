@@ -1,3 +1,4 @@
-add_executable(${PROJECT_NAME} banch.cxx)
+add_executable(banch_main banch_main.cxx)
 
-target_link_libraries(${PROJECT_NAME} sub::nostl sub::measure)
+target_link_libraries(banch_main
+						sub::banch)
