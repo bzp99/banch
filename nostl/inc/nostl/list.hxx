@@ -8,6 +8,10 @@
 /// \brief namespace for STL reimplementations
 namespace nostl {
 
+//////////////////
+// DECLARATIONS //
+//////////////////
+
 /// \brief re-implementation of std::List<T>
 ///
 /// \tparam T type of elements that the List contains
@@ -58,10 +62,11 @@ public:
 	/// \brief clear the list (i.e. remove all of its elements)
 	void clear();
 
+
 	/// \brief get the size of the list (i.e. the number of its elements)
 	///
 	/// \return the List's size
-	unsigned int size() const { return this->number_of_elements_; }
+	inline unsigned int size() const { return this->number_of_elements_; }
 
 
 	/// \brief destructor
@@ -121,25 +126,25 @@ public:
 		/// \brief dereference operator
 		///
 		/// \return the value of the Node currently pointed to
-		T & operator*() { return this->current_->value_; }
+		inline T & operator*() { return this->current_->value_; }
 
 		/// \brief const dereference operator
 		///
 		/// \return the value of the Node currently pointed to
-		T const & operator*() const { return this->current_->value_; }
+		inline T const & operator*() const { return this->current_->value_; }
 
 		/// \brief member access operator
 		///
 		/// \return pointer to itself
 		///
 		/// \note this is just needed for convenience
-		Iterator * operator->() { return this; }
+		inline Iterator * operator->() { return this; }
 
 
 		/// \brief preincrement operator
 		///
 		/// \return Iterator of next Node
-		Iterator operator++()
+		inline Iterator operator++()
 		{
 			if (this->current_->next_ != this->last_sentinel_)
 			{
@@ -153,7 +158,7 @@ public:
 		/// \param int dummy parameter
 		///
 		/// \return Iterator of current Node
-		Iterator operator++(int)
+		inline Iterator operator++(int)
 		{
 			Iterator rv = *this;
 			if (this->current_->next_ != this->last_sentinel_)
@@ -166,7 +171,7 @@ public:
 		/// \brief predecrement operator
 		///
 		/// \return Iterator of previous Node
-		Iterator operator--()
+		inline Iterator operator--()
 		{
 			if (this->current_->previous_ != this->first_sentinel_)
 			{
@@ -180,7 +185,7 @@ public:
 		/// \param int dummy parameter
 		///
 		/// \return Iterator of current Node
-		Iterator operator--(int)
+		inline Iterator operator--(int)
 		{
 			Iterator rv = *this;
 			if (this->current_->previous_ != this->first_sentinel_)
@@ -196,7 +201,7 @@ public:
 		/// \param rhs Iterator to check equality with
 		///
 		/// \return true if the Iterators point to the same Node
-		bool operator==(Iterator const & rhs) const
+		inline bool operator==(Iterator const & rhs) const
 		{
 			return this->current_ == rhs.current_;
 		}
@@ -206,7 +211,10 @@ public:
 		/// \param rhs Iterator to check inequality with
 		///
 		/// \return true if the Iterators point to different Nodes
-		bool operator!=(Iterator const & rhs) const { return !(*this == rhs); }
+		inline bool operator!=(Iterator const & rhs) const
+		{
+			return !(*this == rhs);
+		}
 
 
 	private:
@@ -222,7 +230,7 @@ public:
 	/// \return the first List element (right after the head sentinel)
 	///
 	/// TODO should we really return nullptrs when the List is empty?
-	Iterator begin() const
+	inline Iterator begin() const
 	{
 		if (this->size() == 0)
 		{
@@ -239,7 +247,7 @@ public:
 	/// \return the last List element (right before the tail sentinel)
 	///
 	/// TODO should we really return nullptrs when the List is empty?
-	Iterator end() const
+	inline Iterator end() const
 	{
 		if (this->size() == 0)
 		{
@@ -251,6 +259,12 @@ public:
 		}
 	}
 }; // class List
+
+
+
+/////////////////
+// DEFINITIONS //
+/////////////////
 
 template <typename T>
 List<T>::List()
