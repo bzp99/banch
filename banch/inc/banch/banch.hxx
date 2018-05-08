@@ -139,7 +139,7 @@ public:
 	/// \param os stream to print into
 	void show(std::ostream & os) const
 	{
-		os << "Recipe: " << this->name_ << '\n';
+		os << "Recipe: " << this->name_ << std::endl;
 		for (nostl::Set<Ingredient *>::Iterator i = this->ingredients_.begin();
 				i != this->ingredients_.end();
 				++i)
