@@ -14,9 +14,9 @@ TEST(RecipeTest, CreateRecipe)
 	// test printing recipe
 	std::stringstream ss;
 	dryMartini.show(ss);
-	EXPECT_STREQ("Recipe: Dry Martini\n \
-					5 units of gin\n \
-					1 units of dry vermouth\n \
-					a few olives\n",
+	EXPECT_STREQ("Recipe: Dry Martini\n" \
+					"5 units of gin\n" \
+					"1 units of dry vermouth\n" \
+					"a few olives\n", // these are auto-conctenated by compiler
 					ss.str().c_str());
 }
