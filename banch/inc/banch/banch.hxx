@@ -14,6 +14,10 @@ using std::string;
 /// \brief namespace for the banch project
 namespace banch {
 
+//////////////////
+// DECLARATIONS //
+//////////////////
+
 /// \brief abstract class for drink ingredients
 class Ingredient : public nostl::Serializable {
 public:
@@ -26,7 +30,7 @@ public:
 	virtual ~Ingredient() {}
 }; // class Ingredient
 
-/// \brief derived ingredient: a beverage / drink
+/// \brief derived ingredient class for actual liquid beverages
 class Beverage : public Ingredient {
 public:
 	/// \brief constructor with default arguments
@@ -39,29 +43,18 @@ public:
 	/// \brief implementation of the print method
 	///
 	/// \param os stream to print into
-	void print(std::ostream & os) const
-	{
-		os << this->quanta_ << " units of " << this->name_ << std::endl;
-	}
+	inline void print(std::ostream & os) const;
+
 
 	/// \brief implementation of the serialization method
 	///
 	/// \param os stream to serialize into
-	void serialize(std::ostream & os) const
-	{
-		os << "beverage" << std::endl;
-		os << this->name_ << std::endl;
-		os << this->quanta_ << std::endl;
-	}
+	inline void serialize(std::ostream & os) const;
 
 	/// \brief implementation of the deserialization method
 	///
 	/// \param is stream to deserialize from
-	void deserialize(std::istream & is)
-	{
-		getline(is, this->name_);
-		(is >> this->quanta_).ignore(1); // ignore is needed to flush the buffer
-	}
+	inline void deserialize(std::istream & is);
 
 
 private:
@@ -70,7 +63,7 @@ private:
 							///< expressed in units
 }; // class Beverage
 
-/// \brief a derived ingredient class
+/// \brief a derived ingredient class for garnishes
 ///
 /// This is for modelling ingredients that aren't drinks, for example a slice of
 /// lemon or something.
@@ -84,27 +77,19 @@ public:
 	/// \brief implementation of the print method
 	///
 	/// \param os stream to print into
-	void print(std::ostream & os) const
-	{
-		os << this->text_ << std::endl;
-	}
+	inline void print(std::ostream & os) const;
+
 
 	/// \brief implementation of the serialization method
 	///
 	/// \param os stream to serialize into
-	void serialize(std::ostream & os) const
-	{
-		os << "extra" << std::endl;
-		os << this->text_ << std::endl;
-	}
+	inline void serialize(std::ostream & os) const;
 
 	/// \brief implementation of the deserialization method
 	///
 	/// \param is stream to deserialize from
-	void deserialize(std::istream & is)
-	{
-		getline(is, this->text_);
-	}
+	inline void deserialize(std::istream & is);
+
 
 private:
 	string text_; ///< the extra, for example: "A cherry"
@@ -121,80 +106,29 @@ public:
 	/// \brief method that adds an ingredient
 	///
 	/// \param addendum ingredient to add
-	void add(Ingredient * addendum)
-	{
-		this->ingredients_.insert(addendum);
-	}
+	inline void add(Ingredient * addendum);
 
 	/// \brief method that removes an ingredient
 	///
 	/// \param delendum ingredient to remove
-	void remove(Ingredient * delendum)
-	{
-		this->ingredients_.remove(delendum);
-	}
+	inline void remove(Ingredient * delendum);
+
 
 	/// \brief method that prints all ingredients
 	///
 	/// \param os stream to print into
-	void show(std::ostream & os) const
-	{
-		os << "Recipe: " << this->name_ << std::endl;
-		for (nostl::Set<Ingredient *>::Iterator i = this->ingredients_.begin();
-				i != this->ingredients_.end();
-				++i)
-		{
-			(*i)->print(os);
-		}
-	}
+	void show(std::ostream & os) const;
+
 
 	/// \brief implementation of the serialization method
 	///
 	/// \param os stream to serialize into
-	void serialize(std::ostream & os) const
-	{
-		// start of recipe record
-		os << "startrecipe" << std::endl;
-
-		// name of recipe
-		os << this->name_ << std::endl;
-
-		// recipe ingredients
-		for (nostl::Set<Ingredient *>::Iterator i = ingredients_.begin();
-				i != ingredients_.end();
-				++i)
-		{
-			(*i)->serialize(os);
-		}
-
-		// end of recipe record
-		os << "endrecipe" << std::endl;
-	}
+	void serialize(std::ostream & os) const;
 
 	/// \brief implementation of the deserialization method
 	///
 	/// \param is stream to deserialize from
-	void deserialize(std::istream & is)
-	{
-		getline(is, this->name_);
-
-		string currentLine;
-		while (getline(is, currentLine) && currentLine != string("endrecipe"))
-		{
-			if (currentLine == string("beverage"))
-			{
-				Beverage * beverage = new Beverage;
-				beverage->deserialize(is);
-				this->add(beverage);
-			}
-			if (currentLine == string("extra"))
-			{
-				Extra * extra = new Extra;
-				extra->deserialize(is);
-				this->add(extra);
-			}
-		}
-	}
+	void deserialize(std::istream & is);
 
 
 private:
@@ -209,67 +143,105 @@ public:
 	/// \brief add recipe to the collection
 	///
 	/// \param addendum recipe to add
-	void add(Recipe * addendum)
-	{
-		this->recipes_.insert(addendum);
-	}
+	inline void add(Recipe * addendum);
 
 	/// \brief remove a recipe from the collection
 	///
 	/// \param delendum recipe to remove
-	void remove(Recipe * delendum)
-	{
-		this->recipes_.remove(delendum);
-	}
+	inline void remove(Recipe * delendum);
+
 
 	/// \brief list all recipes in the book
 	///
 	/// \param os stream to print into
-	void list(std::ostream & os) const
-	{
-		for (nostl::Set<Recipe *>::Iterator i = this->recipes_.begin();
-				i != this->recipes_.end();
-				++i)
-		{
-			(*i)->show(os);
-			os << std::endl;
-		}
-	}
+	void list(std::ostream & os) const;
+
 
 	/// \brief implementation of the serialization method
 	///
 	/// \param os stream to serialize into
-	void serialize(std::ostream & os) const
-	{
-		for (nostl::Set<Recipe *>::Iterator i = recipes_.begin();
-				i != recipes_.end();
-				++i)
-		{
-			(*i)->serialize(os);
-		}
-	}
+	void serialize(std::ostream & os) const;
 
 	/// \brief implementation of the deserialization method
 	///
 	/// \param is stream to deserialize from
-	void deserialize(std::istream & is)
-	{
-		string currentLine;
-		while (getline(is, currentLine))
-		{
-			if (currentLine == string("startrecipe"))
-			{
-				Recipe * recipe = new Recipe;
-				recipe->deserialize(is);
-				this->add(recipe);
-			}
-		}
-	}
+	void deserialize(std::istream & is);
 
 
 private:
 	nostl::Set<Recipe *> recipes_; ///< set containing the recipes (pointers)
 }; // class RecipeBook
+
+
+
+////////////////////////
+// INLINE DEFINITIONS //
+////////////////////////
+
+// class Beverage //
+
+void Beverage::print(std::ostream & os) const
+{
+	os << this->quanta_ << " units of " << this->name_ << std::endl;
+}
+
+void Beverage::serialize(std::ostream & os) const
+{
+	os << "beverage" << std::endl;
+	os << this->name_ << std::endl;
+	os << this->quanta_ << std::endl;
+}
+
+void Beverage::deserialize(std::istream & is)
+{
+	getline(is, this->name_);
+	(is >> this->quanta_).ignore(1); // ignore is needed to flush the buffer
+}
+
+
+// class Garnish //
+
+void Extra::print(std::ostream & os) const
+{
+	os << this->text_ << std::endl;
+}
+
+void Extra::serialize(std::ostream & os) const
+{
+	os << "extra" << std::endl;
+	os << this->text_ << std::endl;
+}
+
+void Extra::deserialize(std::istream & is)
+{
+	getline(is, this->text_);
+}
+
+
+// class Recipe //
+
+void Recipe::add(Ingredient * addendum)
+{
+	this->ingredients_.insert(addendum);
+}
+
+void Recipe::remove(Ingredient * delendum)
+{
+	this->ingredients_.remove(delendum);
+}
+
+
+// class RecipeBook //
+
+void RecipeBook::add(Recipe * addendum)
+{
+	this->recipes_.insert(addendum);
+}
+
+void RecipeBook::remove(Recipe * delendum)
+{
+	this->recipes_.remove(delendum);
+}
 
 } // namespace banch
 
