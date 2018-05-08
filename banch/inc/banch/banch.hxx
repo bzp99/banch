@@ -41,7 +41,7 @@ public:
 	/// \param os stream to print into
 	void print(std::ostream & os) const
 	{
-		os << this->quanta_ << " units of " << this->name_ << '\n';
+		os << this->quanta_ << " units of " << this->name_ << std::endl;
 	}
 
 	/// \brief implementation of the serialization method
@@ -49,8 +49,9 @@ public:
 	/// \param os stream to serialize into
 	void serialize(std::ostream & os) const
 	{
-		os << "beverage" << '\n';
-		os << this->name_ << '\n' << this->quanta_ << '\n';
+		os << "beverage" << std::endl;
+		os << this->name_ << std::endl;
+		os << this->quanta_ << std::endl;
 	}
 
 	/// \brief implementation of the deserialization method
@@ -59,7 +60,7 @@ public:
 	void deserialize(std::istream & is)
 	{
 		getline(is, this->name_);
-		(is >> this->quanta_).ignore(1);
+		(is >> this->quanta_).ignore(1); // ignore is needed to flush the buffer
 	}
 
 
@@ -85,7 +86,7 @@ public:
 	/// \param os stream to print into
 	void print(std::ostream & os) const
 	{
-		os << this->text_ << '\n';
+		os << this->text_ << std::endl;
 	}
 
 	/// \brief implementation of the serialization method
@@ -93,8 +94,8 @@ public:
 	/// \param os stream to serialize into
 	void serialize(std::ostream & os) const
 	{
-		os << "extra" << '\n';
-		os << this->text_ << '\n';
+		os << "extra" << std::endl;
+		os << this->text_ << std::endl;
 	}
 
 	/// \brief implementation of the deserialization method
@@ -152,15 +153,22 @@ public:
 	/// \param os stream to serialize into
 	void serialize(std::ostream & os) const
 	{
-		os << "startrecipe" << '\n';
-		os << this->name_ << '\n';
+		// start of recipe record
+		os << "startrecipe" << std::endl;
+
+		// name of recipe
+		os << this->name_ << std::endl;
+
+		// recipe ingredients
 		for (nostl::Set<Ingredient *>::Iterator i = ingredients_.begin();
 				i != ingredients_.end();
 				++i)
 		{
 			(*i)->serialize(os);
 		}
-		os << "endrecipe" << '\n';
+
+		// end of recipe record
+		os << "endrecipe" << std::endl;
 	}
 
 	/// \brief implementation of the deserialization method
@@ -224,7 +232,7 @@ public:
 				++i)
 		{
 			(*i)->show(os);
-			os << '\n';
+			os << std::endl;
 		}
 	}
 
