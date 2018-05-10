@@ -146,7 +146,7 @@ public:
 		/// \return Iterator of next Node
 		inline Iterator operator++()
 		{
-			if (this->current_->next_ != this->last_sentinel_)
+			if (this->current_ != this->last_sentinel_)
 			{
 				this->current_ = this->current_->next_;
 			}
@@ -161,7 +161,7 @@ public:
 		inline Iterator operator++(int)
 		{
 			Iterator rv = *this;
-			if (this->current_->next_ != this->last_sentinel_)
+			if (this->current_ != this->last_sentinel_)
 			{
 				this->current_ = this->current_->next_;
 			}
