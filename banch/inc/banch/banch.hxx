@@ -113,6 +113,9 @@ public:
 	/// \param delendum ingredient to remove
 	inline void remove(Ingredient * delendum);
 
+	/// \brief method that clears the recipe
+	void clear();
+
 
 	/// \brief method that prints all ingredients
 	///
@@ -136,6 +139,10 @@ public:
 	void deserialize(std::istream & is);
 
 
+	/// \brief destructor (frees memory)
+	inline ~Recipe();
+
+
 private:
 	string name_; ///< name of the recipe
 	nostl::Set<Ingredient *> ingredients_; ///< heterogenous container
@@ -154,6 +161,9 @@ public:
 	///
 	/// \param delendum recipe to remove
 	inline void remove(Recipe * delendum);
+
+	/// \brief method that clears the book
+	void clear();
 
 
 	/// \brief list all recipes in the book
@@ -176,6 +186,10 @@ public:
 	///
 	/// \param is stream to deserialize from
 	void deserialize(std::istream & is);
+
+
+	/// \brief destructor (frees memory)
+	inline ~RecipeBook();
 
 
 private:
@@ -237,12 +251,21 @@ void Recipe::add(Ingredient * addendum)
 
 void Recipe::remove(Ingredient * delendum)
 {
+	// get rid of pointer
 	this->ingredients_.remove(delendum);
+
+	// free memory
+	delete delendum;
 }
 
 unsigned int Recipe::number_of_ingredients() const
 {
 	return this->ingredients_.size();
+}
+
+Recipe::~Recipe()
+{
+	this->clear();
 }
 
 
@@ -255,12 +278,21 @@ void RecipeBook::add(Recipe * addendum)
 
 void RecipeBook::remove(Recipe * delendum)
 {
+	// get rid of pointer
 	this->recipes_.remove(delendum);
+
+	// free memory
+	delete delendum;
 }
 
 unsigned int RecipeBook::number_of_entries() const
 {
 	return this->recipes_.size();
+}
+
+RecipeBook::~RecipeBook()
+{
+	this->clear();
 }
 
 } // namespace banch

@@ -4,10 +4,23 @@
 
 #include "banch/banch.hxx"
 
+#include <iostream>
+
 /// \brief namespace for the banch project
 namespace banch {
 
 // class Recipe //
+
+void Recipe::clear()
+{
+	// iterate though container and free memory
+	for (nostl::Set<Ingredient *>::Iterator i = this->ingredients_.begin();
+			i != this->ingredients_.end();
+			++i)
+	{
+		this->remove(*i);
+	}
+}
 
 void Recipe::show(std::ostream & os) const
 {
@@ -29,8 +42,8 @@ void Recipe::serialize(std::ostream & os) const
 	os << this->name_ << std::endl;
 
 	// recipe ingredients
-	for (nostl::Set<Ingredient *>::Iterator i = ingredients_.begin();
-			i != ingredients_.end();
+	for (nostl::Set<Ingredient *>::Iterator i = this->ingredients_.begin();
+			i != this->ingredients_.end();
 			++i)
 	{
 		(*i)->serialize(os);
@@ -62,7 +75,19 @@ void Recipe::deserialize(std::istream & is)
 	}
 }
 
+
 // class RecipeBook //
+
+void RecipeBook::clear()
+{
+	// iterate though container and free memory
+	for (nostl::Set<Recipe *>::Iterator i = this->recipes_.begin();
+			i != this->recipes_.end();
+			++i)
+	{
+		this->remove(*i);
+	}
+}
 
 void RecipeBook::list(std::ostream & os) const
 {
@@ -77,8 +102,8 @@ void RecipeBook::list(std::ostream & os) const
 
 void RecipeBook::serialize(std::ostream & os) const
 {
-	for (nostl::Set<Recipe *>::Iterator i = recipes_.begin();
-			i != recipes_.end();
+	for (nostl::Set<Recipe *>::Iterator i = this->recipes_.begin();
+			i != this->recipes_.end();
 			++i)
 	{
 		(*i)->serialize(os);
@@ -98,6 +123,5 @@ void RecipeBook::deserialize(std::istream & is)
 		}
 	}
 }
-
 
 } // namespace banch
