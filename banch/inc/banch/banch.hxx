@@ -119,6 +119,11 @@ public:
 	/// \param os stream to print into
 	void show(std::ostream & os) const;
 
+	/// \brief method that prints number of ingredients in recipe
+	///
+	/// \return the number of ingredients
+	inline unsigned int number_of_ingredients() const;
+
 
 	/// \brief implementation of the serialization method
 	///
@@ -155,6 +160,11 @@ public:
 	///
 	/// \param os stream to print into
 	void list(std::ostream & os) const;
+
+	/// \brief method that tells how many recipes there are in the book
+	///
+	/// \return the number of contained recipes
+	inline unsigned int number_of_entries() const;
 
 
 	/// \brief implementation of the serialization method
@@ -229,6 +239,11 @@ void Recipe::remove(Ingredient * delendum)
 {
 	this->ingredients_.remove(delendum);
 }
+	
+unsigned int Recipe::number_of_ingredients() const
+{
+	return this->ingredients_.size();
+}
 
 
 // class RecipeBook //
@@ -241,6 +256,11 @@ void RecipeBook::add(Recipe * addendum)
 void RecipeBook::remove(Recipe * delendum)
 {
 	this->recipes_.remove(delendum);
+}
+	
+unsigned int RecipeBook::number_of_entries() const
+{
+	return this->recipes_.size();
 }
 
 } // namespace banch
