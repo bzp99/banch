@@ -242,9 +242,9 @@ public:
 		}
 	}
 
-	/// \brief get Iterator to the last element of the List
+	/// \brief get Iterator to the element that would come after the last one
 	///
-	/// \return the last List element (right before the tail sentinel)
+	/// \return the past-the-last element (i.e. the tail sentinel)
 	///
 	/// TODO should we really return nullptrs when the List is empty?
 	inline Iterator end() const
@@ -255,7 +255,7 @@ public:
 		}
 		else
 		{
-			return Iterator(this->tail_->previous_, this->head_, this->tail_);
+			return Iterator(this->tail_, this->head_, this->tail_);
 		}
 	}
 }; // class List
