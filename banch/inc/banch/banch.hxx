@@ -63,7 +63,7 @@ private:
 							///< expressed in units
 }; // class Beverage
 
-/// \brief a derived ingredient class for garnishes
+/// \brief a derived ingredient class for everything that's not a beverage
 ///
 /// This is for modelling ingredients that aren't drinks, for example a slice of
 /// lemon or something.
