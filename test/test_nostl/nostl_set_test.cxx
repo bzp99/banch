@@ -99,7 +99,7 @@ TEST(SetTest, Iteration)
 	foo.insert(5);
 	foo.insert(1);
 
-	// test preindex iteration
+	// test preindex incrementation
 	Set<int>::Iterator i = foo.begin();
 	EXPECT_EQ(200, *i);
 	++i;
@@ -110,16 +110,19 @@ TEST(SetTest, Iteration)
 	EXPECT_EQ(5, *i);
 
 	i = foo.end();
+	--i;
 	EXPECT_EQ(1, *i);
 	--i;
 	EXPECT_EQ(5, *i);
 
-	// test postindex iteration
+	// test postindex incrementation
 	i = foo.begin();
+	--i;
 	EXPECT_EQ(200, *(i++));
 	EXPECT_EQ(5, *i);
 
 	i = foo.end();
+	--i;
 	EXPECT_EQ(1, *(i--));
 	EXPECT_EQ(5, *i);
 }
@@ -140,9 +143,9 @@ TEST(SetTest, IterationOutOfRange)
 
 	// try to over-iterate
 	i = foo.end();
+	Set<double>::Iterator j = i;
 	++i;
-	EXPECT_EQ(20.5, *(i++));
-	EXPECT_EQ(20.5, *i);
+	EXPECT_EQ(i, j);
 }
 
 TEST(SetTest, Removal)

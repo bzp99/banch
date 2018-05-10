@@ -93,7 +93,7 @@ TEST(ListTest, Iteration)
 	foo.append(1);
 	foo.prepend(200);
 
-	// test preindex iteration
+	// test preindex incrementation
 	List<int>::Iterator i = foo.begin();
 	EXPECT_EQ(200, *i);
 	++i;
@@ -104,16 +104,18 @@ TEST(ListTest, Iteration)
 	EXPECT_EQ(5, *i);
 
 	i = foo.end();
+	--i;
 	EXPECT_EQ(1, *i);
 	--i;
 	EXPECT_EQ(5, *i);
 
-	// test postindex iteration
+	// test postindex incrementation
 	i = foo.begin();
 	EXPECT_EQ(200, *(i++));
 	EXPECT_EQ(5, *i);
 
 	i = foo.end();
+	--i;
 	EXPECT_EQ(1, *(i--));
 	EXPECT_EQ(5, *i);
 }
@@ -134,9 +136,9 @@ TEST(ListTest, IterationOutOfRange)
 
 	// try to over-iterate
 	i = foo.end();
+	List<double>::Iterator j = i;
 	++i;
-	EXPECT_EQ(20.5, *(i++));
-	EXPECT_EQ(20.5, *i);
+	EXPECT_EQ(i, j);
 }
 
 TEST(ListTest, Removal)
@@ -159,7 +161,7 @@ TEST(ListTest, Removal)
 
 	// remove two more just for fun
 	foo.remove(30); // --> {3, 3}
-	EXPECT_EQ(2, foo.size()); // FIXME this fails
+	EXPECT_EQ(2, foo.size());
 	foo.remove(3); // --> {3}
 	i = foo.begin();
 	EXPECT_EQ(3, *i);
