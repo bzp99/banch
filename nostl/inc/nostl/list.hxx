@@ -228,35 +228,17 @@ public:
 	/// \brief get Iterator to the first element of the List
 	///
 	/// \return the first List element (right after the head sentinel)
-	///
-	/// TODO should we really return nullptrs when the List is empty?
 	inline Iterator begin() const
 	{
-		if (this->size() == 0)
-		{
-			return Iterator(nullptr, nullptr, nullptr);
-		}
-		else
-		{
-			return Iterator(this->head_->next_, this->head_, this->tail_);
-		}
+		return Iterator(this->head_->next_, this->head_, this->tail_);
 	}
 
 	/// \brief get Iterator to the element that would come after the last one
 	///
 	/// \return the past-the-last element (i.e. the tail sentinel)
-	///
-	/// TODO should we really return nullptrs when the List is empty?
 	inline Iterator end() const
 	{
-		if (this->size() == 0)
-		{
-			return Iterator(nullptr, nullptr, nullptr);
-		}
-		else
-		{
-			return Iterator(this->tail_, this->head_, this->tail_);
-		}
+		return Iterator(this->tail_, this->head_, this->tail_);
 	}
 }; // class List
 
