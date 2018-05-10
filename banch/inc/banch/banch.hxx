@@ -239,7 +239,7 @@ void Recipe::remove(Ingredient * delendum)
 {
 	this->ingredients_.remove(delendum);
 }
-	
+
 unsigned int Recipe::number_of_ingredients() const
 {
 	return this->ingredients_.size();
@@ -257,7 +257,7 @@ void RecipeBook::remove(Recipe * delendum)
 {
 	this->recipes_.remove(delendum);
 }
-	
+
 unsigned int RecipeBook::number_of_entries() const
 {
 	return this->recipes_.size();
