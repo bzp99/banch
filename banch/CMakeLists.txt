@@ -1,7 +1,7 @@
 project(banch)
 
 # add the banch library and also alias it as sub::banch
-add_library(${PROJECT_NAME} STATIC src/banch.cxx)
+add_library(${PROJECT_NAME} STATIC src/banch.cxx src/menu.cxx)
 add_library(sub::banch ALIAS ${PROJECT_NAME})
 
 # the banch library's includes
