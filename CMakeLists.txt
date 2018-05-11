@@ -18,6 +18,7 @@ enable_testing()
 # subprojects
 add_subdirectory(banch) # main project
 add_subdirectory(nostl) # STL workarounds
+add_subdirectory(menu) # interactive menu
 add_subdirectory(test) # unit testing w/ GTest
 
 # documentation

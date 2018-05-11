@@ -48,3 +48,4 @@ include_directories("${source_dir}/googletest/include"
 ###
 add_subdirectory(test_nostl)
 add_subdirectory(test_banch)
+add_subdirectory(test_menu)
