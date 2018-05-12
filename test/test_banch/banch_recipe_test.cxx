@@ -3,7 +3,7 @@
 
 using namespace banch;
 
-TEST(RecipeTest, Build)
+TEST_CASE("A recipe can be made", "[recipe]")
 {
 	// create recipe and fill with stuff
 	Recipe dryMartini("Dry Martini");
@@ -11,19 +11,20 @@ TEST(RecipeTest, Build)
 	dryMartini.add(new Beverage("dry vermouth", 1));
 	dryMartini.add(new Extra("a few olives"));
 
-	EXPECT_EQ(3, dryMartini.number_of_ingredients());
+	CHECK( dryMartini.number_of_ingredients() == 3 );
 
 	// test printing recipe
 	std::stringstream ss;
 	dryMartini.show(ss);
-	EXPECT_STREQ("Recipe: Dry Martini\n" \
-					"5 units of gin\n" \
-					"1 units of dry vermouth\n" \
-					"a few olives\n", // these are auto-conctenated by compiler
-					ss.str().c_str());
+	CHECK( ss.str().c_str() ==
+			"Recipe: Dry Martini\n" \
+				"5 units of gin\n" \
+				"1 units of dry vermouth\n" \
+				"a few olives\n"
+		 );
 }
 
-TEST(RecipeTest, Remove)
+TEST_CASE("Ingredients can be removed froma a recipe", "[recipe]")
 {
 	// create recipe and fill with stuff + a few superfluous things
 	Recipe ramosGinFizz("Ramos gin fizz");
@@ -38,37 +39,39 @@ TEST(RecipeTest, Remove)
 	ramosGinFizz.add(dirt);
 	ramosGinFizz.add(new Extra("sugar"));
 
-	EXPECT_EQ(8, ramosGinFizz.number_of_ingredients());
+	CHECK( ramosGinFizz.number_of_ingredients() == 8 );
 
 	// test if removal actually works
 	std::stringstream ss;
 	ramosGinFizz.remove(nuka);
 	ramosGinFizz.show(ss);
-	EXPECT_STREQ("Recipe: Ramos gin fizz\n" \
-					"4 units of gin\n" \
-					"2 units of cream\n" \
-					"an egg white\n" \
-					"1 units of lemon juice\n" \
-					"1 units of lime juice\n" \
-					"a bit of dirt\n" \
-					"sugar\n",
-					ss.str().c_str());
+	CHECK( ss.str().c_str() ==
+			"Recipe: Ramos gin fizz\n" \
+				"4 units of gin\n" \
+				"2 units of cream\n" \
+				"an egg white\n" \
+				"1 units of lemon juice\n" \
+				"1 units of lime juice\n" \
+				"a bit of dirt\n" \
+				"sugar\n"
+		 );
 
 	ss.str("");
 	ss.clear();
 	ramosGinFizz.remove(dirt);
 	ramosGinFizz.show(ss);
-	EXPECT_STREQ("Recipe: Ramos gin fizz\n" \
-					"4 units of gin\n" \
-					"2 units of cream\n" \
-					"an egg white\n" \
-					"1 units of lemon juice\n" \
-					"1 units of lime juice\n" \
-					"sugar\n",
-					ss.str().c_str());
+	CHECK( ss.str().c_str() ==
+			"Recipe: Ramos gin fizz\n" \
+				"4 units of gin\n" \
+				"2 units of cream\n" \
+				"an egg white\n" \
+				"1 units of lemon juice\n" \
+				"1 units of lime juice\n" \
+				"sugar\n"
+		 );
 }
 
-TEST(RecipeTest, Serialize)
+TEST_CASE("A recipe can be persistent", "[recipe][serialization]")
 {
 	// create recipe and fill with stuff
 	Recipe piscoSour("Pisco sour");
@@ -78,23 +81,25 @@ TEST(RecipeTest, Serialize)
 	piscoSour.add(new Extra("a fresh egg white"));
 	piscoSour.add(new Extra("a dash of angoustra"));
 
-	// serialize into a stringstream
-	std::stringstream ss;
-	piscoSour.serialize(ss);
-	EXPECT_STREQ("startrecipe\n" \
+	SECTION("A recipe can be serialized")
+	{
+		std::stringstream ss;
+		piscoSour.serialize(ss);
+		CHECK( ss.str().c_str() ==
+				"startrecipe\n" \
 					"Pisco sour\n" \
 					"beverage\npisco\n3\n" \
 					"beverage\nfresh squeezed lime juice\n1\n" \
 					"beverage\nsimple syrup\n1\n" \
 					"extra\na fresh egg white\n" \
 					"extra\na dash of angoustra\n" \
-					"endrecipe\n",
-					ss.str().c_str());
+					"endrecipe\n"
+			 );
+	}
 
 	ss.str("");
 	ss.clear();
 
-	// deserialize from a stringstream
 	ss.str("Sidecar\n" \
 			"beverage\ncognac\n2\n" \
 			"beverage\ncointreau\n1\n" \
@@ -102,14 +107,19 @@ TEST(RecipeTest, Serialize)
 			"extra\nsuperfine sugar\n" \
 			"endrecipe");
 	Recipe sidecar;
-	sidecar.deserialize(ss);
 
-	std::stringstream ss2;
-	sidecar.show(ss2);
-	EXPECT_STREQ("Recipe: Sidecar\n" \
+	SECTION("A recipe can be deserialized")
+	{
+		sidecar.deserialize(ss);
+
+		std::stringstream ss2;
+		sidecar.show(ss2);
+		CHECK( ss2.str().c_str() ==
+				"Recipe: Sidecar\n" \
 					"2 units of cognac\n" \
 					"1 units of cointreau\n" \
 					"1 units of fresh lemon juice\n" \
-					"superfine sugar\n",
-					ss2.str().c_str());
+					"superfine sugar\n"
+			 );
+	}
 }

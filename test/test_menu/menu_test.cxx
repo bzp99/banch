@@ -1,4 +1,4 @@
-#include "gtest/gtest.h"
+#include "catch/catch.hpp"
 #include "menu/menu.hxx"
 
 using namespace menu;
@@ -13,9 +13,9 @@ public:
 
 private:
 	std::ostream & os_;
-}; // class say_hello
+};
 
-TEST(MenuTest, Basic)
+TEST_CASE("An empty menu can be created", "[menu][sanity]")
 {
 	// create a menu and add our function object
 	Menu foo;

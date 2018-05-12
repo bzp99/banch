@@ -1,9 +1,9 @@
-#include "gtest/gtest.h"
+#include "catch/catch.hpp"
 #include "banch/banch.hxx"
 
 using namespace banch;
 
-TEST(RecipeBookTest, Basic)
+TEST_CASE("A recipe book can be created", "[recipebook]")
 {
 	// create some placeholder recipes and put them into the book
 	Recipe * foo = new Recipe("foo");
@@ -13,7 +13,7 @@ TEST(RecipeBookTest, Basic)
 	qux.add(foo);
 	qux.add(bar);
 
-	EXPECT_EQ(2, qux.number_of_entries());
+	CHECK( qux.number_of_entries() == 2 );
 
 	// add a few ingredients and test listing
 	foo->add(new Beverage("mineral water", 10));
@@ -22,17 +22,18 @@ TEST(RecipeBookTest, Basic)
 
 	std::stringstream ss;
 	qux.list(ss);
-	EXPECT_STREQ("Recipe: foo\n" \
-					"10 units of mineral water\n" \
-					"lemon slices\n" \
-					"\n" \
-					"Recipe: bar\n" \
-					"8 units of milk\n" \
-					"\n",
-					ss.str().c_str());
+	CHECK( ss.str().c_str() ==
+			"Recipe: foo\n" \
+				"10 units of mineral water\n" \
+				"lemon slices\n" \
+				"\n" \
+				"Recipe: bar\n" \
+				"8 units of milk\n" \
+				"\n"
+		 );
 }
 
-TEST(RecipeBookTest, Remove)
+TEST_CASE("Recipes can be removed from a recipe book", "[recipebook]")
 {
 	// create some placeholder recipes with stuff and add in a book
 	Recipe * foo = new Recipe("foo");
@@ -44,22 +45,23 @@ TEST(RecipeBookTest, Remove)
 	qux.add(oldCrippledMan);
 	qux.add(bar);
 
-	EXPECT_EQ(3, qux.number_of_entries());
+	CHECK( qux.number_of_entries() == 3 );
 
 	qux.remove(oldCrippledMan); // haha, you're dead ^^
 
-	EXPECT_EQ(2, qux.number_of_entries());
+	CHECK( qux.number_of_entries() == 2 );
 
 	std::stringstream ss;
 	qux.list(ss);
-	EXPECT_STREQ("Recipe: foo\n" \
-					"\n" \
-					"Recipe: bar\n" \
-					"\n",
-					ss.str().c_str());
+	CHECK( ss.str().c_str() ==
+			"Recipe: foo\n" \
+				"\n" \
+				"Recipe: bar\n" \
+				"\n"
+		 );
 }
 
-TEST(RecipeBookTest, Serialize)
+TEST_CASE("A recipe book can be persistent", "[recipebook][serialization]")
 {
 	// create a realistic book
 	Recipe * lastWord = new Recipe("Last word");
@@ -78,10 +80,13 @@ TEST(RecipeBookTest, Serialize)
 	myDrinks.add(lastWord);
 	myDrinks.add(brooklyn);
 
-	// serialize into stringstream
 	std::stringstream ss;
 	myDrinks.serialize(ss);
-	EXPECT_STREQ("startrecipe\n" \
+
+	SECTION("A recipe book can be serialized")
+	{
+		CHECK( ss.str().c_str() ==
+				"startrecipe\n" \
 					"Last word\n" \
 					"beverage\ngin\n1\n" \
 					"beverage\nfresh squeezed lime juice\n1\n" \
@@ -94,11 +99,15 @@ TEST(RecipeBookTest, Serialize)
 					"beverage\ndry vermouth\n4\n" \
 					"beverage\nmaraschino liqueur\n1\n" \
 					"extra\na few dashes of angoustra\n" \
-					"endrecipe\n",
-					ss.str().c_str());
+					"endrecipe\n"
+			 );
+	}
 
-	// check deserialization
 	RecipeBook myDrinksCopy;
 	myDrinksCopy.deserialize(ss);
-	EXPECT_EQ(2, myDrinksCopy.number_of_entries());
+
+	SECTION("A recipe book can be deserialized")
+	{
+		CHECK( myDrinksCopy.number_of_entries() == 2 );
+	}
 }

@@ -15,13 +15,18 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # testing
 enable_testing()
 
-# subprojects
+###################
+### SUBPROJECTS ###
+###################
+
 add_subdirectory(banch) # main project
 add_subdirectory(nostl) # STL workarounds
 add_subdirectory(menu) # interactive menu
 add_subdirectory(test) # unit testing w/ GTest
 
-# documentation
+#####################
+### DOCUMENTATION ###
+#####################
 option(BUILD_DOC "Build documentation" ON) # documentation is on by default
 find_package(Doxygen)
 if (DOXYGEN_FOUND)

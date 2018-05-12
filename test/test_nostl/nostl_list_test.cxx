@@ -1,16 +1,16 @@
-#include "gtest/gtest.h"
+#include "catch/catch.hxx"
 #include "nostl/list.hxx"
 
 using namespace nostl;
 
-TEST(ListTest, CreateEmpty)
+TEST_CASE_CASE("Empty list can be created", "[list][sanity]")
 {
 	// create empty List and check if its size is 0
 	List<int> foo;
-	EXPECT_EQ(0, foo.size());
+	REQUIRE( foo.size() == 0 );
 }
 
-TEST(ListTest, Fill)
+TEST_CASE_CASE("A list can be filled", "[list]")
 {
 	// create List with doubles like {0, .5, 1, 1.5, ..., 50}
 	List<double> foo;
@@ -18,10 +18,11 @@ TEST(ListTest, Fill)
 	{
 		foo.append(static_cast<double>(i) / 2.0);
 	}
-	EXPECT_EQ(100, foo.size());
+
+	REQUIRE( foo.size() == 100 );
 }
 
-TEST(ListTest, Clear)
+TEST_CASE_CASE("A list can be cleared", "[list]")
 {
 	// create List with longs and test clearing
 	List<long> foo;
@@ -29,12 +30,15 @@ TEST(ListTest, Clear)
 	{
 		foo.append(static_cast<long>(i) / 3.141592654);
 	}
-	EXPECT_EQ(20, foo.size());
+
+	REQUIRE( foo.size() == 20 );
+
 	foo.clear();
-	EXPECT_EQ(0, foo.size());
+
+	REQUIRE( foo.size() == 0);
 }
 
-TEST(ListTest, Copy)
+TEST_CASE("A list can be correctly copied", "[list]")
 {
 	// create List with a few ints like {0, 1, ..., 99}
 	List<int> foo;
@@ -50,13 +54,16 @@ TEST(ListTest, Copy)
 	// unchanged
 	bar.remove(13);
 	bar.remove(0);
-	EXPECT_NE(foo.size(), bar.size());
+
+	REQUIRE( foo.size() != bar.size() );
+
 	bar.clear();
-	EXPECT_EQ(0, bar.size());
-	EXPECT_EQ(100, foo.size());
+
+	REQUIRE( bar.size() == 0 );
+	REQUIRE( foo.size() == 100 );
 }
 
-TEST(ListTest, Assign)
+TEST_CASE("A list can be assigned another list", "[list]")
 {
 	// create List with a few ints like {0, 1, ..., 99}
 	List<int> foo;
@@ -73,19 +80,21 @@ TEST(ListTest, Assign)
 	}
 
 	// make sure the two Lists differ (obviously...)
-	EXPECT_NE(foo.size(), bar.size());
+	REQUIRE( foo.size() != bar.size() );
 
 	// set foo to be the same as bar
 	foo = bar;
 
 	// see if assignment was correct and the two Lists are still different
 	// instances
-	EXPECT_EQ(foo.size(), bar.size());
+	REQUIRE( foo.size() == bar.size() );
+
 	bar.append(1000);
-	EXPECT_NE(foo.size(), bar.size());
+
+	REQUIRE_FALSE( foo.size() == bar.size() );
 }
 
-TEST(ListTest, Iteration)
+TEST_CASE("A list can be iterated", "[list][iterators]")
 {
 	// create new List and fill with ints like {200, 5, 1}
 	List<int> foo;
@@ -93,34 +102,42 @@ TEST(ListTest, Iteration)
 	foo.append(1);
 	foo.prepend(200);
 
-	// test preindex incrementation
-	List<int>::Iterator i = foo.begin();
-	EXPECT_EQ(200, *i);
-	++i;
-	EXPECT_EQ(5, *i);
-	++i;
-	EXPECT_EQ(1, *i);
-	--i;
-	EXPECT_EQ(5, *i);
+	SECTION("List iterators can be preindexed")
+	{
+		List<int>::Iterator i = foo.begin();
+		REQUIRE( *i == 200 );
 
-	i = foo.end();
-	--i;
-	EXPECT_EQ(1, *i);
-	--i;
-	EXPECT_EQ(5, *i);
+		++i;
+		REQUIRE( *i == 5 );
 
-	// test postindex incrementation
-	i = foo.begin();
-	EXPECT_EQ(200, *(i++));
-	EXPECT_EQ(5, *i);
+		++i;
+		REQUIRE( *i == 1 );
 
-	i = foo.end();
-	--i;
-	EXPECT_EQ(1, *(i--));
-	EXPECT_EQ(5, *i);
+		--i;
+		REQUIRE( *i == 5 );
+
+		i = foo.end();
+		--i;
+		REQUIRE( *i == 1 );
+
+		--i;
+		REQUIRE( *i == 5 );
+	}
+
+	SECTION("List iterators can be postindexed")
+	{
+		i = foo.begin();
+		REQUIRE( *(i++) == 200 );
+		REQUIRE( *i == 5 );
+
+		i = foo.end();
+		--i;
+		REQUIRE( *(i--) == 1 );
+		REQUIRE( *i == 5 );
+	}
 }
 
-TEST(ListTest, IterationOutOfRange)
+TEST_CASE("List iterators don't go out of range", "[list][iterators]")
 {
 	// create new List and fill with doubles like {10.5, 15.5, 20.5}
 	List<double> foo;
@@ -128,20 +145,24 @@ TEST(ListTest, IterationOutOfRange)
 	foo.prepend(15.5);
 	foo.prepend(10.5);
 
-	// try to under-iterate
-	List<double>::Iterator i = foo.begin();
-	--i;
-	EXPECT_EQ(10.5, *(i--));
-	EXPECT_EQ(10.5, *i);
+	SECTION("List iterators don't go below minimal value")
+	{
+		List<double>::Iterator i = foo.begin();
+		--i;
+		REQUIRE( *(i--) == 10.5 );
+		REQUIRE( *i == 10.5 );
+	}
 
-	// try to over-iterate
-	i = foo.end();
-	List<double>::Iterator j = i;
-	++i;
-	EXPECT_EQ(i, j);
+	SECTION("List iterators don't go above maximal value")
+	{
+		List<double>::Iterator i = foo.end();
+		List<double>::Iterator j = i;
+		++i;
+		REQUIRE( i == j );
+	}
 }
 
-TEST(ListTest, Removal)
+TEST_CASE("Elements can be removed from a list", "[list]")
 {
 	// create new List with a few elements like {3, 30, 3, 30}
 	List<int> foo;
@@ -149,21 +170,23 @@ TEST(ListTest, Removal)
 	foo.append(30);
 	foo.append(3);
 	foo.append(30);
-	EXPECT_EQ(4, foo.size());
 
 	// remove an element
 	foo.remove(30); // --> {3, 3, 30}
+	REQUIRE( foo.size() == 3 );
+
 	List<int>::Iterator i = foo.begin();
-	EXPECT_EQ(3, *(i++));
-	EXPECT_EQ(3, *(i++));
-	EXPECT_EQ(30, *i);
-	EXPECT_EQ(3, foo.size());
+	REQUIRE( *(i++) == 3 );
+	REQUIRE( *(i++) == 3 );
+	REQUIRE( *i == 30 );
 
 	// remove two more just for fun
 	foo.remove(30); // --> {3, 3}
-	EXPECT_EQ(2, foo.size());
+	REQUIRE( foo.size() == 2 );
+
 	foo.remove(3); // --> {3}
+	REQUIRE( foo.size() == 1 );
+
 	i = foo.begin();
-	EXPECT_EQ(3, *i);
-	EXPECT_EQ(1, foo.size());
+	REQUIRE( *i == 3 );
 }

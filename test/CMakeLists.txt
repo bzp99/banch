@@ -1,51 +1,35 @@
-###
-# copied from a GitHub example project
-###
-find_package(Threads REQUIRED)
+##########################
+### CATCH2 INTEGRATION ###
+##########################
 
-# enable ExternalProject CMake module
+find_package(git REQUIRED)
 include(ExternalProject)
 
-# Download and install GoogleTest
+# add Catch2 as an external project
 ExternalProject_Add(
-	gtest
-	URL https://github.com/google/googletest/archive/master.zip
-	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/gtest
-	# Disable install step
-	INSTALL_COMMAND ""
-)
+	catch
+	PREFIX ${CMAKE_CURRENT_BINARY_DIR}/catch
+	GIT_REPOSITORY https://github.com/philsquared/Catch.git
+	TIMEOUT 10
+	UPDATE_COMMAND ${GIT_EXECUTABLE} pull
+    CONFIGURE_COMMAND ""
+    BUILD_COMMAND ""
+    INSTALL_COMMAND ""
+    LOG_DOWNLOAD ON
+	)
 
-# get GTest source and binary directories from CMake project
-ExternalProject_Get_Property(gtest source_dir binary_dir)
+# Expose required variable (CATCH_INCLUDE_DIR) to parent scope
+ExternalProject_Get_Property(catch source_dir)
+set(CATCH_INCLUDE_DIR
+	${source_dir}/single_include CACHE INTERNAL "Catch2 include folder")
 
-# create a libgtest target to be used as a dependency by test programs
-add_library(libgtest IMPORTED STATIC GLOBAL)
-add_dependencies(libgtest gtest)
+# tell Catch2 to create a main
+add_definitions(-DCATCH_CONFIG_MAIN)
 
-# set libgtest properties
-set_target_properties(libgtest PROPERTIES
-	"IMPORTED_LOCATION" "${binary_dir}/googlemock/gtest/libgtest.a"
-	"IMPORTED_LINK_INTERFACE_LIBRARIES" "${CMAKE_THREAD_LIBS_INIT}"
-)
+#######################
+### TESTS FROM HERE ###
+#######################
 
-# create a libgmock target to be used as a dependency by test programs
-add_library(libgmock IMPORTED STATIC GLOBAL)
-add_dependencies(libgmock gtest)
-
-# set libgmock properties
-set_target_properties(libgmock PROPERTIES
-	"IMPORTED_LOCATION" "${binary_dir}/googlemock/libgmock.a"
-	"IMPORTED_LINK_INTERFACE_LIBRARIES" "${CMAKE_THREAD_LIBS_INIT}"
-)
-
-# I couldn't make it work with INTERFACE_INCLUDE_DIRECTORIES
-include_directories("${source_dir}/googletest/include"
-                    "${source_dir}/googlemock/include"
-)
-
-###
-# add test directories from here
-###
 add_subdirectory(test_nostl)
-add_subdirectory(test_banch)
 add_subdirectory(test_menu)
+add_subdirectory(test_banch)

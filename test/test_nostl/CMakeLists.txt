@@ -1,16 +1,11 @@
-###
-# copied from a GitHub example project
-###
+# collect source files
 file(GLOB SRCS *.cxx)
 
+# create executable
 add_executable(test_nostl ${SRCS})
 
-target_link_libraries(test_nostl
-						libgtest
-						libgmock
-						sub::nostl
-)
+# link required lib
+target_link_libraries(test_nostl sub::nostl)
 
-add_test(NAME test_nostl
-         COMMAND test_nostl
-)
+# add test
+add_test(NAME test_nostl COMMAND test_nostl)
