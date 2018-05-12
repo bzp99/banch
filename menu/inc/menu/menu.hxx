@@ -65,7 +65,8 @@ public:
 
 
 	/// \brief display the menu
-	inline void operator()(std::iostream &) const;
+	inline void operator()(std::ostream & = std::cout,
+							std::istream & = std::cin) const;
 
 
 private:
@@ -106,36 +107,43 @@ unsigned int Menu::number_of_entries() const
 	return this->options_.size();
 }
 
-void Menu::operator()(std::iostream & ios) const
+void Menu::operator()(std::ostream & os, std::istream & is) const
 {
 	while (true)
 	{
-		unsigned int selection;
-		unsigned int option_count = 0;
+		unsigned int selection; // the user's choice
+		unsigned int option_count = 0; // options are numbered from 0
 
+		// iterator to options
 		nostl::List<Option>::Iterator i = this->options_.begin();
 
+		// list options with numbers
 		while (i != this->options_.end())
 		{
-			ios << option_count++ << *(i++);
+			os << option_count++ << *(i++);
 		}
 
+		// get input from user
 		do
 		{
-			ios >> selection;
+			is >> selection;
 		}
 		while (selection <= 0 || selection > this->number_of_entries());
 
+		// 0 is always the exit option
 		if (selection == 0)
 		{
 			break;
 		}
 
+		// iterate until option
 		i = this->options_.begin();
 		for (unsigned int k = 0; k < selection; ++k)
 		{
 			++i;
 		}
+
+		// call option
 		(*i)();
 	}
 }
