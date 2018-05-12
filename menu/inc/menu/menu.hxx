@@ -118,14 +118,18 @@ void Menu::operator()(std::ostream & os, std::istream & is) const
 		nostl::List<Option>::Iterator i = this->options_.begin();
 
 		// list options with numbers
+		os << std::endl; // aesthetics
 		while (i != this->options_.end())
 		{
-			os << option_count++ << *(i++);
+			os << option_count++ << ')' << ' ' << *(i++);
 		}
 
 		// get input from user
 		do
 		{
+			os << std::endl;
+
+			os << ">> ";
 			is >> selection;
 		}
 		while (selection < 0 || selection > this->number_of_entries());
