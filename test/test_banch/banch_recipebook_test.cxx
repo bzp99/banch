@@ -1,6 +1,9 @@
 #include "catch/catch.hpp"
 #include "banch/banch.hxx"
 
+#include <sstream> // test uses stringstreams
+
+using namespace Catch;
 using namespace banch;
 
 TEST_CASE("A recipe book can be created", "[recipebook]")
@@ -22,15 +25,16 @@ TEST_CASE("A recipe book can be created", "[recipebook]")
 
 	std::stringstream ss;
 	qux.list(ss);
-	CHECK( ss.str().c_str() ==
-			"Recipe: foo\n" \
-				"10 units of mineral water\n" \
-				"lemon slices\n" \
-				"\n" \
-				"Recipe: bar\n" \
-				"8 units of milk\n" \
-				"\n"
-		 );
+	CHECK_THAT( ss.str().c_str(),
+			Equals( "Recipe: foo\n" \
+						"10 units of mineral water\n" \
+						"lemon slices\n" \
+						"\n" \
+						"Recipe: bar\n" \
+						"8 units of milk\n" \
+						"\n"
+			)
+	);
 }
 
 TEST_CASE("Recipes can be removed from a recipe book", "[recipebook]")
@@ -53,12 +57,13 @@ TEST_CASE("Recipes can be removed from a recipe book", "[recipebook]")
 
 	std::stringstream ss;
 	qux.list(ss);
-	CHECK( ss.str().c_str() ==
-			"Recipe: foo\n" \
-				"\n" \
-				"Recipe: bar\n" \
-				"\n"
-		 );
+	CHECK_THAT( ss.str().c_str(),
+			Equals( "Recipe: foo\n" \
+						"\n" \
+						"Recipe: bar\n" \
+						"\n"
+			)
+	);
 }
 
 TEST_CASE("A recipe book can be persistent", "[recipebook][serialization]")
@@ -85,22 +90,23 @@ TEST_CASE("A recipe book can be persistent", "[recipebook][serialization]")
 
 	SECTION("A recipe book can be serialized")
 	{
-		CHECK( ss.str().c_str() ==
-				"startrecipe\n" \
-					"Last word\n" \
-					"beverage\ngin\n1\n" \
-					"beverage\nfresh squeezed lime juice\n1\n" \
-					"beverage\nmaraschino liqueur\n1\n" \
-					"beverage\ngreen Chartreuse\n1\n" \
-					"endrecipe\n" \
-					"startrecipe\n" \
-					"Brooklyn\n" \
-					"beverage\nrye whiskey\n8\n" \
-					"beverage\ndry vermouth\n4\n" \
-					"beverage\nmaraschino liqueur\n1\n" \
-					"extra\na few dashes of angoustra\n" \
-					"endrecipe\n"
-			 );
+		CHECK_THAT( ss.str().c_str(),
+				Equals( "startrecipe\n" \
+							"Last word\n" \
+							"beverage\ngin\n1\n" \
+							"beverage\nfresh squeezed lime juice\n1\n" \
+							"beverage\nmaraschino liqueur\n1\n" \
+							"beverage\ngreen Chartreuse\n1\n" \
+							"endrecipe\n" \
+							"startrecipe\n" \
+							"Brooklyn\n" \
+							"beverage\nrye whiskey\n8\n" \
+							"beverage\ndry vermouth\n4\n" \
+							"beverage\nmaraschino liqueur\n1\n" \
+							"extra\na few dashes of angoustra\n" \
+							"endrecipe\n"
+				)
+		);
 	}
 
 	RecipeBook myDrinksCopy;

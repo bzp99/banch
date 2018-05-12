@@ -7,7 +7,7 @@ project(subprojects)
 set(CMAKE_CXX_STANDARD 11)
 
 # compiler flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -Wall -Wextra -pedantic")
 
 # output dir
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -22,7 +22,9 @@ enable_testing()
 add_subdirectory(banch) # main project
 add_subdirectory(nostl) # STL workarounds
 add_subdirectory(menu) # interactive menu
-add_subdirectory(test) # unit testing w/ GTest
+add_subdirectory(test) # unit tests
+
+add_subdirectory(catch) # external project: Catch2
 
 #####################
 ### DOCUMENTATION ###
@@ -41,10 +43,11 @@ if (DOXYGEN_FOUND)
     # note the option ALL which allows to build the docs together with the
 	# application
     add_custom_target( doc_doxygen ALL
-        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        COMMENT "Generating API documentation with Doxygen"
-        VERBATIM )
+						COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+						WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+						COMMENT "Generating API documentation with Doxygen"
+						VERBATIM
+	)
 else (DOXYGEN_FOUND)
   message("Doxygen needs to be installed to generate the doxygen documentation")
 endif (DOXYGEN_FOUND)

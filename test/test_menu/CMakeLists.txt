@@ -1,11 +1,8 @@
 # collect source files
 file(GLOB SRCS *.cxx)
 
-# create executable
-add_executable(test_menu ${SRCS})
+# create lib
+add_library(test_menu SHARED ${SRCS})
 
-# link required lib
-target_link_libraries(test_menu sub::menu)
-
-# add test
-add_test(NAME test_menu COMMAND test_menu)
+# link required libs
+target_link_libraries(test_menu sub::menu catch)

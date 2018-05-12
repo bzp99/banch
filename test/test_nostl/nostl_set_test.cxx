@@ -21,7 +21,7 @@ TEST_CASE("A set can be filled", "[set]")
 
 	SECTION("Filling works")
 	{
-		REQUIRE(100, foo.size());
+		REQUIRE( foo.size() == 100 );
 	}
 
 	SECTION("Same elements cannot be readded")

@@ -1,16 +1,16 @@
-#include "catch/catch.hxx"
+#include "catch/catch.hpp"
 #include "nostl/list.hxx"
 
 using namespace nostl;
 
-TEST_CASE_CASE("Empty list can be created", "[list][sanity]")
+TEST_CASE("Empty list can be created", "[list][sanity]")
 {
 	// create empty List and check if its size is 0
 	List<int> foo;
 	REQUIRE( foo.size() == 0 );
 }
 
-TEST_CASE_CASE("A list can be filled", "[list]")
+TEST_CASE("A list can be filled", "[list]")
 {
 	// create List with doubles like {0, .5, 1, 1.5, ..., 50}
 	List<double> foo;
@@ -22,7 +22,7 @@ TEST_CASE_CASE("A list can be filled", "[list]")
 	REQUIRE( foo.size() == 100 );
 }
 
-TEST_CASE_CASE("A list can be cleared", "[list]")
+TEST_CASE("A list can be cleared", "[list]")
 {
 	// create List with longs and test clearing
 	List<long> foo;
@@ -126,7 +126,7 @@ TEST_CASE("A list can be iterated", "[list][iterators]")
 
 	SECTION("List iterators can be postindexed")
 	{
-		i = foo.begin();
+		List<int>::Iterator i = foo.begin();
 		REQUIRE( *(i++) == 200 );
 		REQUIRE( *i == 5 );
 

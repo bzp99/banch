@@ -1,7 +1,11 @@
-#include "gtest/gtest.h"
+#include "catch/catch.hpp"
 #include "banch/banch.hxx"
 
+#include <sstream> // test uses stringstreams
+
+using namespace Catch;
 using namespace banch;
+
 
 TEST_CASE("A recipe can be made", "[recipe]")
 {
@@ -16,12 +20,13 @@ TEST_CASE("A recipe can be made", "[recipe]")
 	// test printing recipe
 	std::stringstream ss;
 	dryMartini.show(ss);
-	CHECK( ss.str().c_str() ==
-			"Recipe: Dry Martini\n" \
-				"5 units of gin\n" \
-				"1 units of dry vermouth\n" \
-				"a few olives\n"
-		 );
+	CHECK_THAT( ss.str().c_str(),
+				Equals( "Recipe: Dry Martini\n" \
+							"5 units of gin\n" \
+							"1 units of dry vermouth\n" \
+							"a few olives\n"
+				)
+	);
 }
 
 TEST_CASE("Ingredients can be removed froma a recipe", "[recipe]")
@@ -45,30 +50,33 @@ TEST_CASE("Ingredients can be removed froma a recipe", "[recipe]")
 	std::stringstream ss;
 	ramosGinFizz.remove(nuka);
 	ramosGinFizz.show(ss);
-	CHECK( ss.str().c_str() ==
-			"Recipe: Ramos gin fizz\n" \
-				"4 units of gin\n" \
-				"2 units of cream\n" \
-				"an egg white\n" \
-				"1 units of lemon juice\n" \
-				"1 units of lime juice\n" \
-				"a bit of dirt\n" \
-				"sugar\n"
-		 );
+	CHECK_THAT( ss.str().c_str(),
+				Equals( "Recipe: Ramos gin fizz\n" \
+							"4 units of gin\n" \
+							"2 units of cream\n" \
+							"an egg white\n" \
+							"1 units of lemon juice\n" \
+							"1 units of lime juice\n" \
+							"a bit of dirt\n" \
+							"sugar\n"
+				)
+
+	);
 
 	ss.str("");
 	ss.clear();
 	ramosGinFizz.remove(dirt);
 	ramosGinFizz.show(ss);
-	CHECK( ss.str().c_str() ==
-			"Recipe: Ramos gin fizz\n" \
-				"4 units of gin\n" \
-				"2 units of cream\n" \
-				"an egg white\n" \
-				"1 units of lemon juice\n" \
-				"1 units of lime juice\n" \
-				"sugar\n"
-		 );
+	CHECK_THAT( ss.str().c_str(),
+				Equals( "Recipe: Ramos gin fizz\n" \
+							"4 units of gin\n" \
+							"2 units of cream\n" \
+							"an egg white\n" \
+							"1 units of lemon juice\n" \
+							"1 units of lime juice\n" \
+							"sugar\n"
+				)
+	);
 }
 
 TEST_CASE("A recipe can be persistent", "[recipe][serialization]")
@@ -81,31 +89,33 @@ TEST_CASE("A recipe can be persistent", "[recipe][serialization]")
 	piscoSour.add(new Extra("a fresh egg white"));
 	piscoSour.add(new Extra("a dash of angoustra"));
 
+	std::stringstream ss;
+	piscoSour.serialize(ss);
+
 	SECTION("A recipe can be serialized")
 	{
-		std::stringstream ss;
-		piscoSour.serialize(ss);
-		CHECK( ss.str().c_str() ==
-				"startrecipe\n" \
-					"Pisco sour\n" \
-					"beverage\npisco\n3\n" \
-					"beverage\nfresh squeezed lime juice\n1\n" \
-					"beverage\nsimple syrup\n1\n" \
-					"extra\na fresh egg white\n" \
-					"extra\na dash of angoustra\n" \
-					"endrecipe\n"
-			 );
+		CHECK_THAT( ss.str().c_str(),
+				Equals( "startrecipe\n" \
+							"Pisco sour\n" \
+							"beverage\npisco\n3\n" \
+							"beverage\nfresh squeezed lime juice\n1\n" \
+							"beverage\nsimple syrup\n1\n" \
+							"extra\na fresh egg white\n" \
+							"extra\na dash of angoustra\n" \
+							"endrecipe\n"
+				)
+		);
 	}
 
 	ss.str("");
 	ss.clear();
-
 	ss.str("Sidecar\n" \
 			"beverage\ncognac\n2\n" \
 			"beverage\ncointreau\n1\n" \
 			"beverage\nfresh lemon juice\n1\n" \
 			"extra\nsuperfine sugar\n" \
 			"endrecipe");
+
 	Recipe sidecar;
 
 	SECTION("A recipe can be deserialized")
@@ -114,12 +124,13 @@ TEST_CASE("A recipe can be persistent", "[recipe][serialization]")
 
 		std::stringstream ss2;
 		sidecar.show(ss2);
-		CHECK( ss2.str().c_str() ==
-				"Recipe: Sidecar\n" \
-					"2 units of cognac\n" \
-					"1 units of cointreau\n" \
-					"1 units of fresh lemon juice\n" \
-					"superfine sugar\n"
-			 );
+		CHECK_THAT( ss2.str().c_str(),
+				Equals( "Recipe: Sidecar\n" \
+							"2 units of cognac\n" \
+							"1 units of cointreau\n" \
+							"1 units of fresh lemon juice\n" \
+							"superfine sugar\n"
+				)
+		);
 	}
 }
