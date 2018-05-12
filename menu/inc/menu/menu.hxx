@@ -128,7 +128,7 @@ void Menu::operator()(std::ostream & os, std::istream & is) const
 		{
 			is >> selection;
 		}
-		while (selection <= 0 || selection > this->number_of_entries());
+		while (selection < 0 || selection > this->number_of_entries());
 
 		// 0 is always the exit option
 		if (selection == 0)
