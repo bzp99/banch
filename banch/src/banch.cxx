@@ -10,26 +10,6 @@
 /// \brief namespace for the banch project
 namespace banch {
 
-bool confirm(std::ostream & os, std::istream & is, std::string const text)
-{
-		os << '\t' << text << std::endl;
-		os << "Confirm? [y/n] ";
-		std::string confirmation;
-		do
-		{
-			getline(is, confirmation);
-		} while (!(confirmation == "y" || confirmation == "n"));
-		
-		if (confirmation == "y")
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-}
-
 // class Recipe //
 
 void Recipe::remove(unsigned int const n)
@@ -60,27 +40,20 @@ void Recipe::clear()
 		this->remove(tmp);
 	}
 }
+	
 
-void Recipe::show(std::ostream & os) const
+void Recipe::show(std::ostream & os, bool numbered) const
 {
+	unsigned int counter = 0; // only needed if numbered
 	os << "Recipe: " << this->name_ << std::endl;
 	for (nostl::Set<Ingredient *>::Iterator i = this->ingredients_.begin();
 			i != this->ingredients_.end();
 			++i)
 	{
-		(*i)->print(os);
-	}
-}
-
-void Recipe::showNumbered(std::ostream & os) const
-{
-	os << "Recipe: " << this->name_ << std::endl;
-	unsigned int counter_ = 0;
-	for (nostl::Set<Ingredient *>::Iterator i = this->ingredients_.begin();
-			i != this->ingredients_.end();
-			++i)
-	{
-		os << ++counter_ << ')' << ' ';
+		if (numbered)
+		{
+			os << ++counter << ')' << ' ';
+		}
 		(*i)->print(os);
 	}
 }
@@ -143,12 +116,33 @@ void RecipeBook::clear()
 	}
 }
 
-void RecipeBook::list(std::ostream & os) const
+Recipe & RecipeBook::getNth(unsigned int n)
 {
+	// assert correct call
+	assert((n > 0) && (n <= this->number_of_entries()));
+
+	// find Recipe asked for
+	nostl::Set<Recipe *>::Iterator i = this->recipes_.begin();
+	for (unsigned int k = 1; k < n; ++k)
+	{
+		++i;
+	}
+	// i now points to chose Recipe
+
+	return **i;
+}
+
+void RecipeBook::list(std::ostream & os, bool numbered) const
+{
+	unsigned int counter = 0; // only needed if numbered
 	for (nostl::Set<Recipe *>::Iterator i = this->recipes_.begin();
 			i != this->recipes_.end();
 			++i)
 	{
+		if (numbered)
+		{
+			os << ++counter << ')' << ' ';
+		}
 		(*i)->show(os);
 		os << std::endl;
 	}
