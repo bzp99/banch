@@ -32,7 +32,18 @@ int main(int argc, char ** argv)
 																	std::cout,
 																	std::cin,
 																	myBook))));
+	mainMenu.add(menu::Option("save database to file",
+								std::function<void()>(banch::Fsave_recipebook(
+																	std::cout,
+																	std::cin,
+																	myBook))));
+	mainMenu.add(menu::Option("load database from file",
+								std::function<void()>(banch::Fload_recipebook(
+																	std::cout,
+																	std::cin,
+																	myBook))));
 
 	mainMenu();
+
 	return 0;
 }
