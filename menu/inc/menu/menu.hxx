@@ -58,10 +58,14 @@ private:
 /// \brief a simple menu of Options
 class Menu {
 public:
-	/// \brief constructor (only adds an exit option)
+	/// \brief constuctor with 2 parameters
+	///
+	/// \param os stream to write into
+	/// \param os stream to read from
+	///
+	/// \note the constructor automatically adds an exit option
 	inline Menu(std::ostream & os, std::istream & is)
 		: os_(os), is_(is) { this->add(std::move(Option("exit menu"))); }
-
 
 	/// \brief add option to the menu
 	///
@@ -73,24 +77,41 @@ public:
 	/// \return number of entries
 	inline unsigned int number_of_entries() const;
 
-
-	/// \brief display the menu
+/// \brief display the menu
 	void operator()() const;
 
 
-private:
+protected:
 	nostl::List<Option> options_; ///< List of options in the menu
 	std::ostream & os_; ///< stream the Menu can write into
 	std::istream & is_; ///< stream the Menu can read from
 }; // class Menu
+
+/// \brief advanced menu that calls a function before displaying itself
+class AdvancedMenu : public Menu {
+public:
+	/// \brief constructor with 3 parameters
+	///
+	/// \param os stream to write into
+	/// \param is stream to read from
+	/// \param func function to call every time before displaying
+	inline AdvancedMenu(std::ostream & os,
+						std::istream & is,
+						std::function<void()> function)
+		: Menu(os, is), function_(function) {}
+
+	void operator()() const;
+
+private:
+	std::function<void()> function_; ///< function to call every time the
+											///< menu is displayed
+};
 
 
 
 ////////////////////////
 // INLINE DEFINITIONS //
 ////////////////////////
-
-// class Menu //
 
 unsigned int Menu::number_of_entries() const
 {

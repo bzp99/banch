@@ -160,21 +160,21 @@ void Fadd_recipe::operator()()
 	getline(this->is_, recipename);
 	Recipe * recipe = new Recipe(recipename);
 
-	menu::Menu menu(this->os_, this->is_);
+	// create a menu with options
+	menu::AdvancedMenu menu(this->os_,
+							this->is_,
+							std::function<void()>(Fshow_recipe(this->os_,
+																*recipe)));
+
 	menu.add(menu::Option("add new beverage ingredient",
 						std::function<void()>(Fadd_beverage(this->os_,
 															this->is_,
-															*recipe)
-												)
-					)
-			);
+															*recipe))));
 	menu.add(menu::Option("add new extra ingredient",
 						std::function<void()>(Fadd_extra(this->os_,
 															this->is_,
-															*recipe)
-												)
-					)
-			);
+															*recipe))));
+
 	menu();
 
 	// confirm
@@ -185,6 +185,10 @@ void Fadd_recipe::operator()()
 	if (confirm(this->os_, this->is_, tmp.str()))
 	{
 		this->book_.add(recipe);
+	}
+	else
+	{
+		delete recipe;
 	}
 }
 
@@ -220,7 +224,10 @@ void Fmodify_recipe::operator()()
 	recipe.show(this->os_);
 
 	// create menu with options
-	menu::Menu menu(this->os_, this->is_);
+	menu::AdvancedMenu menu(this->os_,
+							this->is_,
+							std::function<void()>(Fshow_recipe(this->os_,
+																recipe)));
 	menu.add(menu::Option("add beverage ingredient",
 							std::function<void()>(Fadd_beverage(this->os_,
 																this->is_,

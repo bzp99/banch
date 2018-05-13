@@ -45,6 +45,14 @@ void Recipe::clear()
 
 void Recipe::show(std::ostream & os, bool numbered) const
 {
+	// if Recipe is empty, there's nothing to show
+	if (this->number_of_ingredients() == 0)
+	{
+		os << std::endl;
+		os << "Recipe: " << this->name_ << " is empty" << std::endl;
+		return;
+	}
+
 	unsigned int counter = 0; // only needed if numbered
 	os << std::endl;
 	os << "Recipe: " << this->name_ << std::endl;

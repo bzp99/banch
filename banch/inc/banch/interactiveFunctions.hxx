@@ -75,6 +75,8 @@ public:
 	///
 	/// \param os stream to write to
 	/// \param book RecipeBook object reference to list
+	///
+	/// \note passes std::cin as an istream, but doesn't use it TODO
 	Flist_recipes(std::ostream & os, RecipeBook const & book)
 		: Finteractive_function(os, std::cin), book_(book) {}
 
@@ -120,9 +122,12 @@ public:
 
 	/// \brief function that prompts the user to create a new Extra ingredient
 	void operator()();
+
+
 private:
 	Recipe & recipe_; ///< reference to Recipe to tamper with
 }; // class Fadd_beverage
+
 
 class Fremove_ingredient : public Finteractive_function {
 public:
@@ -130,6 +135,7 @@ public:
 		: Finteractive_function(os, is), recipe_(recipe) {}
 
 	void operator()();
+
 
 private:
 	Recipe & recipe_; ///< reference to Recipe to tamper with
@@ -175,6 +181,7 @@ private:
 	RecipeBook & book_; ///< reference to RecipeBook to tamper with
 }; // class Fmodify_recipe
 
+
 /// \brief function object to prompt user with deleting an existing Recipe
 class Fremove_recipe : public Finteractive_function {
 public:
@@ -188,10 +195,36 @@ public:
 
 	/// \brief function that prompts the user to modify an existing Recipe
 	void operator()();
+
+
 private:
 	RecipeBook & book_; ///< reference to RecipeBook to tamper with
 }; // class Fremove_recipe
 
+
+/// \brief helper function object that acts like an std::bind
+///
+/// TODO actually use std::bind?
+/// TODO this is not even an interactiveFunction...
+class Fshow_recipe : public Finteractive_function {
+public:
+	/// \brief constructor with 3 paramters
+	///
+	/// \param os stream to write into
+	/// \param is stream to read from
+	/// \param recipe
+	///
+	/// \note passes std::cin as an istream, but doesn't use it TODO
+	Fshow_recipe(std::ostream & os, Recipe & recipe)
+		: Finteractive_function(os, std::cin), recipe_(recipe) {}
+
+	/// \brief method that prints the recipe to the stream
+	inline void operator()() { this->recipe_.show(this->os_); }
+
+
+private:
+	Recipe & recipe_; ///< reference to Recipe to tamper with
+}; // class Fremove_recipe
 
 } // namespace banch
 
