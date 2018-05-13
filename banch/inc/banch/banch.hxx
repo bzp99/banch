@@ -134,15 +134,11 @@ public:
 	/// \return the Recipe's name
 	std::string getName() const { return this->name_; }
 
-	/// \brief method that prints all ingredients
+	/// \brief method that prints all Ingredients (optionally with numbers)
 	///
 	/// \param os stream to print into
-	void show(std::ostream & os) const;
-
-	/// \brief method that prints all the ingredients with numbers
-	///
-	/// \param os stream to print into
-	void showNumbered(std::ostream & os) const;
+	/// \param numbering if true, all Ingredients will be numbered
+	void show(std::ostream & os, bool numbering = false) const;
 
 	/// \brief method that prints number of ingredients in recipe
 	///
@@ -184,14 +180,28 @@ public:
 	/// \param name of Recipe to remove
 	inline void remove(Recipe * delendum);
 
+	/// \brief remove the n-th Recipe from the collection
+	///
+	/// \param number of Recipe to remove
+	inline void remove(unsigned int n) { this->remove(&(this->getNth(n))); }
+
 	/// \brief method that clears the book
 	void clear();
 
 
-	/// \brief list all recipes in the book
+	/// \brief method that returns a reference to the n-th Recipe
+	///
+	/// \param number of Recipe to return reference to
+	///
+	/// \return reference to the chose Recipe
+	Recipe & getNth(unsigned int);
+
+
+	/// \brief list all Recipes in the book (optionally with numbers)
 	///
 	/// \param os stream to print into
-	void list(std::ostream & os) const;
+	/// \param numbered if true, each Recipe will be numbered
+	void list(std::ostream & os, bool numbered = false) const;
 
 	/// \brief method that tells how many recipes there are in the book
 	///
@@ -264,7 +274,7 @@ void Extra::deserialize(std::istream & is)
 
 
 // class Recipe //
-	
+
 inline bool Recipe::operator==(Recipe const & rhs) const
 {
 	return (this->name_ == rhs.name_ && this->ingredients_ == rhs.ingredients_);
