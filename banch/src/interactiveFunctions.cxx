@@ -35,6 +35,7 @@ unsigned int askNumber(std::ostream& os,
 						std::istream & is,
 						std::string const text)
 {
+	os << std::endl;
 	os << text << ' ';
 	std::string input;
 	int rv;
@@ -45,6 +46,15 @@ unsigned int askNumber(std::ostream& os,
 	while (!(std::stringstream(input) >> rv));
 
 	return rv;
+}
+
+void printSep(std::ostream & os, unsigned int n, char sepChar)
+{
+	for (unsigned int i = 0; i < n; ++i)
+	{
+		os << sepChar;
+	}
+	os << std::endl;
 }
 
 
@@ -69,11 +79,13 @@ void Fadd_beverage::operator()()
 		quanta = askNumber(this->os_,
 							this->is_,
 							"Please enter how many units of the beverage is" \
-							"needed:");
+							" needed:");
 	}
 	while (quanta <= 0);
 
 	// confirm
+	this->os_ << std::endl;
+	this->os_ << "Will add:";
 	std::stringstream tmp;
 	tmp << quanta << " units of " << name;
 	if (confirm(this->os_, this->is_, tmp.str()))
@@ -91,6 +103,8 @@ void Fadd_extra::operator()()
 	std::string extra;
 	getline(this->is_, extra);
 
+	this->os_ << std::endl;
+	this->os_ << "Will add:";
 	if (confirm(this->os_, this->is_, extra))
 	{
 		this->recipe_.add(new Extra(extra));
@@ -114,7 +128,7 @@ void Fremove_ingredient::operator()()
 		selection = askNumber(this->os_,
 								this->is_,
 								"Please enter number of ingredient to remove" \
-								"(0 to cancel):");
+								" (0 to cancel):");
 	}
 	while (selection < 0 || selection > this->recipe_.number_of_ingredients());
 
@@ -124,8 +138,11 @@ void Fremove_ingredient::operator()()
 		return;
 	}
 
+	// confirm
+	this->os_ << std::endl;
+	this->os_ << "Will remove:";
 	std::stringstream tmp;
-	tmp << "Will remove: " << selection << ')';
+	tmp << "ingredient number " << selection;
 	if (confirm(this->os_, this->is_, tmp.str()))
 	{
 		this->recipe_.remove(selection);
@@ -160,6 +177,9 @@ void Fadd_recipe::operator()()
 			);
 	menu();
 
+	// confirm
+	this->os_ << std::endl;
+	this->os_ << "Will add this recipe:" << std::endl;
 	std::stringstream tmp;
 	recipe->show(tmp);
 	if (confirm(this->os_, this->is_, tmp.str()))
@@ -183,7 +203,7 @@ void Fmodify_recipe::operator()()
 		selection = askNumber(this->os_,
 								this->is_,
 								"Please enter number of recipe to modify" \
-								"(0 cancels):");
+								" (0 cancels):");
 	}
 	while (selection < 0 || selection > this->book_.number_of_entries());
 
@@ -243,8 +263,11 @@ void Fremove_recipe::operator()()
 		return;
 	}
 
+	// confirm
+	this->os_ << std::endl;
+	this->os_ << "Will remove:";
 	std::stringstream tmp;
-	tmp << "Will remove: " << selection << ')';
+	tmp << "recipe number " << selection;
 	if (confirm(this->os_, this->is_, tmp.str()))
 	{
 		this->book_.remove(selection);

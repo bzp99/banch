@@ -3,6 +3,7 @@
 /// \brief function definitions of banch.hxx
 
 #include "banch/banch.hxx"
+#include "banch/interactiveFunctions.hxx"
 
 #include <cassert>
 #include <iostream>
@@ -40,12 +41,14 @@ void Recipe::clear()
 		this->remove(tmp);
 	}
 }
-	
+
 
 void Recipe::show(std::ostream & os, bool numbered) const
 {
 	unsigned int counter = 0; // only needed if numbered
+	os << std::endl;
 	os << "Recipe: " << this->name_ << std::endl;
+	printSep(os);
 	for (nostl::Set<Ingredient *>::Iterator i = this->ingredients_.begin();
 			i != this->ingredients_.end();
 			++i)
@@ -54,6 +57,7 @@ void Recipe::show(std::ostream & os, bool numbered) const
 		{
 			os << ++counter << ')' << ' ';
 		}
+		os << '-' << ' ';
 		(*i)->print(os);
 	}
 }
@@ -139,9 +143,10 @@ void RecipeBook::list(std::ostream & os, bool numbered) const
 			i != this->recipes_.end();
 			++i)
 	{
+		os << std::endl;
 		if (numbered)
 		{
-			os << ++counter << ')' << ' ';
+			os << "### " << ++counter << " ###";
 		}
 		(*i)->show(os);
 		os << std::endl;

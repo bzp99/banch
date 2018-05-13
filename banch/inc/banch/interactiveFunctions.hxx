@@ -33,6 +33,13 @@ bool confirm(std::ostream &, std::istream &, std::string const);
 /// \return the number input by user
 unsigned int askNumber(std::ostream &, std::istream &, std::string const);
 
+/// \brief global function that prints a separator line to a stream
+///
+/// \param stream to print line into
+/// \param number of characters to print
+/// \param separator character
+void printSep(std::ostream &, unsigned int = 25, char = '-');
+
 //////////////////////
 // FUNCTION OBJECTS //
 //////////////////////
