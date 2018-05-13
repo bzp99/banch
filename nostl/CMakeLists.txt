@@ -1,6 +1,11 @@
 project(nostl)
 
-add_library(${PROJECT_NAME} INTERFACE)
+# create lib and alias it too
+add_library(${PROJECT_NAME} STATIC
+							src/set.cxx
+							src/list.cxx
+			)
 add_library(sub::nostl ALIAS ${PROJECT_NAME})
 
-target_include_directories(${PROJECT_NAME} INTERFACE ${PROJECT_SOURCE_DIR}/inc)
+# set include directories
+target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/inc)
