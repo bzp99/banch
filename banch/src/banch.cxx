@@ -173,6 +173,10 @@ void RecipeBook::serialize(std::ostream & os) const
 
 void RecipeBook::deserialize(std::istream & is)
 {
+	// tabula rasa
+	this->clear();
+
+	// deserialize
 	string currentLine;
 	while (getline(is, currentLine))
 	{
