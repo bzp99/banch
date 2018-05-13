@@ -24,7 +24,7 @@ public:
 	/// \brief add element to the Set
 	///
 	/// \param value of new element
-	void insert(T const &);
+	inline void insert(T const &);
 
 	/// \brief remove an element from the Set
 	///
@@ -41,7 +41,7 @@ public:
 	///
 	/// \return true if the two Sets are equal
 	inline bool operator==(Set<T> const &) const;
-	
+
 	/// \brief ineqality operator
 	///
 	/// \param Set to check ineqality with
@@ -79,6 +79,25 @@ private:
 ////////////////////////
 // INLINE DEFINITIONS //
 ////////////////////////
+
+template <typename T>
+void Set<T>::insert(T const & val)
+{
+	// make sure list/set doesn't contain item yet
+	if (this->size() != 0)
+	{
+		for (typename List<T>::Iterator i = this->list_.begin();
+				i != this->list_.end(); ++i)
+		{
+			if (*i == val)
+			{
+				return;
+			}
+		}
+	}
+
+	this->list_.append(val);
+}
 
 template <typename T>
 bool Set<T>::operator==(Set<T> const & rhs) const

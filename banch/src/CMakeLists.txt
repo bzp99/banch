@@ -4,4 +4,5 @@ target_link_libraries(banch_main
 						PRIVATE
 						sub::banch
 						sub::menu
+						sub::nostl
 						)

@@ -52,6 +52,25 @@ protected:
 }; // class Finteractive_function
 
 
+/// \brief function object that lists Recipes in a RecipeBook
+class Flist_recipes : Finteractive_function {
+public:
+	/// \brief constructor with 2 parameters
+	///
+	/// \param os stream to write to
+	/// \param book RecipeBook object reference to list
+	Flist_recipes(std::ostream & os, RecipeBook const & book)
+		: Finteractive_function(os, std::cin), book_(book) {}
+
+	/// \brief function that actually calls the RecipeBook's list() method
+	inline void operator()() { book_.list(this->os_); }
+
+
+private:
+	RecipeBook const & book_; ///< reference to RecipeBook to list
+}; // class Fadd_recipe
+
+
 /// \brief function object to prompt user with adding a new Beverage ingredient
 class Fadd_beverage : Finteractive_function {
 public:
@@ -89,6 +108,17 @@ private:
 	Recipe & recipe_; ///< reference to Recipe to tamper with
 }; // class Fadd_beverage
 
+class Fremove_ingredient : Finteractive_function {
+public:
+	Fremove_ingredient(std::ostream & os, std::istream & is, Recipe & recipe)
+		: Finteractive_function(os, is), recipe_(recipe) {}
+
+	void operator()();
+
+private:
+	Recipe & recipe_; ///< reference to Recipe to tamper with
+}; // class Fremove_ingredient
+
 
 /// \brief function object to prompt user with creating a new Recipe
 class Fadd_recipe : Finteractive_function {
@@ -110,23 +140,25 @@ private:
 }; // class Fadd_recipe
 
 
-/// \brief function object that lists Recipes in a RecipeBook
-class Flist_recipes : Finteractive_function {
+/// \brief function object to prompt user with modifying an existing Recipe
+class Fmodify_recipe : Finteractive_function {
 public:
-	/// \brief constructor with 2 parameters
+	/// \brief contructor with 3 parameters
 	///
-	/// \param os stream to write to
-	/// \param book RecipeBook object reference to list
-	Flist_recipes(std::ostream & os, RecipeBook const & book)
-		: Finteractive_function(os, std::cin), book_(book) {}
+	/// \param os stream to write into
+	/// \param is stream to read from
+	/// \param book RecipeBook object reference to tamper with
+	Fmodify_recipe(std::ostream & os, std::istream & is, RecipeBook & book)
+		: Finteractive_function(os, is), book_(book) {}
 
-	/// \brief function that actually calls the RecipeBook's list() method
-	inline void operator()() { book_.list(this->os_); }
+	/// \brief function that prompts the user to modify an existing Recipe
+	void operator()();
 
 
 private:
-	RecipeBook const & book_; ///< reference to RecipeBook to list
-}; // class Fadd_recipe
+	RecipeBook & book_; ///< reference to RecipeBook to tamper with
+}; // class Fmodify_recipe
+
 
 } // namespace banch
 

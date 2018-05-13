@@ -51,6 +51,41 @@ void Fadd_extra::operator()()
 }
 
 
+// class Fremove_ingredient //
+
+void Fremove_ingredient::operator()()
+{
+	// list Ingredients
+	this->os_ << "0) cancel";
+	this->recipe_.showNumbered(this->os_);
+	this->os_ << std::endl;
+
+	// make user choose one
+	this->os_ << "Please enter number of ingredient to remove (0 to cancel): ";
+	std::string input;
+	int selection;
+	do
+	{
+		getline(this->is_, input);
+	}
+	while (!(std::stringstream(input) >> selection) ||
+			selection < 0 || selection > this->recipe_.number_of_ingredients());
+
+	// 0 cancels
+	if (selection == 0)
+	{
+		return;
+	}
+
+	std::stringstream tmp;
+	tmp << "Will remove: " << selection << ')';
+	if (confirm(this->os_, this->is_, tmp.str()))
+	{
+		this->recipe_.remove(selection);
+	}
+}
+
+
 // class Fadd_recipe //
 
 void Fadd_recipe::operator()()
@@ -84,6 +119,16 @@ void Fadd_recipe::operator()()
 	{
 		this->book_.add(recipe);
 	}
+}
+
+
+// class Fmodify_recipe //
+
+void Fmodify_recipe::operator()()
+{
+	// list Recipes for the user
+	Flist_recipes(this->os_, this->book_)();
+	//
 }
 
 } // namespace banch

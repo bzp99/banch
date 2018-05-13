@@ -115,10 +115,15 @@ public:
 	/// \param addendum ingredient to add
 	inline void add(Ingredient * addendum);
 
-	/// \brief method that removes an ingredient
+	/// \brief method that removes an Ingredient by pointer
 	///
 	/// \param delendum ingredient to remove
 	inline void remove(Ingredient * delendum);
+
+	/// \brief method that removes the n-th Ingredient
+	///
+	/// \param n number of ingredient to remove
+	void remove(unsigned int const n);
 
 	/// \brief method that clears the recipe
 	void clear();
@@ -133,6 +138,11 @@ public:
 	///
 	/// \param os stream to print into
 	void show(std::ostream & os) const;
+
+	/// \brief method that prints all the ingredients with numbers
+	///
+	/// \param os stream to print into
+	void showNumbered(std::ostream & os) const;
 
 	/// \brief method that prints number of ingredients in recipe
 	///

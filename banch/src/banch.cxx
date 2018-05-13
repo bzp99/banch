@@ -4,6 +4,7 @@
 
 #include "banch/banch.hxx"
 
+#include <cassert>
 #include <iostream>
 
 /// \brief namespace for the banch project
@@ -31,6 +32,22 @@ bool confirm(std::ostream & os, std::istream & is, std::string const text)
 
 // class Recipe //
 
+void Recipe::remove(unsigned int const n)
+{
+	// assert that call is correct
+	assert(((n > 0) && (n <= this->number_of_ingredients())));
+
+	// get iterator to asked Ingredient
+	nostl::Set<Ingredient *>::Iterator i = this->ingredients_.begin();
+	for (unsigned int counter = 1; counter < n; counter++)
+	{
+		++i;
+	}
+
+	// remove that Ingredient
+	this->remove(*i);
+}
+
 void Recipe::clear()
 {
 	// iterate though container and free memory
@@ -51,6 +68,19 @@ void Recipe::show(std::ostream & os) const
 			i != this->ingredients_.end();
 			++i)
 	{
+		(*i)->print(os);
+	}
+}
+
+void Recipe::showNumbered(std::ostream & os) const
+{
+	os << "Recipe: " << this->name_ << std::endl;
+	unsigned int counter_ = 0;
+	for (nostl::Set<Ingredient *>::Iterator i = this->ingredients_.begin();
+			i != this->ingredients_.end();
+			++i)
+	{
+		os << ++counter_ << ')' << ' ';
 		(*i)->print(os);
 	}
 }

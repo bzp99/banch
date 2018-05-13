@@ -31,14 +31,14 @@ public:
 	///
 	/// The default copy constructor needs to be overridden because it would
 	/// only copy pointers to the head and tail of the List.
-	List(List const &);
+	inline List(List const &);
 
 	/// \brief assignment operator
 	///
 	/// \param List to set *this* equal to
 	///
 	/// \return the List itself
-	List & operator=(List const &);
+	inline List & operator=(List const &);
 
 
 	/// \brief add element to end of List
@@ -60,7 +60,7 @@ public:
 	inline void remove(T const &);
 
 	/// \brief clear the list (i.e. remove all of its elements)
-	void clear();
+	inline void clear();
 
 
 	/// \brief get the size of the list (i.e. the number of its elements)
@@ -74,8 +74,8 @@ public:
 	/// \param List to check equality with
 	///
 	/// \return true if all elements of the Lists match
-	bool operator==(List<T> const &) const;
-	
+	inline bool operator==(List<T> const &) const;
+
 	/// \brief inequality operator
 	///
 	/// \param List to check inequality with
@@ -232,6 +232,59 @@ List<T>::List()
 }
 
 template <typename T>
+List<T>::List(List const & obj)
+{
+	// initiating empty list
+	this->head_ = new Node;
+	this->tail_ = new Node;
+	this->head_->previous_ = nullptr;
+	this->head_->next_ = this->tail_;
+	this->tail_->previous_ = this->head_;
+	this->tail_->next_ = nullptr;
+	this->number_of_elements_ = 0;
+
+	// copying list
+	Node * traveller = obj.head_->next_;
+	while (traveller->next_ != obj.tail_)
+	{
+		this->append(traveller->value_); // this also sets the node counter
+		traveller = traveller->next_;
+	}
+}
+
+template <typename T>
+List<T> & List<T>::operator=(List<T> const & rhs)
+{
+	// checking for self-assignment
+	if (this == &rhs)
+	{
+		return *this;
+	}
+
+	// clearing current list
+	this->clear();
+
+	// if rhs is empty, we're done
+	if (rhs.size() == 0)
+	{
+		return *this;
+	}
+
+	// copying list
+	Node * traveller = rhs.head_->next_;
+	while (traveller != rhs.tail_)
+	{
+		this->append(traveller->value_); // this also sets the node counter
+		traveller = traveller->next_;
+	}
+
+	return *this;
+}
+
+
+
+
+template <typename T>
 void List<T>::append(T const & val)
 {
 	Node * new_node = new Node;
@@ -285,6 +338,50 @@ void List<T>::remove(T const & val)
 		// decrementing node counter
 		--this->number_of_elements_;
 	}
+}
+
+template <typename T>
+void List<T>::clear()
+{
+	// traverse list and delete nodes between sentinels
+	Node * traveller = this->head_->next_;
+	while (traveller != this->tail_)
+	{
+		traveller = traveller->next_;
+		delete traveller->previous_;
+	}
+
+	// resetting pointers of sentinels
+	this->head_->next_ = this->tail_;
+	this->tail_->previous_ = this->head_;
+
+	// zero node counter
+	this->number_of_elements_ = 0;
+}
+
+template <typename T>
+bool List<T>::operator==(List<T> const & rhs) const
+{
+	// the lists cannot be equal if their size differs
+	if (this->size() != rhs.size())
+	{
+		return false;
+	}
+
+	// iterate through both lists, comparing each element
+	List<T>::Iterator i = this->begin();
+	List<T>::Iterator j = rhs.begin();
+	while (i != this->end())
+	{
+		// if two elements don't match up, the Lists are different
+		if (*(i++) != *(j++))
+		{
+			return false;
+		}
+	}
+
+	// if we got here, the Lists must be identical
+	return true;
 }
 
 template <typename T>
@@ -379,6 +476,32 @@ template <typename T>
 typename List<T>::Iterator List<T>::end() const
 {
 	return Iterator(this->tail_, this->head_, this->tail_);
+}
+
+template <typename T>
+typename List<T>::Node * List<T>::find(T const & val) const
+{
+	// if the List is empty, nothing will be found
+	if (this->size() == 0)
+	{
+		return nullptr;
+	}
+
+	Node * traveller = this->head_->next_;
+
+	// traverse list to find node
+	while(traveller != this->tail_)
+	{
+		if (traveller->value_ == val)
+		{
+			return traveller;
+		}
+
+		traveller = traveller->next_;
+	}
+
+	// node was not found
+	return nullptr;
 }
 
 } // namespace nostl
