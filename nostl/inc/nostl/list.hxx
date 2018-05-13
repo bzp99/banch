@@ -23,7 +23,7 @@ template <typename T>
 class List {
 public:
 	/// \brief constructor w/o parameters --- only creates sentinels
-	List();
+	inline List();
 
 	/// \brief copy constructor
 	///
@@ -44,12 +44,12 @@ public:
 	/// \brief add element to end of List
 	///
 	/// \param value of new element
-	void append(T const &);
+	inline void append(T const &);
 
 	/// \brief add element to beginning of List
 	///
 	/// \param value of new element
-	void prepend(T const &);
+	inline void prepend(T const &);
 
 	/// \brief remove an element from the List
 	///
@@ -57,7 +57,7 @@ public:
 	///
 	/// \note this function only deletes the first occurrence of the value
 	/// that's passed as a parameter
-	void remove(T const &);
+	inline void remove(T const &);
 
 	/// \brief clear the list (i.e. remove all of its elements)
 	void clear();
@@ -69,11 +69,26 @@ public:
 	inline unsigned int size() const { return this->number_of_elements_; }
 
 
+	/// \brief equality operator
+	///
+	/// \param List to check equality with
+	///
+	/// \return true if all elements of the Lists match
+	bool operator==(List<T> const &) const;
+	
+	/// \brief inequality operator
+	///
+	/// \param List to check inequality with
+	///
+	/// \return true if the Lists differ somehow
+	inline bool operator!=(List<T> const &) const;
+
+
 	/// \brief destructor
 	///
 	/// The default destructor function needs to be overridden because the class
 	/// uses dynamic memory allocation
-	~List();
+	inline ~List();
 
 
 private:
@@ -110,17 +125,10 @@ public:
 	public:
 		/// \brief constructor for the List's Iterator
 		///
-		/// \param where_to_point address Node to point to
-		/// \param first_sentinel address of the List's head sentinel
-		/// \param last_sentinel address f the List's tail sentinel
-		Iterator(Node * where_to_point,
-					Node * first_sentinel,
-					Node * last_sentinel)
-		{
-			this->current_ = where_to_point;
-			this->first_sentinel_ = first_sentinel;
-			this->last_sentinel_ = last_sentinel;
-		}
+		/// \param address Node to point to
+		/// \param address of the List's head sentinel
+		/// \param address of the List's tail sentinel
+		inline Iterator(Node *, Node *, Node *);
 
 
 		/// \brief dereference operator
@@ -138,83 +146,49 @@ public:
 		/// \return pointer to itself
 		///
 		/// \note this is just needed for convenience
+		///
+		/// TODO does this even work?
 		inline Iterator * operator->() { return this; }
 
 
 		/// \brief preincrement operator
 		///
 		/// \return Iterator of next Node
-		inline Iterator operator++()
-		{
-			if (this->current_ != this->last_sentinel_)
-			{
-				this->current_ = this->current_->next_;
-			}
-			return *this;
-		}
+		inline Iterator operator++();
 
 		/// \brief postincrement operator
 		///
 		/// \param int dummy parameter
 		///
 		/// \return Iterator of current Node
-		inline Iterator operator++(int)
-		{
-			Iterator rv = *this;
-			if (this->current_ != this->last_sentinel_)
-			{
-				this->current_ = this->current_->next_;
-			}
-			return rv;
-		}
+		inline Iterator operator++(int);
 
 		/// \brief predecrement operator
 		///
 		/// \return Iterator of previous Node
-		inline Iterator operator--()
-		{
-			if (this->current_->previous_ != this->first_sentinel_)
-			{
-				this->current_ = this->current_->previous_;
-			}
-			return *this;
-		}
+		inline Iterator operator--();
 
 		/// \brief postdecrement operator
 		///
 		/// \param int dummy parameter
 		///
 		/// \return Iterator of current Node
-		inline Iterator operator--(int)
-		{
-			Iterator rv = *this;
-			if (this->current_->previous_ != this->first_sentinel_)
-			{
-				this->current_ = this->current_->previous_;
-			}
-			return rv;
-		}
+		inline Iterator operator--(int);
 
 
 		/// \brief equality operator
 		///
-		/// \param rhs Iterator to check equality with
+		/// \param Iterator to check equality with
 		///
 		/// \return true if the Iterators point to the same Node
-		inline bool operator==(Iterator const & rhs) const
-		{
-			return this->current_ == rhs.current_;
-		}
+		inline bool operator==(Iterator const &) const;
 
 		/// \brief inequality operator
 		///
-		/// \param rhs Iterator to check inequality with
+		/// \param Iterator to check inequality with
 		///
 		/// \return true if the Iterators point to different Nodes
-		inline bool operator!=(Iterator const & rhs) const
-		{
-			return !(*this == rhs);
-		}
+		inline bool operator!=(Iterator const &) const;
 
 
 	private:
@@ -228,25 +202,19 @@ public:
 	/// \brief get Iterator to the first element of the List
 	///
 	/// \return the first List element (right after the head sentinel)
-	inline Iterator begin() const
-	{
-		return Iterator(this->head_->next_, this->head_, this->tail_);
-	}
+	inline Iterator begin() const;
 
 	/// \brief get Iterator to the element that would come after the last one
 	///
 	/// \return the past-the-last element (i.e. the tail sentinel)
-	inline Iterator end() const
-	{
-		return Iterator(this->tail_, this->head_, this->tail_);
-	}
+	inline Iterator end() const;
 }; // class List
 
 
 
-/////////////////
-// DEFINITIONS //
-/////////////////
+////////////////////////
+// INLINE DEFINITIONS //
+////////////////////////
 
 template <typename T>
 List<T>::List()
@@ -261,53 +229,6 @@ List<T>::List()
 
 	this->tail_->previous_ = this->head_;
 	this->tail_->next_ = nullptr;
-}
-
-template <typename T>
-typename List<T>::Node * List<T>::find(T const & val) const
-{
-	// if the List is empty, nothing will be found
-	if (this->size() == 0)
-	{
-		return nullptr;
-	}
-
-	Node * traveller = this->head_->next_;
-
-	// traverse list to find node
-	while(traveller != this->tail_)
-	{
-		if (traveller->value_ == val)
-		{
-			return traveller;
-		}
-
-		traveller = traveller->next_;
-	}
-
-	// node was not found
-	return nullptr;
-}
-
-template <typename T>
-List<T>::List(List const & obj)
-{
-	// initiating empty list
-	this->head_ = new Node;
-	this->tail_ = new Node;
-	this->head_->previous_ = nullptr;
-	this->head_->next_ = this->tail_;
-	this->tail_->previous_ = this->head_;
-	this->tail_->next_ = nullptr;
-	this->number_of_elements_ = 0;
-
-	// copying list
-	Node * traveller = obj.head_->next_;
-	while (traveller->next_ != obj.tail_)
-	{
-		this->append(traveller->value_); // this also sets the node counter
-		traveller = traveller->next_;
-	}
 }
 
 template <typename T>
@@ -367,51 +288,9 @@ void List<T>::remove(T const & val)
 }
 
 template <typename T>
-void List<T>::clear()
+bool List<T>::operator!=(List<T> const & rhs) const
 {
-	// traverse list and delete nodes between sentinels
-	Node * traveller = this->head_->next_;
-	while (traveller != this->tail_)
-	{
-		traveller = traveller->next_;
-		delete traveller->previous_;
-	}
-
-	// resetting pointers of sentinels
-	this->head_->next_ = this->tail_;
-	this->tail_->previous_ = this->head_;
-
-	// zero node counter
-	this->number_of_elements_ = 0;
-}
-
-template <typename T>
-List<T> & List<T>::operator=(List<T> const & rhs)
-{
-	// checking for self-assignment
-	if (this == &rhs)
-	{
-		return *this;
-	}
-
-	// clearing current list
-	this->clear();
-
-	// if rhs is empty, we're done
-	if (rhs.size() == 0)
-	{
-		return *this;
-	}
-
-	// copying list
-	Node * traveller = rhs.head_->next_;
-	while (traveller != rhs.tail_)
-	{
-		this->append(traveller->value_); // this also sets the node counter
-		traveller = traveller->next_;
-	}
-
-	return *this;
+	return !(*this == rhs);
 }
 
 template <typename T>
@@ -423,6 +302,83 @@ List<T>::~List()
 	// delete sentinels
 	delete this->head_;
 	delete this->tail_;
+}
+
+template <typename T>
+List<T>::Iterator::Iterator(Node * where_to_point,
+							Node * first_sentinel,
+							Node * last_sentinel
+							)
+{
+	this->current_ = where_to_point;
+	this->first_sentinel_ = first_sentinel;
+	this->last_sentinel_ = last_sentinel;
+}
+
+template <typename T>
+typename List<T>::Iterator List<T>::Iterator::operator++()
+{
+	if (this->current_ != this->last_sentinel_)
+	{
+		this->current_ = this->current_->next_;
+	}
+	return *this;
+}
+
+template <typename T>
+typename List<T>::Iterator List<T>::Iterator::operator++(int)
+{
+	Iterator rv = *this;
+	if (this->current_ != this->last_sentinel_)
+	{
+		this->current_ = this->current_->next_;
+	}
+	return rv;
+}
+
+template <typename T>
+typename List<T>::Iterator List<T>::Iterator::operator--()
+{
+	if (this->current_->previous_ != this->first_sentinel_)
+	{
+		this->current_ = this->current_->previous_;
+	}
+	return *this;
+}
+
+template <typename T>
+typename List<T>::Iterator List<T>::Iterator::operator--(int)
+{
+	Iterator rv = *this;
+	if (this->current_->previous_ != this->first_sentinel_)
+	{
+		this->current_ = this->current_->previous_;
+	}
+	return rv;
+}
+
+template <typename T>
+bool List<T>::Iterator::operator==(Iterator const & rhs) const
+{
+	return this->current_ == rhs.current_;
+}
+
+template <typename T>
+bool List<T>::Iterator::operator!=(Iterator const & rhs) const
+{
+	return !(*this == rhs);
+}
+	
+template <typename T>
+typename List<T>::Iterator List<T>::begin() const
+{
+	return Iterator(this->head_->next_, this->head_, this->tail_);
+}
+
+template <typename T>
+typename List<T>::Iterator List<T>::end() const
+{
+	return Iterator(this->tail_, this->head_, this->tail_);
 }
 
 } // namespace nostl
