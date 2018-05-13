@@ -9,16 +9,38 @@
 /// \brief namespace for the banch project
 namespace banch {
 
+bool confirm(std::ostream & os, std::istream & is, std::string const text)
+{
+		os << '\t' << text << std::endl;
+		os << "Confirm? [y/n] ";
+		std::string confirmation;
+		do
+		{
+			getline(is, confirmation);
+		} while (!(confirmation == "y" || confirmation == "n"));
+		
+		if (confirmation == "y")
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+}
+
 // class Recipe //
 
 void Recipe::clear()
 {
 	// iterate though container and free memory
-	for (nostl::Set<Ingredient *>::Iterator i = this->ingredients_.begin();
-			i != this->ingredients_.end();
-			++i)
+	nostl::Set<Ingredient *>::Iterator i = this->ingredients_.begin();
+	while (i != this->ingredients_.end())
 	{
-		this->remove(*i);
+		// we need to set this, otherwise we would have the i iterator point to
+		// already freed locations
+		Ingredient * tmp = *(i++);
+		this->remove(tmp);
 	}
 }
 
@@ -81,11 +103,13 @@ void Recipe::deserialize(std::istream & is)
 void RecipeBook::clear()
 {
 	// iterate though container and free memory
-	for (nostl::Set<Recipe *>::Iterator i = this->recipes_.begin();
-			i != this->recipes_.end();
-			++i)
+	nostl::Set<Recipe *>::Iterator i = this->recipes_.begin();
+	while (i != this->recipes_.end())
 	{
-		this->remove(*i);
+		// we need to set this, otherwise we would have the i iterator point to
+		// already freed locations
+		Recipe * tmp = *(i++);
+		this->remove(tmp);
 	}
 }
 
@@ -106,7 +130,7 @@ void RecipeBook::serialize(std::ostream & os) const
 			i != this->recipes_.end();
 			++i)
 	{
-		(*i)->serialize(os);
+		(*i)->serialize(os); 
 	}
 }
 
@@ -115,7 +139,7 @@ void RecipeBook::deserialize(std::istream & is)
 	string currentLine;
 	while (getline(is, currentLine))
 	{
-		if (currentLine == string("startrecipe"))
+		if (currentLine == "startrecipe")
 		{
 			Recipe * recipe = new Recipe;
 			recipe->deserialize(is);
