@@ -24,6 +24,15 @@ namespace banch {
 /// \return true if the user confirms whatever
 bool confirm(std::ostream &, std::istream &, std::string const);
 
+/// \brief global function that asks the user for a number and validates it
+///
+/// \param stream to write messages into
+/// \param stream to read number from
+/// \param text to prompt user with
+///
+/// \return the number input by user
+unsigned int askNumber(std::ostream &, std::istream &, std::string const);
+
 //////////////////////
 // FUNCTION OBJECTS //
 //////////////////////
@@ -53,7 +62,7 @@ protected:
 
 
 /// \brief function object that lists Recipes in a RecipeBook
-class Flist_recipes : Finteractive_function {
+class Flist_recipes : public Finteractive_function {
 public:
 	/// \brief constructor with 2 parameters
 	///
@@ -72,7 +81,7 @@ private:
 
 
 /// \brief function object to prompt user with adding a new Beverage ingredient
-class Fadd_beverage : Finteractive_function {
+class Fadd_beverage : public Finteractive_function {
 public:
 	/// \brief constructor with 3 parameters
 	///
@@ -92,7 +101,7 @@ private:
 
 
 /// \brief function object to prompt user with adding a new Extra ingredient
-class Fadd_extra : Finteractive_function {
+class Fadd_extra : public Finteractive_function {
 public:
 	/// \brief constructor with 3 parameters
 	///
@@ -108,7 +117,7 @@ private:
 	Recipe & recipe_; ///< reference to Recipe to tamper with
 }; // class Fadd_beverage
 
-class Fremove_ingredient : Finteractive_function {
+class Fremove_ingredient : public Finteractive_function {
 public:
 	Fremove_ingredient(std::ostream & os, std::istream & is, Recipe & recipe)
 		: Finteractive_function(os, is), recipe_(recipe) {}
@@ -121,7 +130,7 @@ private:
 
 
 /// \brief function object to prompt user with creating a new Recipe
-class Fadd_recipe : Finteractive_function {
+class Fadd_recipe : public Finteractive_function {
 public:
 	/// \brief constructor with 3 parameters
 	///
@@ -141,7 +150,7 @@ private:
 
 
 /// \brief function object to prompt user with modifying an existing Recipe
-class Fmodify_recipe : Finteractive_function {
+class Fmodify_recipe : public Finteractive_function {
 public:
 	/// \brief contructor with 3 parameters
 	///
@@ -158,6 +167,23 @@ public:
 private:
 	RecipeBook & book_; ///< reference to RecipeBook to tamper with
 }; // class Fmodify_recipe
+
+/// \brief function object to prompt user with deleting an existing Recipe
+class Fremove_recipe : public Finteractive_function {
+public:
+	/// \brief constructor with 3 parameters
+	///
+	/// \param os stream to write into
+	/// \param is stream to read from
+	/// \param book RecipeBook object reference to tamper with
+	Fremove_recipe(std::ostream & os, std::istream & is, RecipeBook & book)
+		: Finteractive_function(os, is), book_(book) {}
+
+	/// \brief function that prompts the user to modify an existing Recipe
+	void operator()();
+private:
+	RecipeBook & book_; ///< reference to RecipeBook to tamper with
+}; // class Fremove_recipe
 
 
 } // namespace banch
