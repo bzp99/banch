@@ -16,21 +16,22 @@ int main(int argc, char ** argv)
 	mainMenu.add(menu::Option("list recipes",
 								std::function<void()>(banch::Flist_recipes(
 																	std::cout,
-																	myBook
-																			)
-														)
-
-								)
-	);
+																	myBook))));
 	mainMenu.add(menu::Option("add recipe",
 								std::function<void()>(banch::Fadd_recipe(
 																	std::cout,
 																	std::cin,
-																	myBook
-																		)
-														)
-								)
-	);
+																	myBook))));
+	mainMenu.add(menu::Option("modify recipe",
+								std::function<void()>(banch::Fmodify_recipe(
+																	std::cout,
+																	std::cin,
+																	myBook))));
+	mainMenu.add(menu::Option("remove recipe",
+								std::function<void()>(banch::Fremove_recipe(
+																	std::cout,
+																	std::cin,
+																	myBook))));
 
 	mainMenu();
 	return 0;
