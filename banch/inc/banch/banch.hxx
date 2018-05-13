@@ -103,6 +103,13 @@ public:
 	/// \param name the name of the Recipe
 	Recipe(string const name = "") : name_(name) {}
 
+	/// \brief equals operator
+	///
+	/// \param rhs recipe to check equality with
+	///
+	/// \return true if the two recipes are equal
+	inline bool operator==(Recipe const & rhs) const;
+
 	/// \brief method that adds an ingredient
 	///
 	/// \param addendum ingredient to add
@@ -116,6 +123,11 @@ public:
 	/// \brief method that clears the recipe
 	void clear();
 
+
+	/// \brief getter method for name of Recipe
+	///
+	/// \return the Recipe's name
+	std::string getName() const { return this->name_; }
 
 	/// \brief method that prints all ingredients
 	///
@@ -157,9 +169,9 @@ public:
 	/// \param addendum recipe to add
 	inline void add(Recipe * addendum);
 
-	/// \brief remove a recipe from the collection
+	/// \brief remove a Recipe from the collection
 	///
-	/// \param delendum recipe to remove
+	/// \param name of Recipe to remove
 	inline void remove(Recipe * delendum);
 
 	/// \brief method that clears the book
@@ -195,7 +207,6 @@ public:
 private:
 	nostl::Set<Recipe *> recipes_; ///< set containing the recipes (pointers)
 }; // class RecipeBook
-
 
 
 ////////////////////////
@@ -243,6 +254,11 @@ void Extra::deserialize(std::istream & is)
 
 
 // class Recipe //
+	
+inline bool Recipe::operator==(Recipe const & rhs) const
+{
+	return (this->name_ == rhs.name_ && this->ingredients_ == rhs.ingredients_);
+}
 
 void Recipe::add(Ingredient * addendum)
 {
@@ -278,7 +294,7 @@ void RecipeBook::add(Recipe * addendum)
 
 void RecipeBook::remove(Recipe * delendum)
 {
-	// get rid of pointer
+	// get rid of Recipe pointer
 	this->recipes_.remove(delendum);
 
 	// free memory
