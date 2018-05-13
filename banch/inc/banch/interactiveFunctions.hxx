@@ -202,6 +202,46 @@ private:
 }; // class Fremove_recipe
 
 
+/// \brief function object that prompts the user with saving database to file
+class Fsave_recipebook : public	Finteractive_function {
+public:
+	/// \brief constructor with 3 parameters
+	///
+	/// \param os stream to write into
+	/// \param is stream to read from
+	/// \param book RecipeBook object reference to tamper with
+	Fsave_recipebook(std::ostream & os, std::istream & is, RecipeBook & book)
+		: Finteractive_function(os, is), book_(book) {}
+
+	/// \brief method that prompts the user for a filename and serializes book_
+	void operator()();
+
+
+private:
+	RecipeBook & book_; ///< reference to RecipeBook to tamper with
+}; // class Fsave_recipebook
+
+
+/// \brief function object that prompts the user with loading a file into RAM
+class Fload_recipebook : public	Finteractive_function {
+public:
+	/// \brief constructor with 3 parameters
+	///
+	/// \param os stream to write into
+	/// \param is stream to read from
+	/// \param book RecipeBook object reference to tamper with
+	Fload_recipebook(std::ostream & os, std::istream & is, RecipeBook & book)
+		: Finteractive_function(os, is), book_(book) {}
+
+	/// \brief method that prompts the user for a filename and deserializes book_
+	void operator()();
+
+
+private:
+	RecipeBook & book_; ///< reference to RecipeBook to tamper with
+}; // class Fload_recipebook
+
+
 /// \brief helper function object that acts like an std::bind
 ///
 /// TODO actually use std::bind?

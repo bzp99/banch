@@ -3,6 +3,7 @@
 /// \brief function definitons for interactiveFunctions.hxx
 
 #include "banch/interactiveFunctions.hxx"
+#include <fstream>
 
 /// \brief namespace for the banch project
 namespace banch {
@@ -279,6 +280,60 @@ void Fremove_recipe::operator()()
 	{
 		this->book_.remove(selection);
 	}
+}
+
+// class Fsave_recipebook //
+
+void Fsave_recipebook::operator()()
+{
+	// prompt the user for a filename
+	std::string input;
+	this->os_ << "Save current database as [path]: ";
+	getline(this->is_, input);
+
+	// open a stream
+	std::ofstream ofs;
+	ofs.open(input);
+	if (!ofs.is_open())
+	{
+		this->os_ << "Failed to open file!" << std::endl;
+		return;
+	}
+
+	// serialize into stream
+	this->book_.serialize(ofs);
+
+	// close the stream
+	ofs.close();
+
+	this->os_ << "Sucessfully saved database as " << input << std::endl;
+}
+
+// class Fload_recipebook //
+
+void Fload_recipebook::operator()()
+{
+	// prompt the user for a filename
+	std::string input;
+	this->os_ << "Enter name of file to load [path]: ";
+	getline(this->is_, input);
+
+	// open a stream
+	std::ifstream ifs;
+	ifs.open(input);
+	if (!ifs.is_open())
+	{
+		this->os_ << "Failed to open file!" << std::endl;
+		return;
+	}
+
+	// deserialize from stream
+	this->book_.deserialize(ifs);
+
+	// close the stream
+	ifs.close();
+
+	this->os_ << "Successfully loaded database from " << input << std::endl;
 }
 
 } // namespace banch
