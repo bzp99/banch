@@ -7,10 +7,6 @@
 int main(int argc, char ** argv)
 {
 	banch::RecipeBook myBook;
-	banch::Recipe * mySoleRecipe = new banch::Recipe("tester");
-	mySoleRecipe->add(new banch::Beverage("apple juice", 5));
-	mySoleRecipe->add(new banch::Extra("some extra stuff"));
-	myBook.add(mySoleRecipe);
 
 	menu::Menu mainMenu(std::cout, std::cin);
 	mainMenu.add(menu::Option("list recipes",
@@ -43,6 +39,8 @@ int main(int argc, char ** argv)
 																	std::cin,
 																	myBook))));
 
+	std::cout << "Welcome to banch ʘ‿ʘ" << std::endl;
+	std::cout << " Please select one from the options below" << std::endl;
 	mainMenu();
 
 	return 0;
