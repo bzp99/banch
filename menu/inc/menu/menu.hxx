@@ -8,6 +8,7 @@
 #include <iostream>
 #include <string>
 #include <functional>
+#include <sstream>
 
 #include "nostl/list.hxx"
 
@@ -17,17 +18,21 @@ using std::string;
 /// \brief namespace for the menu subproject
 namespace menu {
 
-/// \brief simple option for the menu
+//////////////////
+// DECLARATIONS //
+//////////////////
+
+/// \brief simple option for the Menu
 class Option {
 public:
 	/// \brief constructor with only name or nothing
-	Option(string name = "") : name_(name) {}
+	inline Option(string name = "") : name_(name) {}
 
 	/// \brief constructor with two parameters
 	///
 	/// \param name name of the option
 	/// \param fnctn function to execute when option is selected
-	Option(string const name, std::function<void()> const & fnctn)
+	inline Option(string const name, std::function<void()> const & fnctn)
 		: name_(name), function_(fnctn) {}
 
 	/// \brief overloaded inserter operator
@@ -41,115 +46,55 @@ public:
 	/// \brief call function method
 	///
 	/// \param argument to call contained function with
-	inline void operator()() const;
+	inline void operator()() const { this->function_(); }
+
 
 private:
-	string name_;
-	std::function<void()> function_;
+	string name_; ///< the name that shows up in the menu after option number
+	std::function<void()> function_; ///< function object the option can 'call'
 }; // class Option
 
+
+/// \brief a simple menu of Options
 class Menu {
 public:
 	/// \brief constructor (only adds an exit option)
-	inline Menu();
+	inline Menu(std::ostream & os, std::istream & is)
+		: os_(os), is_(is) { this->add(std::move(Option("exit menu"))); }
+
 
 	/// \brief add option to the menu
 	///
 	/// \param option to add (use std::move)
-	inline void add(Option const &);
+	inline void add(Option const & opt) { this->options_.append(opt); }
 
 	/// \brief get number of option entries in the menu
 	///
 	/// \return number of entries
-	unsigned int number_of_entries() const;
+	inline unsigned int number_of_entries() const;
 
 
 	/// \brief display the menu
-	inline void operator()(std::ostream & = std::cout,
-							std::istream & = std::cin) const;
+	void operator()() const;
 
 
 private:
-	nostl::List<Option> options_;
+	nostl::List<Option> options_; ///< List of options in the menu
+	std::ostream & os_; ///< stream the Menu can write into
+	std::istream & is_; ///< stream the Menu can read from
 }; // class Menu
+
 
 
 ////////////////////////
 // INLINE DEFINITIONS //
 ////////////////////////
 
-// class Option //
-
-void Option::operator()() const
-{
-	function_();
-}
-
-std::ostream & operator<<(std::ostream & os, Option const & obj)
-{
-	return os << obj.name_ << std::endl;
-}
-
 // class Menu //
-
-Menu::Menu()
-{
-	this->add(std::move(Option("exit menu")));
-}
-
-void Menu::add(Option const & opt)
-{
-	this->options_.append(opt);
-}
 
 unsigned int Menu::number_of_entries() const
 {
 	return this->options_.size();
-}
-
-void Menu::operator()(std::ostream & os, std::istream & is) const
-{
-	while (true)
-	{
-		unsigned int selection; // the user's choice
-		unsigned int option_count = 0; // options are numbered from 0
-
-		// iterator to options
-		nostl::List<Option>::Iterator i = this->options_.begin();
-
-		// list options with numbers
-		os << std::endl; // aesthetics
-		while (i != this->options_.end())
-		{
-			os << option_count++ << ')' << ' ' << *(i++);
-		}
-
-		// get input from user
-		do
-		{
-			os << std::endl;
-
-			os << ">> ";
-			is >> selection;
-		}
-		while (selection < 0 || selection > this->number_of_entries());
-
-		// 0 is always the exit option
-		if (selection == 0)
-		{
-			break;
-		}
-
-		// iterate until option
-		i = this->options_.begin();
-		for (unsigned int k = 0; k < selection; ++k)
-		{
-			++i;
-		}
-
-		// call option
-		(*i)();
-	}
 }
 
 } // namespace menu
