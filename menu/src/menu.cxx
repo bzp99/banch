@@ -43,6 +43,7 @@ void Menu::operator()() const
 			this->os_ << std::endl;
 
 			this->os_ << ">> ";
+			getline(this->is_, input);
 		}
 		while (!(std::stringstream(input) >> selection) ||
 				selection < 0 || selection > (this->number_of_entries() - 1));
